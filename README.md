@@ -1,10 +1,13 @@
 # SDK для Почты России
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/appwilio/russianpost-sdk/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/appwilio/russianpost-sdk/?branch=master)
 [![Total Downloads](https://poser.pugx.org/appwilio/russianpost-sdk/downloads)](https://packagist.org/packages/appwilio/russianpost-sdk)
 [![Latest Stable Version](https://poser.pugx.org/appwilio/russianpost-sdk/version)](https://packagist.org/packages/appwilio/russianpost-sdk)
 [![License](https://poser.pugx.org/appwilio/russianpost-sdk/license)](https://packagist.org/packages/appwilio/russianpost-sdk)
 
 ---
+
+### Это будет самое полное SDK, умеющее работать со всеми API pochta.ru
 
 Возможности:
 
@@ -15,7 +18,7 @@
 - [отправка](https://otpravka.pochta.ru/specification)
   - [ ] расчёт стоимости отправки
   - [ ] нормализация и валидация вводимых данных
-  - [ ] работа с единичными заказами и партиями заказов
+  - [ ] работа с единичными заказами и их партиями
   - [ ] генерация печатных форм
 
 > Работа с API возможна только при наличии договора с Почтой России (кроме единичного трекинга, где без договора лимит 100 запросов в сутки).
@@ -66,7 +69,7 @@ foreach ($response->getItems() as $item) {
 }
 ```
 
-## Разработчики
+## Авторы
 
 - [greabock](https://github.com/greabock)
 - [JhaoDa](https://github.com/jhaoda)

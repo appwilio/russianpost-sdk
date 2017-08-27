@@ -14,10 +14,19 @@ namespace Appwilio\RussianPostSDK\Tracking\Packet;
 
 class Operation
 {
+    /** @var string */
     public $DateOper;
+
+    /** @var string */
     public $OperName;
+
+    /** @var string */
     public $IndexOper;
+
+    /** @var int */
     public $OperCtgID;
+
+    /** @var int */
     public $OperTypeID;
 
     public function getOperationName(): string

@@ -20,7 +20,7 @@ class OperationParameters
     /** @var Parameter */
     public $OperAttr;
 
-    /** @var \DateTimeImmutable */
+    /** @var string */
     public $OperDate;
 
     public function getOperationId(): int

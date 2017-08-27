@@ -93,12 +93,12 @@ class PacketAccessClient
         return $response;
     }
 
-    private function assembleTicketRequestArguments(iterable $codes, string $language): array
+    private function assembleTicketRequestArguments(iterable $tracks, string $language): array
     {
         $items = new \ArrayObject();
 
-        foreach ($codes as $code) {
-            $items->append(new \SoapVar("<Item Barcode=\"{$code}\" />", XSD_ANYXML));
+        foreach ($tracks as $track) {
+            $items->append(new \SoapVar("<Item Barcode=\"{$track}\" />", XSD_ANYXML));
         }
 
         return [

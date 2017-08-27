@@ -20,7 +20,7 @@ class TrackingResponse
     /** @var Error */
     public $error;
 
-    public function getValue()//: Value
+    public function getValue(): Value
     {
         return $this->value;
     }
