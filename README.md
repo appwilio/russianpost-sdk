@@ -5,8 +5,6 @@
 [![Latest Stable Version](https://poser.pugx.org/appwilio/russianpost-sdk/version)](https://packagist.org/packages/appwilio/russianpost-sdk)
 [![License](https://poser.pugx.org/appwilio/russianpost-sdk/license)](https://packagist.org/packages/appwilio/russianpost-sdk)
 
----
-
 ### Это будет самое полное SDK, умеющее работать со всеми API pochta.ru
 
 Возможности:

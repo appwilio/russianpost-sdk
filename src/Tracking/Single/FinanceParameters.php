@@ -8,30 +8,31 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Single;
 
 class FinanceParameters
 {
-    /** @var integer */
+    /** @var int */
     public $Payment;
 
-    /** @var integer */
+    /** @var int */
     public $Value;
 
-    /** @var integer */
+    /** @var int */
     public $MassRate;
 
-    /** @var integer */
+    /** @var int */
     public $InsrRate;
 
-    /** @var integer */
+    /** @var int */
     public $AirRate;
 
-    /** @var integer */
+    /** @var int */
     public $Rate;
 
-    /** @var integer */
+    /** @var int */
     public $CustomDuty;
 }

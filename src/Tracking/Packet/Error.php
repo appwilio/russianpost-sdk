@@ -8,21 +8,25 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Packet;
 
 class Error
 {
+    /** @var int */
     public $ErrorTypeID;
+
+    /** @var string */
     public $ErrorName;
 
-    public function getCode()
+    public function getCode(): int
     {
-        return $this->ErrorTypeID;
+        return (int) $this->ErrorTypeID;
     }
 
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->ErrorName;
     }
