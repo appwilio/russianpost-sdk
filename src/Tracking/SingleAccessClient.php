@@ -89,37 +89,35 @@ class SingleAccessClient
         }
     }
 
-    public function getCashOnDeliveryEvents(string $code, string $language = self::LANG_RUS)
+    public function getCashOnDeliveryEvents(string $track, string $language = self::LANG_RUS)
     {
-        $arguments = $this->assembleCashOnDeliveryHistoryArguments($code, $language);
+        $arguments = $this->assembleCashOnDeliveryHistoryArguments($track, $language);
 
         return $this->getClient()->{'PostalOrderEventsForMail'}($arguments);
     }
 
-    private function assembleTrackingHistoryArguments(string $code, string $language, int $type): array
+    private function assembleTrackingHistoryArguments(string $track, string $language, int $type): \SoapVar
     {
-        return [
+        return new \SoapVar([
             new \SoapVar([
-                new \SoapVar([
-                    new \SoapVar($code, XSD_STRING, null, null, 'Barcode', self::XML_NS_DATA),
-                    new \SoapVar($type, XSD_STRING, null, null, 'MessageType', self::XML_NS_DATA),
-                    new \SoapVar($language, XSD_STRING, null, null, 'Language', self::XML_NS_DATA),
-                ], SOAP_ENC_OBJECT, null, null, 'OperationHistoryRequest', self::XML_NS_DATA),
-                new \SoapVar($this->auth, SOAP_ENCODED, null, null, 'AuthorizationHeader', self::XML_NS_DATA),
-            ], SOAP_ENC_OBJECT),
-        ];
+                new \SoapVar($track, XSD_STRING, null, null, 'Barcode', self::XML_NS_DATA),
+                new \SoapVar($type, XSD_STRING, null, null, 'MessageType', self::XML_NS_DATA),
+                new \SoapVar($language, XSD_STRING, null, null, 'Language', self::XML_NS_DATA),
+            ], SOAP_ENC_OBJECT, null, null, 'OperationHistoryRequest', self::XML_NS_DATA),
+            new \SoapVar($this->auth, SOAP_ENCODED, null, null, 'AuthorizationHeader', self::XML_NS_DATA),
+        ], SOAP_ENC_OBJECT);
     }
 
-    private function assembleCashOnDeliveryHistoryArguments(string $code, string $language): array
+    private function assembleCashOnDeliveryHistoryArguments(string $code, string $language): \SoapVar
     {
         $request = new PostalOrderEventsForMail(
             new PostalOrderEventsForMailInput($code, $language),
             $this->auth
         );
 
-        return [
-            new \SoapVar($request, SOAP_ENC_OBJECT, null, null, 'PostalOrderEventsForMail', self::XML_NS_HISTORY)
-        ];
+        return new \SoapVar(
+            $request, SOAP_ENC_OBJECT, null, null, 'PostalOrderEventsForMail', self::XML_NS_HISTORY
+        );
     }
 
     protected function getClient(): \SoapClient
