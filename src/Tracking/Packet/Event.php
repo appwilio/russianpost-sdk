@@ -13,16 +13,18 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Packet;
 
-class Item
+class Event
 {
-    /** @var Operation[] */
-    public $Operation;
+    use ErrorAware;
+
+    /** @var Error */
+    public $Error;
 
     /** @var string */
     public $Barcode;
 
-    /** @var Error */
-    public $Error;
+    /** @var Operation[] */
+    public $Operation;
 
     /**
      * @return Operation[]
@@ -32,7 +34,7 @@ class Item
         return $this->Operation;
     }
 
-    public function getBarcode():string
+    public function getBarcode(): string
     {
         return $this->Barcode;
     }
@@ -40,19 +42,5 @@ class Item
     public function isFound(): bool
     {
         return (bool) count($this->Operation);
-    }
-
-    public function hasError(): bool
-    {
-        return (bool) $this->Error;
-    }
-
-    public function getError(): ?Error
-    {
-        if (! $this->hasError()) {
-            return null;
-        }
-
-        return $this->Error;
     }
 }

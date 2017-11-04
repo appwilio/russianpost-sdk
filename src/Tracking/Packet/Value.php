@@ -15,14 +15,14 @@ namespace Appwilio\RussianPostSDK\Tracking\Packet;
 
 class Value
 {
-    /** @var Item[] */
+    /** @var Event[]|Event */
     public $Item = [];
 
     /**
-     * @return Item[]
+     * @return Event[]
      */
-    public function getItems()
+    public function getEvents()
     {
-        return $this->Item instanceof Item ? [$this->Item] : $this->Item;
+        return $this->Item instanceof Event ? [$this->Item] : $this->Item;
     }
 }

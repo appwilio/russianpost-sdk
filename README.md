@@ -15,7 +15,7 @@
   - [x] пакетный трекинг почтовых отправлений
 - [отправка](https://otpravka.pochta.ru/specification)
   - [ ] расчёт стоимости отправки
-  - [ ] нормализация и валидация вводимых данных
+  - [ ] нормализация и валидация данных: ФИО, адреса, телефоны
   - [ ] работа с единичными заказами и их партиями
   - [ ] генерация печатных форм
 
@@ -52,14 +52,14 @@ $tracker = new PacketAccessClient($login, $password);
 
 $ticket = $tracker->getTicket(['29014562148754', 'RA325487125CN']); // максимум 3 000 треков
 
-// минимум через 15 минут
+// рекомендуется подождать 15 минут перед запросом информации по билету
 
 $response = $tracker->getTrackingEvents($ticket->getId());
 
-foreach ($response->getItems() as $item) {
-    echo $item->getBarcode();
+foreach ($response->getEvents() as $event) {
+    echo $event->getBarcode();
     
-    foreach ($item->getOperations as $operation) {
+    foreach ($event->getOperations as $operation) {
         echo $operation->getOperationId();
         echo $operation->getAttributeId();
         echo $operation->getPerformedAt();

@@ -13,18 +13,19 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Packet;
 
-class TicketResponse
+trait ErrorAware
 {
-    use ErrorAware;
-
-    /** @var Error */
-    public $error;
-
-    /** @var string */
-    public $value;
-
-    public function getId(): string
+    public function hasError(): bool
     {
-        return $this->value;
+        return (bool) ($this->error ?? $this->Error ?? null);
+    }
+
+    public function getError(): ?Error
+    {
+        if (! $this->hasError()) {
+            return null;
+        }
+
+        return $this->error ?? $this->Error;
     }
 }

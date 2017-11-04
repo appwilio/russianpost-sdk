@@ -15,6 +15,8 @@ namespace Appwilio\RussianPostSDK\Tracking\Packet;
 
 class TrackingResponse
 {
+    use ErrorAware;
+
     /** @var Value */
     public $value;
 
@@ -27,24 +29,10 @@ class TrackingResponse
     }
 
     /**
-     * @return Item[]
+     * @return Event[]
      */
-    public function getItems()
+    public function getEvents()
     {
-        return $this->getValue()->getItems();
-    }
-
-    public function hasError(): bool
-    {
-        return (bool) $this->error;
-    }
-
-    public function getError(): ?Error
-    {
-        if (! $this->hasError()) {
-            return null;
-        }
-
-        return $this->error;
+        return $this->getValue()->getEvents();
     }
 }
