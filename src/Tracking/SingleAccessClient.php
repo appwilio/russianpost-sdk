@@ -25,8 +25,8 @@ class SingleAccessClient
     public const HISTORY_OPERATIONS = 0;
     public const HISTORY_NOTIFICATIONS = 1;
 
-    protected const TRACKING_LINK_URL = 'https://www.pochta.ru/tracking';
-    protected const TRACKING_WSDL_URL = 'https://tracking.russianpost.ru/rtm34?wsdl';
+    protected const LINK_URL = 'https://www.pochta.ru/tracking';
+    protected const WSDL_URL = 'https://tracking.russianpost.ru/rtm34?wsdl';
 
     protected const XML_NS_HISTORY = 'http://russianpost.org/operationhistory';
     protected const XML_NS_DATA = 'http://russianpost.org/operationhistory/data';
@@ -69,7 +69,7 @@ class SingleAccessClient
 
     public function getTrackingUrl(string $number): ?string
     {
-        return self::TRACKING_LINK_URL.'#'.$number;
+        return self::LINK_URL.'#'.$number;
     }
 
     public function getTrackingEvents(
@@ -78,7 +78,7 @@ class SingleAccessClient
         int $type = self::HISTORY_OPERATIONS
     ): TrackingResponse
     {
-        $arguments = $this->assembleTrackingHistoryArguments($track, $language, $type);
+        $arguments = $this->assembleTrackingRequestArguments($track, $language, $type);
 
         try {
             return $this->getClient()->{'getOperationHistory'}($arguments);
@@ -91,12 +91,12 @@ class SingleAccessClient
 
     public function getCashOnDeliveryEvents(string $track, string $language = self::LANG_RUS)
     {
-        $arguments = $this->assembleCashOnDeliveryHistoryArguments($track, $language);
+        $arguments = $this->assembleCashOnDeliveryRequestArguments($track, $language);
 
         return $this->getClient()->{'PostalOrderEventsForMail'}($arguments);
     }
 
-    private function assembleTrackingHistoryArguments(string $track, string $language, int $type): \SoapVar
+    private function assembleTrackingRequestArguments(string $track, string $language, int $type): \SoapVar
     {
         return new \SoapVar([
             new \SoapVar([
@@ -108,7 +108,7 @@ class SingleAccessClient
         ], SOAP_ENC_OBJECT);
     }
 
-    private function assembleCashOnDeliveryHistoryArguments(string $code, string $language): \SoapVar
+    private function assembleCashOnDeliveryRequestArguments(string $code, string $language): \SoapVar
     {
         $request = new PostalOrderEventsForMail(
             new PostalOrderEventsForMailInput($code, $language),
@@ -123,7 +123,7 @@ class SingleAccessClient
     protected function getClient(): \SoapClient
     {
         if (! $this->client) {
-            $this->client = new \SoapClient(self::TRACKING_WSDL_URL, $this->options);
+            $this->client = new \SoapClient(self::WSDL_URL, $this->options);
         }
 
         return $this->client;

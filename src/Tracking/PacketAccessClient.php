@@ -26,7 +26,7 @@ class PacketAccessClient
     public const ERROR_NOT_READY = 6;
     public const ERROR_INTERNAL = 16;
 
-    protected const TRACKING_WSDL_URL = 'https://tracking.russianpost.ru/fc?wsdl';
+    protected const WSDL_URL = 'https://tracking.russianpost.ru/fc?wsdl';
 
     /** @var string */
     protected $login;
@@ -41,11 +41,11 @@ class PacketAccessClient
         'soap_version' => SOAP_1_1,
         'trace'        => 1,
         'classmap'     => [
-            'item'                   => Packet\Item::class,       // Item согласно wsdl-описанию называется item
-            'file'                   => Packet\Value::class,      // value согласно wsdl-описанию называется file
-            'error'                  => Packet\Error::class,      // корневая ошибка
-            'Error'                  => Packet\Error::class,      // ошибка конкретного трека
-            'operation'              => Packet\Operation::class,  // Operation согласно wsdl-описанию называется operation
+            'item'                   => Packet\Event::class,     // Item согласно wsdl-описанию называется item
+            'file'                   => Packet\Value::class,     // value согласно wsdl-описанию называется file
+            'error'                  => Packet\Error::class,     // корневая ошибка
+            'Error'                  => Packet\Error::class,     // ошибка конкретного трека
+            'operation'              => Packet\Operation::class, // Operation согласно wsdl-описанию называется operation
             'ticketResponse'         => TicketResponse::class,
             'answerByTicketResponse' => TrackingResponse::class,
         ],
@@ -81,7 +81,7 @@ class PacketAccessClient
 
     public function getTrackingEvents(string $ticket): TrackingResponse
     {
-        $arguments = $this->assembleTrackingHistoryRequestArgument($ticket);
+        $arguments = $this->assembleTrackingRequestArgument($ticket);
 
         /** @var TrackingResponse $response */
         $response = $this->getClient()->{'getResponseByTicket'}($arguments);
@@ -93,7 +93,7 @@ class PacketAccessClient
         return $response;
     }
 
-    private function assembleTicketRequestArguments(iterable $tracks, string $language): array
+    private function assembleTicketRequestArguments(iterable $tracks, string $language): \SoapVar
     {
         $items = new \ArrayObject();
 
@@ -101,31 +101,27 @@ class PacketAccessClient
             $items->append(new \SoapVar("<Item Barcode=\"{$track}\" />", XSD_ANYXML));
         }
 
-        return [
-            new \SoapVar([
-                new \SoapVar($items, SOAP_ENC_OBJECT, null, null, 'request'),
-                new \SoapVar($this->login, XSD_STRING, null, null, 'login'),
-                new \SoapVar($this->password, XSD_STRING, null, null, 'password'),
-                new \SoapVar($language, XSD_STRING, null, null, 'language'),
-            ], SOAP_ENC_OBJECT),
-        ];
+        return new \SoapVar([
+            new \SoapVar($items, SOAP_ENC_OBJECT, null, null, 'request'),
+            new \SoapVar($this->login, XSD_STRING, null, null, 'login'),
+            new \SoapVar($this->password, XSD_STRING, null, null, 'password'),
+            new \SoapVar($language, XSD_STRING, null, null, 'language'),
+        ], SOAP_ENC_OBJECT);
     }
 
-    private function assembleTrackingHistoryRequestArgument(string $ticket): array
+    private function assembleTrackingRequestArgument(string $ticket): \SoapVar
     {
-        return [
-            new \SoapVar([
-                new \SoapVar($ticket, XSD_STRING, null, null, 'ticket'),
-                new \SoapVar($this->login, XSD_STRING, null, null, 'login'),
-                new \SoapVar($this->password, XSD_STRING, null, null, 'password'),
-            ], SOAP_ENC_OBJECT),
-        ];
+        return new \SoapVar([
+            new \SoapVar($ticket, XSD_STRING, null, null, 'ticket'),
+            new \SoapVar($this->login, XSD_STRING, null, null, 'login'),
+            new \SoapVar($this->password, XSD_STRING, null, null, 'password'),
+        ], SOAP_ENC_OBJECT);
     }
 
     public function getClient(): \SoapClient
     {
         if (! $this->client) {
-            $this->client = new \SoapClient(self::TRACKING_WSDL_URL, $this->options);
+            $this->client = new \SoapClient(self::WSDL_URL, $this->options);
         }
 
         return $this->client;
