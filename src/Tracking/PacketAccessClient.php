@@ -64,7 +64,7 @@ class PacketAccessClient
         }
 
         if (iterator_count($tracks) > 3000) {
-            throw PacketAccessException::tracksNumberLimitExceeded();
+            throw PacketAccessException::trackNumberLimitExceeded();
         }
 
         $arguments = $this->assembleTicketRequestArguments($tracks, $language);

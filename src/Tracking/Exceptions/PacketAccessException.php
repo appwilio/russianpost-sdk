@@ -15,7 +15,7 @@ namespace Appwilio\RussianPostSDK\Tracking\Exceptions;
 
 class PacketAccessException extends \Exception
 {
-    public static function tracksNumberLimitExceeded(): self
+    public static function trackNumberLimitExceeded(): self
     {
         return new self('Максимально допустимое количество треков в одном запросе – 3 000.');
     }

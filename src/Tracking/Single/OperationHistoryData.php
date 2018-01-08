@@ -23,6 +23,10 @@ class OperationHistoryData
      */
     public function getHistoryRecords()
     {
+        if (is_object($this->historyRecord)) {
+            $this->historyRecord = [$this->historyRecord];
+        }
+
         return $this->historyRecord;
     }
 }
