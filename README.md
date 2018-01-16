@@ -66,7 +66,11 @@ foreach ($response->getEvents() as $event) {
     }
 }
 ```
+## Запуск тестов
 
+```
+$ vendor/bin/phpunit
+```
 ## Авторы
 
 - [greabock](https://github.com/greabock)
