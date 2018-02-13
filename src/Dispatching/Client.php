@@ -13,37 +13,41 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching;
 
-use GuzzleHttp\Client as GuzzleClient;
+use Appwilio\RussianPostSDK\Dispatching\Address\Address;
+use Appwilio\RussianPostSDK\Dispatching\Requests\apiClient;
+use Appwilio\RussianPostSDK\Dispatching\Requests\AuthorizationHeader;
+use Appwilio\RussianPostSDK\Dispatching\Requests\CleanAddressRequest;
+use Appwilio\RussianPostSDK\Dispatching\Responses\CleanAddressCollectionResponse;
 
 class Client
 {
     protected const API_URL = 'https://otpravka-api.pochta.ru/1.0/';
 
-    /** @var string */
-    private $login;
-
-    /** @var string */
-    private $password;
-
-    /** @var string */
-    private $token;
-
-    /** @var GuzzleClient */
-    private $httpClient;
 
     public function __construct(string $login, string $password, string $token)
     {
-        $this->login = $login;
-        $this->password = $password;
-        $this->token = $token;
+        $this->auth = new AuthorizationHeader($login, $password, $token);
     }
 
-    protected function getHttpClient(): GuzzleClient
+    /**
+     * @param string $address
+     * @param null|string $id
+     * @return CleanAddressCollectionResponse
+     * @throws Exceptions\AddressException
+     */
+    public function getCleanAddress(
+        string $address,
+        ?string $id = null
+    ): CleanAddressCollectionResponse
     {
-        if (! $this->httpClient) {
-            $this->httpClient = new GuzzleClient();
-        }
+        $cleanAddressRequest = new CleanAddressRequest();
+        $cleanAddressRequest->addAddress(new Address($address, $id));
 
-        return $this->httpClient;
+        $apiClient = new apiClient($this->auth);
+
+        $response = $apiClient->send($cleanAddressRequest);
+
+        return $response;
     }
+
 }
