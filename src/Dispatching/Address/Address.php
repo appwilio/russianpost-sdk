@@ -16,8 +16,13 @@ class Address implements AddressInterface
 
     public function __construct(string $address, ?string $id = null)
     {
-        if (!$this->isAddressValid($address)) throw AddressException::incorrectAddress();
-        if (empty($id)) $id = $this->generateId($address);
+        if (!$this->isAddressValid($address)) {
+            throw AddressException::incorrectAddress();
+        }
+
+        if (empty($id)) {
+            $id = $this->generateId($address);
+        }
 
         $this->setAddress($address);
         $this->setId($id);

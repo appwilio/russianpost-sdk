@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Appwilio\RussianPostSDK\Dispatching;
 
 use Appwilio\RussianPostSDK\Dispatching\Address\Address;
-use Appwilio\RussianPostSDK\Dispatching\Requests\apiClient;
+use Appwilio\RussianPostSDK\Dispatching\Requests\ApiClient;
 use Appwilio\RussianPostSDK\Dispatching\Requests\AuthorizationHeader;
 use Appwilio\RussianPostSDK\Dispatching\Requests\CleanAddressRequest;
 use Appwilio\RussianPostSDK\Dispatching\Responses\CleanAddressCollectionResponse;
@@ -23,10 +23,13 @@ class Client
 {
     protected const API_URL = 'https://otpravka-api.pochta.ru/1.0/';
 
+    /** @var ApiClient */
+    private $client;
 
     public function __construct(string $login, string $password, string $token)
     {
-        $this->auth = new AuthorizationHeader($login, $password, $token);
+        $auth = new AuthorizationHeader($login, $password, $token);
+        $this->client = new ApiClient($auth);
     }
 
     /**
@@ -43,9 +46,7 @@ class Client
         $cleanAddressRequest = new CleanAddressRequest();
         $cleanAddressRequest->addAddress(new Address($address, $id));
 
-        $apiClient = new apiClient($this->auth);
-
-        $response = $apiClient->send($cleanAddressRequest);
+        $response = $this->client->send($cleanAddressRequest);
 
         return $response;
     }

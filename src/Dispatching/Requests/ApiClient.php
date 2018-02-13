@@ -8,13 +8,18 @@ use Appwilio\RussianPostSDK\Dispatching\Responses\CleanAddressCollectionResponse
 use Appwilio\RussianPostSDK\Dispatching\Responses\CleanPhoneResponse;
 use JMS\Serializer\SerializerBuilder;
 
-class apiClient
+class ApiClient
 {
     /** @var string */
     private $auth;
 
     /** @var GuzzleClient */
     private $httpClient;
+
+    private const COMMON_HEADERS = [
+        'Content-Type' => 'application/json',
+        'Accept'       => 'application/json;charset=UTF-8'
+    ];
 
     protected $map = [
         CleanAddressRequest::class => CleanAddressCollectionResponse::class,
@@ -24,20 +29,17 @@ class apiClient
 
     public function __construct(AuthorizationHeader $authorizationHeader)
     {
-       $this->auth = $authorizationHeader;
+        $this->auth = $authorizationHeader;
     }
 
     protected function getHttpClient(): GuzzleClient
     {
         if (!$this->httpClient) {
-            $this->httpClient = new GuzzleClient([
-                'headers' => [
-                    'Authorization'        => 'AccessToken ' . $this->auth->token,
-                    'Content-Type'         => 'application/json',
-                    'Accept'               => 'application/json;charset=UTF-8',
-                    'X-User-Authorization' => 'Basic ' . $this->auth->basicAuth(),
+            $this->httpClient = new GuzzleClient(
+                [
+                    'headers' => array_merge(static::COMMON_HEADERS, $this->auth->buildHeaders())
                 ]
-            ]);
+            );
         }
         return $this->httpClient;
     }
@@ -48,20 +50,13 @@ class apiClient
             $request->getMethod(),
             $request->getUrl(),
             [
-                'body'   => json_encode($request->getBodyArray()),
-                'stream' => true
+                'body' => json_encode($request->getBodyArray()),
             ]
         );
 
-        $stream = $response->getBody();
-        $result = "";
-        while (!$stream->eof()) {
-            $result .= $stream->read(1024);
-        }
-
         //Sometimes $result is unnamed collection
         //Need to wrap up result in to "body" for correct deserialization
-        $result = '{ "body": '.(string)$result.' }';
+        $result = '{ "body": ' . (string)$response->getBody() . ' }';
 
         $serializer = SerializerBuilder::create()->build();
         return $serializer->deserialize($result, $this->map[get_class($request)], 'json');

@@ -7,23 +7,28 @@ namespace Appwilio\RussianPostSDK\Dispatching\Requests;
 class AuthorizationHeader
 {
     /** @var string */
-    public $login;
-
-    /** @var string */
-    public $password;
+    public $basicAuth;
 
     /** @var string */
     public $token;
 
-    public function __construct(?string $login = null, ?string $password = null, ?string $token = null)
+    public function __construct(string $login, string $password, string $token)
     {
-        $this->login = $login;
-        $this->password = $password;
+        $this->basicAuth = $this->basicAuth($login, $password);
         $this->token = $token;
     }
 
-    public function basicAuth(): string
+    public function basicAuth(string $login, string $password): string
     {
-        return base64_encode($this->login . ":" . $this->password);
+        return base64_encode($login . ":" . $password);
+    }
+
+    public function buildHeaders(): array
+    {
+        return
+            [
+                'Authorization'        => 'AccessToken ' . $this->token,
+                'X-User-Authorization' => 'Basic ' . $this->basicAuth
+            ];
     }
 }
