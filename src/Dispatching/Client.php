@@ -14,10 +14,13 @@ declare(strict_types=1);
 namespace Appwilio\RussianPostSDK\Dispatching;
 
 use Appwilio\RussianPostSDK\Dispatching\Address\Address;
+use Appwilio\RussianPostSDK\Dispatching\Phone\Phone;
 use Appwilio\RussianPostSDK\Dispatching\Requests\ApiClient;
 use Appwilio\RussianPostSDK\Dispatching\Requests\AuthorizationHeader;
 use Appwilio\RussianPostSDK\Dispatching\Requests\CleanAddressRequest;
+use Appwilio\RussianPostSDK\Dispatching\Requests\CleanPhoneRequest;
 use Appwilio\RussianPostSDK\Dispatching\Responses\CleanAddressCollectionResponse;
+use Appwilio\RussianPostSDK\Dispatching\Responses\CleanPhoneCollectionResponse;
 
 class Client
 {
@@ -46,9 +49,26 @@ class Client
         $cleanAddressRequest = new CleanAddressRequest();
         $cleanAddressRequest->addAddress(new Address($address, $id));
 
-        $response = $this->client->send($cleanAddressRequest);
-
-        return $response;
+        return $this->client->send($cleanAddressRequest);
     }
 
+    /**
+     * @param string $phone
+     * @param null|string $id
+     * @return CleanPhoneCollectionResponse
+     * @throws Exceptions\PhoneException
+     */
+    public function getCleanPhone(
+        string $phone,
+        ?string $id = null,
+        ?string $area = null,
+        ?string $place = null,
+        ?string $region = null
+    ): CleanPhoneCollectionResponse
+    {
+        $cleanPhoneRequest = new CleanPhoneRequest();
+        $cleanPhoneRequest->addPhone(new Phone($phone, $id, $region, $area, $place));
+
+        return $this->client->send($cleanPhoneRequest);
+    }
 }

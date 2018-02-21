@@ -2,25 +2,51 @@
 
 namespace Appwilio\RussianPostSDK\Dispatching\Requests;
 
-class CleanPhoneRequest
+use Appwilio\RussianPostSDK\Dispatching\Phone\Phone;
+
+class CleanPhoneRequest implements RequestInterface
 {
     public const ENDPOINT = 'https://otpravka-api.pochta.ru/1.0/clean/phone';
-    
-    /** @var string */
-    private $phone;
+    public const METHOD = 'POST';
 
-    public function __construct(iterable $phone)
+    /** @var array */
+    private $phones = [];
+
+    public function getUrl(): string
     {
-        $this->phone = $phone;
+        return self::ENDPOINT;
     }
 
-    public function getPhone(): string
+    public function getMethod(): string
     {
-        return $this->phone;
+        return self::METHOD;
     }
 
-    public function getId(): string
+    public function getBodyArray(): array
     {
-        return sha1($this->phone);
+        return $this->phones;
     }
+
+    public function addPhone(Phone $phone)
+    {
+        $newPhone = [
+            "id"             => $phone->getId(),
+            "original-phone" => $phone->getPhone()
+        ];
+
+        if (!empty($phone->getArea())) {
+            $newPhone["area"] = $phone->getArea();
+        }
+
+        if (!empty($phone->getPlace())) {
+            $newPhone["place"] = $phone->getPlace();
+        }
+
+        if (!empty($phone->getRegion())) {
+            $newPhone["region"] = $phone->getRegion();
+        }
+
+        $this->phones[] = $newPhone;
+    }
+
 }

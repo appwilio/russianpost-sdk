@@ -27,7 +27,6 @@ class CleanAddressRequest implements RequestInterface
         return $this->addresses;
     }
 
-
     public function addAddress(AddressInterface $address)
     {
         $this->addresses[] = [
@@ -35,6 +34,4 @@ class CleanAddressRequest implements RequestInterface
             "original-address" => $address->getAddress()
         ];
     }
-
-
 }
