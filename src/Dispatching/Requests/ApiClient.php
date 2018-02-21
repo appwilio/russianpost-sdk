@@ -6,6 +6,7 @@ use GuzzleHttp\Client as GuzzleClient;
 use Appwilio\RussianPostSDK\Dispatching\Responses\CalculateResponse;
 use Appwilio\RussianPostSDK\Dispatching\Responses\CleanAddressCollectionResponse;
 use Appwilio\RussianPostSDK\Dispatching\Responses\CleanPhoneCollectionResponse;
+use Appwilio\RussianPostSDK\Dispatching\Responses\CleanPhoneResponse;
 use JMS\Serializer\SerializerBuilder;
 
 class ApiClient
@@ -24,6 +25,7 @@ class ApiClient
     protected $map = [
         CleanAddressRequest::class => CleanAddressCollectionResponse::class,
         CleanPhoneRequest::class   => CleanPhoneCollectionResponse::class,
+        CleanPhoneRequest::class   => CleanPhoneResponse::class,
         CalculateRequest::class    => CalculateResponse::class,
     ];
 

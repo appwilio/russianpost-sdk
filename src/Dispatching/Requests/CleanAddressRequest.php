@@ -34,5 +34,4 @@ class CleanAddressRequest implements RequestInterface
             "original-address" => $address->getAddress()
         ];
     }
-
 }

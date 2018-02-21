@@ -71,5 +71,4 @@ class Client
 
         return $this->client->send($cleanPhoneRequest);
     }
-
 }
