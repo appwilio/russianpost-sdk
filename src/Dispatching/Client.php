@@ -17,8 +17,10 @@ use Appwilio\RussianPostSDK\Dispatching\Address\Address;
 use Appwilio\RussianPostSDK\Dispatching\Phone\Phone;
 use Appwilio\RussianPostSDK\Dispatching\Requests\ApiClient;
 use Appwilio\RussianPostSDK\Dispatching\Requests\AuthorizationHeader;
+use Appwilio\RussianPostSDK\Dispatching\Requests\CalculateRequest;
 use Appwilio\RussianPostSDK\Dispatching\Requests\CleanAddressRequest;
 use Appwilio\RussianPostSDK\Dispatching\Requests\CleanPhoneRequest;
+use Appwilio\RussianPostSDK\Dispatching\Responses\CalculateResponse;
 use Appwilio\RussianPostSDK\Dispatching\Responses\CleanAddressCollectionResponse;
 use Appwilio\RussianPostSDK\Dispatching\Responses\CleanPhoneCollectionResponse;
 
@@ -70,5 +72,15 @@ class Client
         $cleanPhoneRequest->addPhone(new Phone($phone, $id, $region, $area, $place));
 
         return $this->client->send($cleanPhoneRequest);
+    }
+
+    /**
+     * @param \Appwilio\RussianPostSDK\Dispatching\Requests\CalculateRequest $request
+     *
+     * @return \Appwilio\RussianPostSDK\Dispatching\Responses\CalculateResponse
+     */
+    public function getCalculate(CalculateRequest $request): CalculateResponse
+    {
+        return $this->client->send($request);
     }
 }

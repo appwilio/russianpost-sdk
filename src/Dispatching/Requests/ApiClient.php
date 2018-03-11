@@ -2,6 +2,7 @@
 
 namespace Appwilio\RussianPostSDK\Dispatching\Requests;
 
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use GuzzleHttp\Client as GuzzleClient;
 use Appwilio\RussianPostSDK\Dispatching\Responses\CalculateResponse;
 use Appwilio\RussianPostSDK\Dispatching\Responses\CleanAddressCollectionResponse;
@@ -59,6 +60,14 @@ class ApiClient
         //Sometimes $result is unnamed collection
         //Need to wrap up result in to "body" for correct deserialization
         $result = '{ "body": ' . (string)$response->getBody() . ' }';
+
+        /**
+         * I have bug from loaded
+         * Doctrine\Common\Annotations\AnnotationException : [Semantical Error] The annotation "@JMS\Serializer\Annotation\Type"
+         * in property ... does not exist, or could not be auto-loaded.
+         * Solution @see https://github.com/symfony/symfony/issues/25555
+         */
+        AnnotationRegistry::registerLoader('class_exists');
 
         $serializer = SerializerBuilder::create()->build();
         return $serializer->deserialize($result, $this->map[get_class($request)], 'json');
