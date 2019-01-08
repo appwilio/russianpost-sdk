@@ -31,7 +31,7 @@ composer require appwilio/russianpost-sdk
 
 ## Использование
 
-Единичный доступ:
+### Единичный доступ:
 ```php
 $tracker = new SingleAccessClient($login, $password);
 
@@ -46,7 +46,7 @@ foreach ($response->getOperations() as $operation) {
 }
 ```
 
-Пакетный доступ:
+### Пакетный доступ:
 ```php
 $tracker = new PacketAccessClient($login, $password);
 
@@ -65,6 +65,12 @@ foreach ($response->getEvents() as $event) {
         echo $operation->getPerformedAt();
     }
 }
+```
+
+## Нормализация телефона
+```php
+$client = new DispatchingClient($login $password, $token);
+$response = $client->services()->normalizePhone(NormalizePhoneRequest::one('89001234567'));
 ```
 
 ## Авторы

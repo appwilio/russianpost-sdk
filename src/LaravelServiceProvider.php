@@ -17,6 +17,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Foundation\Application;
 use Appwilio\RussianPostSDK\Tracking\PacketAccessClient;
 use Appwilio\RussianPostSDK\Tracking\SingleAccessClient;
+use Appwilio\RussianPostSDK\Dispatching\DispatchingClient;
 
 class LaravelServiceProvider extends ServiceProvider
 {
@@ -35,10 +36,18 @@ class LaravelServiceProvider extends ServiceProvider
 
             return new PacketAccessClient($config['login'], $config['password']);
         });
+
+        $this->app->singleton(DispatchingClient::class, function (Application $app) {
+            $config = $app['config']['services.russianpost.dispatching'];
+
+            return new DispatchingClient($config['login'], $config['password'], $config['token']);
+        });
     }
 
     public function provides()
     {
-        return [SingleAccessClient::class, PacketAccessClient::class];
+        return [
+            SingleAccessClient::class, PacketAccessClient::class, DispatchingClient::class
+        ];
     }
 }
