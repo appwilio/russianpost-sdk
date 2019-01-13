@@ -6,11 +6,19 @@ namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses;
 
 use JMS\Serializer\Annotation AS JMS;
 
-final class NormalizeFioResponse
+final class NormalizeFioResponse extends IterableResponse
 {
     /**
      * @JMS\Type("array<Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses\Fio>")
      * @JMS\SerializedName("body")
      */
-    public $items = [];
+    private $items = [];
+
+    /**
+     * @return iterable|Fio[]
+     */
+    public function getItems(): iterable
+    {
+        return $this->items;
+    }
 }

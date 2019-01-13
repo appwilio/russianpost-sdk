@@ -6,11 +6,19 @@ namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses;
 
 use JMS\Serializer\Annotation AS JMS;
 
-final class NormalizeAddressResponse
+final class NormalizeAddressResponse extends IterableResponse
 {
     /**
      * @JMS\Type("array<Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses\Address>")
      * @JMS\SerializedName("body")
      */
-    public $items = [];
+    private $items = [];
+
+    /**
+     * @return iterable|Address[]
+     */
+    public function getItems(): iterable
+    {
+        return $this->items;
+    }
 }
