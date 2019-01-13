@@ -2,12 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Appwilio\RussianPostSDK\Dispatching\Responses;
+namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses;
 
 use JMS\Serializer\Annotation AS JMS;
 
 final class Phone
 {
+    /**
+     * Коды качества нормализации телефона
+     *
+     * @see https://otpravka.pochta.ru/specification#/enums-clean-fio-phone-quality
+     */
     public const QUALITY_UNDEF = 'UNDEF';
     public const QUALITY_EMPTY = 'EMPTY';
     public const QUALITY_GARBAGE = 'GARBAGE';

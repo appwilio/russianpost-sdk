@@ -8,6 +8,11 @@ use JMS\Serializer\Annotation AS JMS;
 
 final class Fio
 {
+    /**
+     * Коды качества нормализации ФИО
+     *
+     * @see https://otpravka.pochta.ru/specification#/enums-clean-fio-quality
+     */
     public const QUALITY_EDITED = 'EDITED';
     public const QUALITY_NOT_SURE = 'NOT_SURE';
     public const QUALITY_CONFIRMED_MANUALLY = 'CONFIRMED_MANUALLY';

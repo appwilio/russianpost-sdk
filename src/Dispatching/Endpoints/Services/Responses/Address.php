@@ -8,10 +8,20 @@ use JMS\Serializer\Annotation AS JMS;
 
 final class Address
 {
+    /**
+     * Типы адресов
+     *
+     * @see https://otpravka.pochta.ru/specification#/enums-base-address-type
+     */
     public const TYPE_PO_BOX = 'PO_BOX';
     public const TYPE_DEMAND = 'DEMAND';
     public const TYPE_DEFAULT = 'DEFAULT';
 
+    /**
+     * Коды качества нормализации адреса
+     *
+     * @see https://otpravka.pochta.ru/specification#/enums-clean-address-quality
+     */
     public const QUALITY_GOOD = 'GOOD';
     public const QUALITY_ON_DEMAND = 'ON_DEMAND';
     public const QUALITY_POSTAL_BOX = 'POSTAL_BOX';
@@ -23,6 +33,11 @@ final class Address
     public const QUALITY_UNDEF_06 = 'UNDEF_06';
     public const QUALITY_UNDEF_07 = 'UNDEF_07';
 
+    /**
+     * Коды проверки нормализации адреса
+     *
+     * @https://otpravka.pochta.ru/specification#/enums-clean-address-validation
+     */
     public const VALIDATION_VALIDATED = 'VALIDATED';
     public const VALIDATION_OVERRIDDEN = 'OVERRIDDEN';
     public const VALIDATION_CONFIRMED_MANUALLY = 'CONFIRMED_MANUALLY';
