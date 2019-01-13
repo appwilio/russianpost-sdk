@@ -26,7 +26,7 @@ final class NormalizePhoneRequest extends ApiRequest
                 'id'             => \sha1($phone),
                 'original-phone' => $phone
             ],
-            array_filter(\compact('area', 'place', 'region'))
+            \array_filter(\compact('area', 'place', 'region'))
         );
     }
 

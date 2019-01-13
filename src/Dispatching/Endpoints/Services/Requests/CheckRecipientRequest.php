@@ -23,8 +23,8 @@ final class CheckRecipientRequest extends ApiRequest
     {
         $this->items[] = [
             'raw-address'   => $address,
-            'raw-full-name' => $fullName,
             'raw-telephone' => $phone,
+            'raw-full-name' => $fullName,
         ];
     }
 
