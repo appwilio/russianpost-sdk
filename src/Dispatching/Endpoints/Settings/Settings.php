@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Settings;
 
 use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Settings\Responses\ShippingPointsResponse;
 
 final class Settings
 {
@@ -16,13 +17,8 @@ final class Settings
         $this->client = $client;
     }
 
-    public function points()
+    public function shippingPoints(): ShippingPointsResponse
     {
-        
-    }
-
-    public function settings()
-    {
-        
+        return $this->client->get('/user-shipping-points', null, ShippingPointsResponse::class);
     }
 }
