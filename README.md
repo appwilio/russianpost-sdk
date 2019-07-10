@@ -30,9 +30,9 @@
     - [x] [Акт осмотра содержимого партии](#акт-осмотра-содержимого-партии)
     - [x] [Форма Ф103 для партии](#форма-Ф103-для-партии)
     - [ ] Подготовка и отправка электронной формы Ф103 для партии
-  - [ ] [Настройки]
-    - [ ] [Точки сдачи]
-    - [ ] [Настройки пользователя]
+  - [ ] Настройки
+    - [ ] Точки сдачи
+    - [ ] Настройки пользователя
 
 > Работа с API возможна только при наличии договора с Почтой России (кроме единичного трекинга, где без договора лимит 100 запросов в сутки).
 
@@ -109,7 +109,9 @@ return \response()->streamDownload(function () use ($file) {
 
 #### Форма Ф7п для заказа
 ```php
-$pdf = $client->documents()->orderF7Form('12345678', new \DataTime('2019-01-01'), Documents::PRINT_TYPE_THERMO);
+$pdf = $client->documents()->orderF7Form(
+    '12345678', new \DataTime('2019-01-01'), Documents::PRINT_TYPE_THERMO
+);
 ```
 
 #### Форма Ф112ЭК для заказа
@@ -124,7 +126,9 @@ $zip = $client->documents()->orderFormsBundleBacklog('12345678', new \DataTime('
 
 #### Пакет документов для заказа (после формирования партии)
 ```php
-$zip = $client->documents()->orderFormBundle('12345678', new \DataTime('2019-01-01'), Documents::PRINT_TYPE_THERMO);
+$zip = $client->documents()->orderFormBundle(
+    '12345678', new \DataTime('2019-01-01'), Documents::PRINT_TYPE_THERMO
+);
 ```
 
 #### Пакет документов для партии
