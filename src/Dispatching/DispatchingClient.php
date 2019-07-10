@@ -17,6 +17,7 @@ use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
 use Appwilio\RussianPostSDK\Dispatching\Http\Authorization;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Services;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Settings\Settings;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Documents\Documents;
 
 final class DispatchingClient
 {
@@ -38,9 +39,9 @@ final class DispatchingClient
 
     }
 
-    public function documents()
+    public function documents(): Documents
     {
-        
+        return new Documents($this->client);
     }
 
     public function archive()
