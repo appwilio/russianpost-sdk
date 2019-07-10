@@ -73,17 +73,21 @@ final class ApiClient
         return $this->serializer;
     }
 
-    private function send(string $method, string $path, ?ApiRequest $request, ?string $class = null)
+    private function send(string $method, string $path, ?ApiRequest $request = null, ?string $class = null)
     {
         $response = $this->getHttpClient()->request(
             $method, $path, $request ? $this->buildRequestOptions($method, $request) : []
         );
 
-        //Sometimes $response is unnamed collection
-        //Need to wrap up response in to "body" for correct deserialization
-        //$data = '{"body": ' . (string) $response->getBody() . '}';
+        $data = (string) $response->getBody();
 
-        $data = (string) $response;
+        if (null !== $class && (new \ReflectionClass($class))->isSubclassOf(IterableResponse::class)) {
+            $data = '{"items":'.$data.'}';
+        }
+
+        if (null === $class) {
+            return \json_decode($data, false);
+        }
 
         return $this->createDesrializer()->deserialize($data, $class, 'json');
     }
