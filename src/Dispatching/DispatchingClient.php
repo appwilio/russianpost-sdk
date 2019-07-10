@@ -23,9 +23,9 @@ final class DispatchingClient
     /** @var ApiClient */
     private $client;
 
-    public function __construct(string $login, string $password, string $token)
+    public function __construct(string $login, string $password, string $token, array $httpOptions = [])
     {
-        $this->client = new ApiClient(new Authorization($login, $password, $token));
+        $this->client = new ApiClient(new Authorization($login, $password, $token), $httpOptions);
     }
 
     public function orders()

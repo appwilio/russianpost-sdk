@@ -25,11 +25,13 @@ final class ApiClient
     /** @var SerializerInterface */
     private $serializer;
 
-    public function __construct(Authorization $authorization)
+    /** @var array */
+    private $httpOptions;
+
+    public function __construct(Authorization $authorization, array $httpOptions)
     {
         $this->auth = $authorization;
-
-        $this->serializer = SerializerBuilder::create()->build();
+        $this->httpOptions = $httpOptions;
     }
 
     public function get(string $path, ?ApiRequest $request = null, ?string $class = null)
@@ -62,16 +64,18 @@ final class ApiClient
         return $this->serializer->deserialize($data, $class, 'json');
     }
 
-    private function buildRequestOptions(string $method, ?ApiRequest $request): array
+    private function buildRequestOptions(string $method, ApiRequest $request): array
     {
+        $data = \array_filter($request->toArray());
+
         if ($method === 'GET') {
             return [
-                'query' => $request->toArray()
+                'query' => $data,
             ];
         }
 
         return [
-            'body'    => \json_encode($request->toArray()),
+            'body'  => \json_encode($data),
             'headers' => [
                 'Content-Type' => 'application/json;charset=UTF-8'
             ],
@@ -81,10 +85,13 @@ final class ApiClient
     private function getHttpClient(): HttpClient
     {
         if ($this->httpClient === null) {
-            $this->httpClient = new HttpClient([
-                'base_uri' => self::API_URL,
-                'headers'  => \array_merge(self::COMMON_HEADERS, $this->auth->toArray()),
-            ]);
+            $this->httpClient = new HttpClient(\array_merge(
+                $this->httpOptions,
+                [
+                    'base_uri' => self::API_URL,
+                    'headers'  => \array_merge(self::COMMON_HEADERS, $this->auth->toArray()),
+                ]
+            ));
         }
 
         return $this->httpClient;
