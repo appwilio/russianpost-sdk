@@ -10,36 +10,60 @@ final class Recipient
     public const RELIABLE = 'reliable';
 
     /**
-     * @JMS\Type("string")
      * @JMS\SerializedName("raw-address")
+     * @JMS\Type("string")
+     * @var string
      */
-    public $address;
+    private $address;
 
     /**
-     * @JMS\Type("string")
      * @JMS\SerializedName("raw-telephone")
+     * @JMS\Type("string")
+     * @var string
      */
-    public $phone;
+    private $phone;
 
     /**
+     * @JMS\SerializedName("raw-full-name")
      * @JMS\Type("string")
-     * @JMS\SerializedName("full-name")
+     * @var string
      */
-    public $fullName;
+    private $fullName;
 
     /**
-     * @JMS\Type("string")
      * @JMS\SerializedName("unreliability")
+     * @JMS\Type("string")
+     * @var bool
      */
-    public $unreliability;
+    private $result;
+
+    public function getAddress(): string
+    {
+        return $this->address;
+    }
+
+    public function getPhone(): string
+    {
+        return $this->phone;
+    }
+
+    public function getFullName(): string
+    {
+        return $this->fullName;
+    }
+
+    public function isResult(): bool
+    {
+        return $this->result;
+    }
 
     public function isFraud(): bool
     {
-        return $this->unreliability === self::FRAUD;
+        return $this->result === self::FRAUD;
     }
 
     public function isReliable(): bool
     {
-        return $this->unreliability === self::RELIABLE;
+        return $this->result === self::RELIABLE;
     }
 }

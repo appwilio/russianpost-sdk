@@ -31,50 +31,87 @@ final class Phone
 
     /**
      * @JMS\Type("string")
+     * @var string
      */
-    public $id;
+    private $id;
 
     /**
-     * @JMS\Type("string")
      * @JMS\SerializedName("phone-country-code")
+     * @JMS\Type("string")
+     * @var string
      */
-    public $countryCode;
+    private $countryCode;
 
     /**
-     * @JMS\Type("string")
      * @JMS\SerializedName("phone-city-code")
+     * @JMS\Type("string")
+     * @var string
      */
-    public $cityCode;
+    private $cityCode;
 
     /**
-     * @JMS\Type("string")
      * @JMS\SerializedName("phone-number")
+     * @JMS\Type("string")
+     * @var string
      */
-    public $number;
+    private $number;
 
     /**
-     * @JMS\Type("string")
      * @JMS\SerializedName("phone-extension")
+     * @JMS\Type("string")
+     * @var string
      */
-    public $extension;
+    private $extension;
 
     /**
-     * @JMS\Type("string")
      * @JMS\SerializedName("original-phone")
+     * @JMS\Type("string")
+     * @var string
      */
-    public $originalPhone;
+    private $originalPhone;
 
     /**
-     * @JMS\Type("string")
      * @JMS\SerializedName("quality-code")
+     * @JMS\Type("string")
+     * @var string
      */
-    public $qualityCode;
+    private $qualityCode;
+
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    public function getCountryCode(): string
+    {
+        return $this->countryCode;
+    }
+
+    public function getCityCode(): string
+    {
+        return $this->cityCode;
+    }
+
+    public function getNumber(): string
+    {
+        return $this->number;
+    }
+
+    public function getExtension(): string
+    {
+        return $this->extension;
+    }
+
+    public function getOriginalPhone(): string
+    {
+        return $this->originalPhone;
+    }
 
     public function isUseful(): bool
     {
         return
             $this->qualityCode === self::QUALITY_CONFIRMED_MANUALLY
             ||
-            strpos($this->qualityCode, self::QUALITY_GOOD) === 0;
+            \strpos($this->qualityCode, self::QUALITY_GOOD) === 0;
     }
 }

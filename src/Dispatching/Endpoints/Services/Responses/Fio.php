@@ -19,43 +19,80 @@ final class Fio
 
     /**
      * @JMS\Type("string")
+     * @var string
      */
-    public $id;
+    private $id;
 
     /**
-     * @JMS\Type("string")
      * @JMS\SerializedName("name")
+     * @JMS\Type("string")
+     * @var string
      */
-    public $firstName;
+    private $firstName;
 
     /**
-     * @JMS\Type("string")
      * @JMS\SerializedName("middle-name")
+     * @JMS\Type("string")
+     * @var string
      */
-    public $middleName;
+    private $middleName;
 
     /**
-     * @JMS\Type("string")
      * @JMS\SerializedName("surname")
+     * @JMS\Type("string")
+     * @var string
      */
-    public $lastName;
+    private $lastName;
 
     /**
-     * @JMS\Type("string")
      * @JMS\SerializedName("original-fio")
+     * @JMS\Type("string")
+     * @var string
      */
-    public $originalFio;
+    private $originalFio;
 
     /**
-     * @JMS\Type("string")
      * @JMS\SerializedName("quality-code")
+     * @JMS\Type("string")
+     * @var string
      */
-    public $qualityCode;
+    private $qualityCode;
 
     /**
      * @JMS\Type("bool")
+     * @var bool
      */
-    public $valid;
+    private $valid;
+
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    public function getFirstName(): string
+    {
+        return $this->firstName;
+    }
+
+    public function getMiddleName(): string
+    {
+        return $this->middleName;
+    }
+
+    public function getLastName(): string
+    {
+        return $this->lastName;
+    }
+
+    public function getOriginalFio(): string
+    {
+        return $this->originalFio;
+    }
+
+    public function getQualityCode(): string
+    {
+        return $this->qualityCode;
+    }
 
     public function isUseful(): bool
     {

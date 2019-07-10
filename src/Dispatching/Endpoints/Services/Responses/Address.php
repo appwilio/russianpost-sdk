@@ -9,15 +9,6 @@ use JMS\Serializer\Annotation AS JMS;
 final class Address
 {
     /**
-     * Типы адресов
-     *
-     * @see https://otpravka.pochta.ru/specification#/enums-base-address-type
-     */
-    public const TYPE_PO_BOX = 'PO_BOX';
-    public const TYPE_DEMAND = 'DEMAND';
-    public const TYPE_DEFAULT = 'DEFAULT';
-
-    /**
      * Коды качества нормализации адреса
      *
      * @see https://otpravka.pochta.ru/specification#/enums-clean-address-quality
@@ -44,99 +35,123 @@ final class Address
 
     /**
      * @JMS\Type("string")
+     * @var string
      */
-    public $id;
+    private $id;
 
     /**
      * @JMS\Type("string")
+     * @var string|null
      */
-    public $index;
+    private $index;
 
     /**
      * @JMS\Type("string")
+     * @var string|null
      */
-    public $area;
+    private $area;
 
     /**
      * @JMS\Type("string")
+     * @var string|null
      */
-    public $place;
+    private $place;
 
     /**
      * @JMS\Type("string")
+     * @var string|null
      */
-    public $region;
+    private $region;
 
     /**
      * @JMS\Type("string")
+     * @var string|null
      */
-    public $location;
+    private $location;
 
     /**
      * @JMS\Type("string")
+     * @var string|null
      */
-    public $street;
+    private $street;
 
     /**
      * @JMS\Type("string")
+     * @var string|null
      */
-    public $house;
+    private $house;
 
     /**
      * @JMS\Type("string")
+     * @var string|null
      */
-    public $room;
+    private $room;
 
     /**
      * @JMS\Type("string")
+     * @var string|null
      */
-    public $slash;
+    private $slash;
 
     /**
      * @JMS\Type("string")
+     * @var string|null
      */
-    public $building;
+    private $building;
 
     /**
      * @JMS\Type("string")
+     * @var string|null
      */
-    public $corpus;
+    private $corpus;
 
     /**
      * @JMS\Type("string")
+     * @var string|null
      */
-    public $letter;
+    private $letter;
 
     /**
      * @JMS\Type("string")
+     * @var string|null
+     */
+    protected $hotel;
+
+    /**
      * @JMS\SerializedName("num-address-type")
+     * @JMS\Type("string")
+     * @var string|null
      */
-    public $numAddressType;
+    private $numAddressType;
 
     /**
-     * @JMS\Type("string")
      * @JMS\SerializedName("original-address")
+     * @JMS\Type("string")
+     * @var string
      */
-    public $originalAddress;
+    private $originalAddress;
 
     /**
-     * @JMS\Type("string")
      * @JMS\SerializedName("address-type")
+     * @JMS\Type("string")
+     * @var string
      *
      */
-    public $addressType;
+    private $addressType;
 
     /**
-     * @JMS\Type("string")
      * @JMS\SerializedName("quality-code")
+     * @JMS\Type("string")
+     * @var string
      */
-    public $qualityCode;
+    private $qualityCode;
 
     /**
-     * @JMS\Type("string")
      * @JMS\SerializedName("validation-code")
+     * @JMS\Type("string")
+     * @var string
      */
-    public $validationCode;
+    private $validationCode;
 
     public function isUseful(): bool
     {
@@ -149,5 +164,100 @@ final class Address
         ]);
 
         return $quality && $validity;
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    public function getIndex(): ?string
+    {
+        return $this->index;
+    }
+
+    public function getArea(): ?string
+    {
+        return $this->area;
+    }
+
+    public function getPlace(): ?string
+    {
+        return $this->place;
+    }
+
+    public function getRegion(): ?string
+    {
+        return $this->region;
+    }
+
+    public function getLocation(): ?string
+    {
+        return $this->location;
+    }
+
+    public function getStreet(): ?string
+    {
+        return $this->street;
+    }
+
+    public function getHouse(): ?string
+    {
+        return $this->house;
+    }
+
+    public function getRoom(): ?string
+    {
+        return $this->room;
+    }
+
+    public function getSlash(): ?string
+    {
+        return $this->slash;
+    }
+
+    public function getBuilding(): ?string
+    {
+        return $this->building;
+    }
+
+    public function getCorpus(): ?string
+    {
+        return $this->corpus;
+    }
+
+    public function getLetter(): ?string
+    {
+        return $this->letter;
+    }
+
+    public function getHotel(): ?string
+    {
+        return $this->hotel;
+    }
+
+    public function getNumAddressType(): ?string
+    {
+        return $this->numAddressType;
+    }
+
+    public function getOriginalAddress(): string
+    {
+        return $this->originalAddress;
+    }
+
+    public function getAddressType(): string
+    {
+        return $this->addressType;
+    }
+
+    public function getQualityCode(): string
+    {
+        return $this->qualityCode;
+    }
+
+    public function getValidationCode(): string
+    {
+        return $this->validationCode;
     }
 }
