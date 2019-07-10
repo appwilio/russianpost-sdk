@@ -7,10 +7,10 @@ namespace Appwilio\RussianPostSDK\Dispatching\Http;
 final class Authorization
 {
     /** @var string */
-    public $token;
+    private $token;
 
     /** @var string */
-    public $basic;
+    private $basic;
 
     public function __construct(string $login, string $password, string $token)
     {
@@ -23,7 +23,7 @@ final class Authorization
     {
         return [
             'Authorization'        => "AccessToken {$this->token}",
-            'X-User-Authorization' => "Basic {$this->basic}"
+            'X-User-Authorization' => "Basic {$this->basic}",
         ];
     }
 }
