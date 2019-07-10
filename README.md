@@ -158,24 +158,24 @@ return \response()->streamDownload(function () use ($file) {
 #### Форма Ф7п для заказа
 ```php
 $pdf = $client->documents()->orderF7Form(
-    '12345678', new \DataTime('2019-01-01'), Documents::PRINT_TYPE_THERMO
+    '12345678', new \DateTime('2019-01-01'), Documents::PRINT_TYPE_THERMO
 );
 ```
 
 #### Форма Ф112ЭК для заказа
 ```php
-$pdf = $client->documents()->orderF112Form('12345678', new \DataTime('2019-01-01'));
+$pdf = $client->documents()->orderF112Form('12345678', new \DateTime('2019-01-01'));
 ```
 
 #### Пакет документов для заказа (до формирования партии)
 ```php
-$zip = $client->documents()->orderFormsBundleBacklog('12345678', new \DataTime('2019-01-01'));
+$zip = $client->documents()->orderFormsBundleBacklog('12345678', new \DateTime('2019-01-01'));
 ```
 
 #### Пакет документов для заказа (после формирования партии)
 ```php
 $zip = $client->documents()->orderFormBundle(
-    '12345678', new \DataTime('2019-01-01'), Documents::PRINT_TYPE_THERMO
+    '12345678', new \DateTime('2019-01-01'), Documents::PRINT_TYPE_THERMO
 );
 ```
 
