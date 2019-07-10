@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Appwilio\RussianPostSDK\Dispatching\Http;
 
 use GuzzleHttp\Client as HttpClient;
+use JMS\Serializer\Handler\HandlerRegistryInterface;
+use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
-use JMS\Serializer\SerializerInterface;
 
 final class ApiClient
 {
@@ -22,11 +23,14 @@ final class ApiClient
     /** @var HttpClient */
     private $httpClient;
 
-    /** @var SerializerInterface */
+    /** @var Serializer */
     private $serializer;
 
     /** @var array */
     private $httpOptions;
+
+    /** @var array */
+    private $customDeserializators = [];
 
     public function __construct(Authorization $authorization, array $httpOptions)
     {
@@ -49,10 +53,30 @@ final class ApiClient
         return $this->send('DELETE', ...\func_get_args());
     }
 
+    public function addCustomDeserializator(string $type, string $class): void
+    {
+        $this->customDeserializators[$type] = $class;
+    }
+
+    private function createDesrializer(): Serializer
+    {
+        if (null === $this->serializer) {
+            $this->serializer = SerializerBuilder::create()
+                ->configureHandlers(function (HandlerRegistryInterface $registry) {
+                    foreach ($this->customDeserializators as $class => $handler) {
+                        $registry->registerHandler('deserialization', $class, 'json', new $handler);
+                    }
+                })
+                ->build();
+        }
+
+        return $this->serializer;
+    }
+
     private function send(string $method, string $path, ?ApiRequest $request, ?string $class = null)
     {
         $response = $this->getHttpClient()->request(
-            $method, $path, $this->buildRequestOptions($method, $request)
+            $method, $path, $request ? $this->buildRequestOptions($method, $request) : []
         );
 
         //Sometimes $response is unnamed collection
@@ -61,7 +85,7 @@ final class ApiClient
 
         $data = (string) $response;
 
-        return $this->serializer->deserialize($data, $class, 'json');
+        return $this->createDesrializer()->deserialize($data, $class, 'json');
     }
 
     private function buildRequestOptions(string $method, ApiRequest $request): array
