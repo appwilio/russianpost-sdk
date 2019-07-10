@@ -141,6 +141,18 @@ $response[0]->isFraud(); // ненадёжный
 $response[0]->isReliable(); // надёжный
 ```
 
+```php
+$response = $client->services()->checkRecipient(
+    CheckRecipientRequest::create()
+        ->addRecipient('123456 Москва, Варшавское шоссе, 37-45')
+        ->addRecipient('654321 Владивосток, пер. Староконный, 12-98');
+);
+
+foreach ($response as $recipient) {
+    echo $recipient->getAddress.': '.$recipiend->isReliable();
+}
+```
+
 ### Документы
 ```php
 $file = $client->documents()->orderF7Form('12345678');

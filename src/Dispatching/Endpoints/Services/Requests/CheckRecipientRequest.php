@@ -10,9 +10,14 @@ final class CheckRecipientRequest extends ApiRequest
 {
     private $items = [];
 
+    public static function create(): self
+    {
+        return new self();
+    }
+
     public static function one(string $address, string $fullName, string $phone): self
     {
-        $request = new self();
+        $request = self::create();
 
         $request->addRecipient(...\func_get_args());
 
