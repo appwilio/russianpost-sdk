@@ -55,6 +55,11 @@ final class ApiClient
         return $this->send('POST', ...\func_get_args());
     }
 
+    public function put(string $path, ApiRequest $request, ?string $class = null)
+    {
+        return $this->send('PUT', ...\func_get_args());
+    }
+
     public function delete(string $path, ApiRequest $request, ?string $class = null)
     {
         return $this->send('DELETE', ...\func_get_args());
