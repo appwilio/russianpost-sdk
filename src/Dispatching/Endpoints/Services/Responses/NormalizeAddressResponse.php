@@ -11,14 +11,14 @@ final class NormalizeAddressResponse extends IterableResponse
 {
     /**
      * @JMS\Type("array<Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses\Address>")
-     * @JMS\SerializedName("body")
+     * @JMS\SerializedName("items")
      */
-    private $items = [];
+    protected $items = [];
 
     /**
      * @return iterable|Address[]
      */
-    public function getItems(): iterable
+    public function getItems()
     {
         return $this->items;
     }

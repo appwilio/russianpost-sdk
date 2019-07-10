@@ -6,5 +6,10 @@ namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses;
 
 final class BalanceReponse
 {
-    public $balance;
+    private $balance;
+
+    public function getBalance()
+    {
+        return $this->balance;
+    }
 }
