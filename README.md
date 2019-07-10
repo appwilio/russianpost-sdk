@@ -91,6 +91,55 @@ foreach ($response->getEvents() as $event) {
 $client = new DispatchingClient($login $password, $token);
 ```
 
+### Расчёт стоимости пересылки
+```php
+$response = $client->services()->calculate(
+    CalculationRequest::create('123456', 200)
+        ->ofMailType(MailType::PARCEL_POSTAL)
+        ->ofMailCategory(MailCategory::ORDINARY)
+        ->ofEntriesType(MailEntryType::SALE_OF_GOODS)
+        ->fragile()
+        ->withSmsNotice();
+);
+
+echo $response->getTotal()->getCost();
+```
+
+### Нормализация и валидация данных
+
+#### Нормализация ФИО
+```php
+$response = $client->services()->normalizeFio(
+    NormalizeFioRequest::one('иванов иван иванович')
+);
+
+if ($response[0]->isUseful()) {
+    echo $response[0]->getFirstName().''.$response[0]->getLastName(); // Иван Иванов
+}
+```
+
+#### Нормализация адресов
+```php
+$response = $client->services()->normalizeAddress(
+    NormalizeAddressRequest::one('Москва варшавское шоссе 37-45')
+);
+```
+
+#### Нормализация телефонов
+```php
+$response = $client->services()->normalizePhone(NormalizePhoneRequest::one('89001234567'));
+```
+
+#### Проверка благонадёжности получателя
+```php
+$response = $client->services()->checkRecipient(
+    CheckRecipientRequest::one('Москва, Варшавское шоссе, 37-45')
+);
+
+$response[0]->isFraud(); // ненадёжный
+$response[0]->isReliable(); // надёжный
+```
+
 ### Документы
 ```php
 $file = $client->documents()->orderF7Form('12345678');
