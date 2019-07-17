@@ -12,19 +12,34 @@ final class ShippingPoint
      * @JMS\Type("bool")
      * @var bool
      */
-    public $enabled;
+    private $enabled;
 
     /**
-     * @JMS\Type("string")
      * @JMS\SerializedName("ops-address")
+     * @JMS\Type("string")
      * @var string
      */
-    public $address;
+    private $address;
 
     /**
-     * @JMS\Type("string")
      * @JMS\SerializedName("operator-postcode")
+     * @JMS\Type("string")
      * @var string
      */
-    public $postCode;
+    private $postalCode;
+
+    public function getAddress(): string
+    {
+        return $this->address;
+    }
+
+    public function getPostalCode(): string
+    {
+        return $this->postalCode;
+    }
+
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
+    }
 }

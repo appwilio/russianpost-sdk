@@ -19,6 +19,6 @@ final class Settings
 
     public function shippingPoints(): ShippingPointsResponse
     {
-        return $this->client->get('/user-shipping-points', null, ShippingPointsResponse::class);
+        return $this->client->get('/1.0/user-shipping-points', null, ShippingPointsResponse::class);
     }
 }
