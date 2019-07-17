@@ -2,9 +2,9 @@
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests;
 
-use Appwilio\RussianPostSDK\Dispatching\Http\ApiRequest;
+use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 
-final class CalculationRequest extends ApiRequest
+final class CalculationRequest implements Arrayable
 {
     /** @var array */
     private $data;

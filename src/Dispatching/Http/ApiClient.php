@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Http;
 
+use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\UploadedFile;
@@ -45,22 +46,22 @@ final class ApiClient
         $this->httpOptions = $httpOptions;
     }
 
-    public function get(string $path, ?ApiRequest $request = null, ?string $class = null)
+    public function get(string $path, ?Arrayable $request = null, ?string $class = null)
     {
         return $this->send('GET', ...\func_get_args());
     }
 
-    public function post(string $path, ApiRequest $request, ?string $class = null)
+    public function post(string $path, Arrayable $request, ?string $class = null)
     {
         return $this->send('POST', ...\func_get_args());
     }
 
-    public function put(string $path, ApiRequest $request, ?string $class = null)
+    public function put(string $path, Arrayable $request, ?string $class = null)
     {
         return $this->send('PUT', ...\func_get_args());
     }
 
-    public function delete(string $path, ApiRequest $request, ?string $class = null)
+    public function delete(string $path, Arrayable $request, ?string $class = null)
     {
         return $this->send('DELETE', ...\func_get_args());
     }
@@ -85,7 +86,7 @@ final class ApiClient
         return $this->serializer;
     }
 
-    private function send(string $method, string $path, ?ApiRequest $request = null, ?string $class = null)
+    private function send(string $method, string $path, ?Arrayable $request = null, ?string $class = null)
     {
         $response = $this->getHttpClient()->request(
             $method, $path, $request ? $this->buildRequestOptions($method, $request) : []
@@ -110,7 +111,7 @@ final class ApiClient
         return $this->createDesrializer()->deserialize($data, $class, 'json');
     }
 
-    private function buildRequestOptions(string $method, ApiRequest $request): array
+    private function buildRequestOptions(string $method, Arrayable $request): array
     {
         $data = \array_filter($request->toArray());
 

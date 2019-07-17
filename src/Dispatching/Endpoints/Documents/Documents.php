@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Documents;
 
+use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
-use Appwilio\RussianPostSDK\Dispatching\Http\ApiRequest;
 use GuzzleHttp\Psr7\UploadedFile;
 
 final class Documents
@@ -117,9 +117,9 @@ final class Documents
         return $sendingDate ? $sendingDate->format('Y-m-d') : null;
     }
 
-    private function buildRequest(array $query): ApiRequest
+    private function buildRequest(array $query): Arrayable
     {
-        return new class($query) extends ApiRequest {
+        return new class($query) implements Arrayable {
             private $query;
 
             public function __construct(array $query)

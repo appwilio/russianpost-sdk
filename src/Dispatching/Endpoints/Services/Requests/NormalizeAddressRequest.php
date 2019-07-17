@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests;
 
-use Appwilio\RussianPostSDK\Dispatching\Http\ApiRequest;
+use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 
-final class NormalizeAddressRequest extends ApiRequest
+final class NormalizeAddressRequest implements Arrayable
 {
     private $items = [];
 
