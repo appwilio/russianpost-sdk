@@ -4,22 +4,19 @@ declare(strict_types = 1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Services;
 
-use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses\Address;
-use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses\Fio;
-use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses\Phone;
-use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses\Recipient;
+use Appwilio\RussianPostSDK\Dispatching\Http\ArrayOf;
 use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\CalculationRequest;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\NormalizeFioRequest;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\NormalizePhoneRequest;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\CheckRecipientRequest;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\NormalizeAddressRequest;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses\Fio;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses\Phone;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses\Address;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses\Recipient;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses\BalanceReponse;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses\CalculationResponse;
-use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses\NormalizeFioResponse;
-use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses\NormalizePhoneResponse;
-use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses\CheckRecipientResponse;
-use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses\NormalizeAddressResponse;
 
 final class Services
 {
@@ -36,11 +33,11 @@ final class Services
      *
      * @param NormalizePhoneRequest $request
      *
-     * @return iterable|NormalizePhoneResponse|Phone[]
+     * @return iterable|Phone[]
      */
-    public function normalizePhone(NormalizePhoneRequest $request): NormalizePhoneResponse
+    public function normalizePhone(NormalizePhoneRequest $request): iterable
     {
-        return $this->client->post('/1.0/clean/phone', $request, NormalizePhoneResponse::class);
+        return $this->client->post('/1.0/clean/phone', $request, new ArrayOf(Phone::class));
     }
 
     /**
@@ -48,11 +45,11 @@ final class Services
      *
      * @param NormalizeAddressRequest $request
      *
-     * @return iterable|NormalizeAddressResponse|Address[]
+     * @return iterable|Address[]
      */
-    public function normalizeAddress(NormalizeAddressRequest $request): NormalizeAddressResponse
+    public function normalizeAddress(NormalizeAddressRequest $request): iterable
     {
-        return $this->client->post('/1.0/clean/address', $request, NormalizeAddressResponse::class);
+        return $this->client->post('/1.0/clean/address', $request, new ArrayOf(Address::class));
     }
 
     /**
@@ -60,11 +57,11 @@ final class Services
      *
      * @param NormalizeFioRequest $request
      *
-     * @return iterable|NormalizeFioResponse|Fio[]
+     * @return iterable|Fio[]
      */
-    public function normalizeFio(NormalizeFioRequest $request): NormalizeFioResponse
+    public function normalizeFio(NormalizeFioRequest $request): iterable
     {
-        return $this->client->post('/1.0/clean/physical', $request, NormalizeFioResponse::class);
+        return $this->client->post('/1.0/clean/physical', $request, new ArrayOf(Fio::class));
     }
 
     /**
@@ -92,10 +89,10 @@ final class Services
      *
      * @param  CheckRecipientRequest  $request
      *
-     * @return iterable|CheckRecipientResponse|Recipient[]
+     * @return iterable|Recipient[]
      */
-    public function checkRecipient(CheckRecipientRequest $request): CheckRecipientResponse
+    public function checkRecipient(CheckRecipientRequest $request): iterable
     {
-        return $this->client->post('/1.0/unreliable-recipient', $request, CheckRecipientResponse::class);
+        return $this->client->post('/1.0/unreliable-recipient', $request, new ArrayOf(Recipient::class));
     }
 }

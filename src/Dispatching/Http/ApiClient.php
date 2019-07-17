@@ -46,22 +46,22 @@ final class ApiClient
         $this->httpOptions = $httpOptions;
     }
 
-    public function get(string $path, ?Arrayable $request = null, ?string $class = null)
+    public function get(string $path, ?Arrayable $request = null, $type = null)
     {
         return $this->send('GET', ...\func_get_args());
     }
 
-    public function post(string $path, Arrayable $request, ?string $class = null)
+    public function post(string $path, Arrayable $request, $type = null)
     {
         return $this->send('POST', ...\func_get_args());
     }
 
-    public function put(string $path, Arrayable $request, ?string $class = null)
+    public function put(string $path, Arrayable $request, $type = null)
     {
         return $this->send('PUT', ...\func_get_args());
     }
 
-    public function delete(string $path, Arrayable $request, ?string $class = null)
+    public function delete(string $path, Arrayable $request, $type = null)
     {
         return $this->send('DELETE', ...\func_get_args());
     }
@@ -86,7 +86,7 @@ final class ApiClient
         return $this->serializer;
     }
 
-    private function send(string $method, string $path, ?Arrayable $request = null, ?string $class = null)
+    private function send(string $method, string $path, ?Arrayable $request = null, $type = null)
     {
         $response = $this->getHttpClient()->request(
             $method, $path, $request ? $this->buildRequestOptions($method, $request) : []
@@ -98,17 +98,17 @@ final class ApiClient
             return $this->buildFile($response, $fileType);
         }
 
-        $data = (string) $response->getBody();
+        $content = (string) $response->getBody();
 
-        if (null !== $class && (new \ReflectionClass($class))->isSubclassOf(IterableResponse::class)) {
-            $data = '{"items":'.$data.'}';
+        if (null === $type) {
+            return \json_decode($content, false);
         }
 
-        if (null === $class) {
-            return \json_decode($data, false);
+        if ($type instanceof ArrayOf) {
+            $type = "array<{$type->getType()}>";
         }
 
-        return $this->createDesrializer()->deserialize($data, $class, 'json');
+        return $this->createDesrializer()->deserialize($content, $type, 'json');
     }
 
     private function buildRequestOptions(string $method, Arrayable $request): array

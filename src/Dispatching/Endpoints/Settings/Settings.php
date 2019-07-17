@@ -4,8 +4,9 @@ declare(strict_types = 1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Settings;
 
+use Appwilio\RussianPostSDK\Dispatching\Http\ArrayOf;
 use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
-use Appwilio\RussianPostSDK\Dispatching\Endpoints\Settings\Responses\ShippingPointsResponse;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Settings\Responses\ShippingPoint;
 
 final class Settings
 {
@@ -17,8 +18,8 @@ final class Settings
         $this->client = $client;
     }
 
-    public function shippingPoints(): ShippingPointsResponse
+    public function shippingPoints(): iterable
     {
-        return $this->client->get('/1.0/user-shipping-points', null, ShippingPointsResponse::class);
+        return $this->client->get('/1.0/user-shipping-points', null, new ArrayOf(ShippingPoint::class));
     }
 }
