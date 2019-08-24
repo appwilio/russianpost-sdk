@@ -26,7 +26,7 @@ class PacketAccessClient
     public const ERROR_NOT_READY = 6;
     public const ERROR_INTERNAL = 16;
 
-    protected const WSDL_URL = 'https://tracking.russianpost.ru/fc?wsdl';
+    protected const WSDL_URL = 'https://tracking.pochta.ru/tracking-web-static/fc_wsdl.xml';
 
     /** @var string */
     protected $login;

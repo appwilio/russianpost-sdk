@@ -26,7 +26,7 @@ class SingleAccessClient
     public const HISTORY_NOTIFICATIONS = 1;
 
     protected const LINK_URL = 'https://www.pochta.ru/tracking';
-    protected const WSDL_URL = 'https://tracking.russianpost.ru/rtm34?wsdl';
+    protected const WSDL_URL = 'https://tracking.pochta.ru/tracking-web-static/rtm34_wsdl.xml';
 
     protected const XML_NS_HISTORY = 'http://russianpost.org/operationhistory';
     protected const XML_NS_DATA = 'http://russianpost.org/operationhistory/data';
