@@ -1,6 +1,7 @@
 # SDK для Почты России
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/appwilio/russianpost-sdk/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/appwilio/russianpost-sdk/?branch=master)
+[![Build Status](https://travis-ci.org/appwilio/russianpost-sdk.svg?branch=master)](https://travis-ci.org/appwilio/russianpost-sdk)
 [![Total Downloads](https://poser.pugx.org/appwilio/russianpost-sdk/downloads)](https://packagist.org/packages/appwilio/russianpost-sdk)
 [![Latest Stable Version](https://poser.pugx.org/appwilio/russianpost-sdk/version)](https://packagist.org/packages/appwilio/russianpost-sdk)
 [![License](https://poser.pugx.org/appwilio/russianpost-sdk/license)](https://packagist.org/packages/appwilio/russianpost-sdk)
