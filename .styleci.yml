@@ -5,4 +5,5 @@ enabled:
     - declare_strict_types
 
 disabled:
+    - unalign_equals
     - phpdoc_single_line_var_spacing
