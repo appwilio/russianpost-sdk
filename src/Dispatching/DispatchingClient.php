@@ -36,7 +36,7 @@ final class DispatchingClient
 
     public function batches()
     {
-
+        //
     }
 
     public function documents(): Documents
@@ -46,7 +46,7 @@ final class DispatchingClient
 
     public function archive()
     {
-        
+        //
     }
 
     public function postoffices()

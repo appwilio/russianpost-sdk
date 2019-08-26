@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses;
 
@@ -9,7 +9,7 @@ use JMS\Serializer\Annotation AS JMS;
 final class Fio
 {
     /**
-     * Коды качества нормализации ФИО
+     * Коды качества нормализации ФИО.
      *
      * @see https://otpravka.pochta.ru/specification#/enums-clean-fio-quality
      */

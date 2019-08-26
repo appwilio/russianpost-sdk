@@ -23,7 +23,7 @@ final class NormalizeFioRequest implements Arrayable
     {
         $this->items[] = [
             'id'           => \sha1($fio),
-            'original-fio' => $fio
+            'original-fio' => $fio,
         ];
     }
 

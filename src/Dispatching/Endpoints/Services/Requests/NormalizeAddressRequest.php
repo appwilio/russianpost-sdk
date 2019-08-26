@@ -23,7 +23,7 @@ final class NormalizeAddressRequest implements Arrayable
     {
         $this->items[] = [
             'id'               => \sha1($address),
-            'original-address' => $address
+            'original-address' => $address,
         ];
     }
 

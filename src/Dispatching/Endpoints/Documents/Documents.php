@@ -1,16 +1,16 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Documents;
 
-use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
-use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
 use GuzzleHttp\Psr7\UploadedFile;
+use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
+use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 
 final class Documents
 {
-    public const PRINT_TYPE_PAPER = 'PAPER';
+    public const PRINT_TYPE_PAPER  = 'PAPER';
     public const PRINT_TYPE_THERMO = 'THERMO';
 
     /** @var ApiClient */

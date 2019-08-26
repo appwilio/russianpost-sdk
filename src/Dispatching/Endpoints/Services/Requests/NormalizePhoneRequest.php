@@ -24,7 +24,7 @@ final class NormalizePhoneRequest implements Arrayable
         $this->items[] = \array_merge(
             [
                 'id'             => \sha1($phone),
-                'original-phone' => $phone
+                'original-phone' => $phone,
             ],
             \array_filter(\compact('area', 'place', 'region'))
         );

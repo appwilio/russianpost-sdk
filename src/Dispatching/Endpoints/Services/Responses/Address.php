@@ -9,7 +9,7 @@ use JMS\Serializer\Annotation AS JMS;
 final class Address
 {
     /**
-     * Коды качества нормализации адреса
+     * Коды качества нормализации адреса.
      *
      * @see https://otpravka.pochta.ru/specification#/enums-clean-address-quality
      */
@@ -25,7 +25,7 @@ final class Address
     public const QUALITY_UNDEF_07 = 'UNDEF_07';
 
     /**
-     * Коды проверки нормализации адреса
+     * Коды проверки нормализации адреса.
      *
      * @https://otpravka.pochta.ru/specification#/enums-clean-address-validation
      */
@@ -156,11 +156,11 @@ final class Address
     public function isUseful(): bool
     {
         $quality = \in_array($this->qualityCode, [
-            self::QUALITY_GOOD, self::QUALITY_POSTAL_BOX, self::QUALITY_ON_DEMAND, self::QUALITY_UNDEF_05
+            self::QUALITY_GOOD, self::QUALITY_POSTAL_BOX, self::QUALITY_ON_DEMAND, self::QUALITY_UNDEF_05,
         ]);
 
         $validity = \in_array($this->validationCode, [
-            self::VALIDATION_VALIDATED, self::VALIDATION_OVERRIDDEN, self::VALIDATION_CONFIRMED_MANUALLY
+            self::VALIDATION_VALIDATED, self::VALIDATION_OVERRIDDEN, self::VALIDATION_CONFIRMED_MANUALLY,
         ]);
 
         return $quality && $validity;

@@ -9,7 +9,7 @@ use JMS\Serializer\Annotation AS JMS;
 final class Phone
 {
     /**
-     * Коды качества нормализации телефона
+     * Коды качества нормализации телефона.
      *
      * @see https://otpravka.pochta.ru/specification#/enums-clean-fio-phone-quality
      */

@@ -17,7 +17,7 @@ final class ApiClient
     private const API_URL = 'https://otpravka-api.pochta.ru';
 
     private const COMMON_HEADERS = [
-        'Accept' => 'application/json;charset=UTF-8'
+        'Accept' => 'application/json;charset=UTF-8',
     ];
 
     private const FILE_SIGNATURES = [

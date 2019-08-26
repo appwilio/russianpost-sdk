@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Services;
 
@@ -31,7 +31,7 @@ final class Services
     /**
      * Нормализация телефона(ов).
      *
-     * @param NormalizePhoneRequest $request
+     * @param  NormalizePhoneRequest  $request
      *
      * @return iterable|Phone[]
      */
@@ -43,7 +43,7 @@ final class Services
     /**
      * Нормализация адреса(ов).
      *
-     * @param NormalizeAddressRequest $request
+     * @param  NormalizeAddressRequest  $request
      *
      * @return iterable|Address[]
      */
@@ -55,7 +55,7 @@ final class Services
     /**
      * Нормализация ФИО.
      *
-     * @param NormalizeFioRequest $request
+     * @param  NormalizeFioRequest  $request
      *
      * @return iterable|Fio[]
      */
