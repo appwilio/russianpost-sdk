@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Appwilio\RussianPostSDK\Tracking;
 
 use Appwilio\RussianPostSDK\Tracking\Single\TrackingResponse;
@@ -22,14 +24,14 @@ class SingleAccessClient
     public const LANG_ENG = 'ENG';
     public const LANG_RUS = 'RUS';
 
-    public const HISTORY_OPERATIONS = 0;
+    public const HISTORY_OPERATIONS    = 0;
     public const HISTORY_NOTIFICATIONS = 1;
 
     protected const LINK_URL = 'https://www.pochta.ru/tracking';
     protected const WSDL_URL = 'https://tracking.pochta.ru/tracking-web-static/rtm34_wsdl.xml';
 
     protected const XML_NS_HISTORY = 'http://russianpost.org/operationhistory';
-    protected const XML_NS_DATA = 'http://russianpost.org/operationhistory/data';
+    protected const XML_NS_DATA    = 'http://russianpost.org/operationhistory/data';
 
     /** @var AuthorizationHeader */
     protected $auth;
@@ -76,16 +78,19 @@ class SingleAccessClient
         string $track,
         string $language = self::LANG_RUS,
         int $type = self::HISTORY_OPERATIONS
-    ): TrackingResponse
-    {
+    ): TrackingResponse {
         $arguments = $this->assembleTrackingRequestArguments($track, $language, $type);
 
         try {
             return $this->getClient()->__soapCall('getOperationHistory', [$arguments]);
         } catch (\SoapFault $e) {
-            $detail = get_object_vars($e->{'detail'});
+            if (\property_exists($e, 'detail')) {
+                $detail = \get_object_vars($e->{'detail'});
 
-            throw new SingleAccessException(key($detail).': '.current($detail), $e->getCode(), $e);
+                throw new SingleAccessException(\key($detail).': '.\current($detail), $e->getCode(), $e);
+            }
+
+            throw new SingleAccessException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -100,12 +105,12 @@ class SingleAccessClient
     {
         return new \SoapVar([
             new \SoapVar([
-                new \SoapVar($track, XSD_STRING, null, null, 'Barcode', self::XML_NS_DATA),
-                new \SoapVar($type, XSD_STRING, null, null, 'MessageType', self::XML_NS_DATA),
-                new \SoapVar($language, XSD_STRING, null, null, 'Language', self::XML_NS_DATA),
-            ], SOAP_ENC_OBJECT, null, null, 'OperationHistoryRequest', self::XML_NS_DATA),
-            new \SoapVar($this->auth, SOAP_ENCODED, null, null, 'AuthorizationHeader', self::XML_NS_DATA),
-        ], SOAP_ENC_OBJECT);
+                new \SoapVar($track, \XSD_STRING, '', '', 'Barcode', self::XML_NS_DATA),
+                new \SoapVar($type, \XSD_STRING, '', '', 'MessageType', self::XML_NS_DATA),
+                new \SoapVar($language, \XSD_STRING, '', '', 'Language', self::XML_NS_DATA),
+            ], \SOAP_ENC_OBJECT, '', '', 'OperationHistoryRequest', self::XML_NS_DATA),
+            new \SoapVar($this->auth, \SOAP_ENCODED, '', '', 'AuthorizationHeader', self::XML_NS_DATA),
+        ], \SOAP_ENC_OBJECT);
     }
 
     private function assembleCashOnDeliveryRequestArguments(string $code, string $language): \SoapVar
@@ -116,7 +121,7 @@ class SingleAccessClient
         );
 
         return new \SoapVar(
-            $request, SOAP_ENC_OBJECT, null, null, 'PostalOrderEventsForMail', self::XML_NS_HISTORY
+            $request, \SOAP_ENC_OBJECT, '', '', 'PostalOrderEventsForMail', self::XML_NS_HISTORY
         );
     }
 

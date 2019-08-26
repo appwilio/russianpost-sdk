@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Appwilio\RussianPostSDK;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Container\Container;
 use Appwilio\RussianPostSDK\Tracking\PacketAccessClient;
 use Appwilio\RussianPostSDK\Tracking\SingleAccessClient;
 
@@ -24,21 +24,24 @@ class LaravelServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app->singleton(SingleAccessClient::class, function (Application $app) {
+        $this->app->singleton(SingleAccessClient::class, static function (Container $app) {
             $config = $app['config']['services.russianpost.tracking'];
 
             return new SingleAccessClient($config['login'], $config['password']);
         });
 
-        $this->app->singleton(PacketAccessClient::class, function (Application $app) {
+        $this->app->singleton(PacketAccessClient::class, static function (Container $app) {
             $config = $app['config']['services.russianpost.tracking'];
 
             return new PacketAccessClient($config['login'], $config['password']);
         });
     }
 
-    public function provides()
+    public function provides(): array
     {
-        return [SingleAccessClient::class, PacketAccessClient::class];
+        return [
+            SingleAccessClient::class,
+            PacketAccessClient::class,
+        ];
     }
 }

@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Appwilio\RussianPostSDK\Tracking;
 
 use Appwilio\RussianPostSDK\Tracking\Packet\TicketResponse;
@@ -20,11 +22,11 @@ class PacketAccessClient
     public const LANG_ENG = 'ENG';
     public const LANG_RUS = 'RUS';
 
-    public const HISTORY_OPERATIONS = 0;
+    public const HISTORY_OPERATIONS    = 0;
     public const HISTORY_NOTIFICATIONS = 1;
 
     public const ERROR_NOT_READY = 6;
-    public const ERROR_INTERNAL = 16;
+    public const ERROR_INTERNAL  = 16;
 
     protected const WSDL_URL = 'https://tracking.pochta.ru/tracking-web-static/fc_wsdl.xml';
 
@@ -38,7 +40,7 @@ class PacketAccessClient
     protected $client;
 
     protected $options = [
-        'soap_version' => SOAP_1_1,
+        'soap_version' => \SOAP_1_1,
         'trace'        => 1,
         'classmap'     => [
             'item'                   => Packet\Event::class,     // Item согласно wsdl-описанию называется item
@@ -59,11 +61,11 @@ class PacketAccessClient
 
     public function getTicket(iterable $tracks, string $language = self::LANG_RUS): TicketResponse
     {
-        if (is_array($tracks)) {
+        if (\is_array($tracks)) {
             $tracks = new \ArrayIterator($tracks);
         }
 
-        if (iterator_count($tracks) > 3000) {
+        if (\iterator_count($tracks) > 3000) {
             throw PacketAccessException::trackNumberLimitExceeded();
         }
 
@@ -98,24 +100,24 @@ class PacketAccessClient
         $items = new \ArrayObject();
 
         foreach ($tracks as $track) {
-            $items->append(new \SoapVar("<Item Barcode=\"{$track}\" />", XSD_ANYXML));
+            $items->append(new \SoapVar("<Item Barcode=\"{$track}\" />", \XSD_ANYXML));
         }
 
         return new \SoapVar([
-            new \SoapVar($items, SOAP_ENC_OBJECT, null, null, 'request'),
-            new \SoapVar($this->login, XSD_STRING, null, null, 'login'),
-            new \SoapVar($this->password, XSD_STRING, null, null, 'password'),
-            new \SoapVar($language, XSD_STRING, null, null, 'language'),
-        ], SOAP_ENC_OBJECT);
+            new \SoapVar($items, \SOAP_ENC_OBJECT, '', '', 'request'),
+            new \SoapVar($this->login, \XSD_STRING, '', '', 'login'),
+            new \SoapVar($this->password, \XSD_STRING, '', '', 'password'),
+            new \SoapVar($language, \XSD_STRING, '', '', 'language'),
+        ], \SOAP_ENC_OBJECT);
     }
 
     private function assembleTrackingRequestArgument(string $ticket): \SoapVar
     {
         return new \SoapVar([
-            new \SoapVar($ticket, XSD_STRING, null, null, 'ticket'),
-            new \SoapVar($this->login, XSD_STRING, null, null, 'login'),
-            new \SoapVar($this->password, XSD_STRING, null, null, 'password'),
-        ], SOAP_ENC_OBJECT);
+            new \SoapVar($ticket, \XSD_STRING, '', '', 'ticket'),
+            new \SoapVar($this->login, \XSD_STRING, '', '', 'login'),
+            new \SoapVar($this->password, \XSD_STRING, '', '', 'password'),
+        ], \SOAP_ENC_OBJECT);
     }
 
     public function getClient(): \SoapClient
