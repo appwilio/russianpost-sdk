@@ -1,9 +1,9 @@
 preset: laravel
 
 enabled:
-    - align_equals
     - declare_strict_types
 
 disabled:
     - unalign_equals
+    - phpdoc_inline_tag
     - phpdoc_single_line_var_spacing
