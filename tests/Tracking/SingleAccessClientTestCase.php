@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tests\Tracking;
 
@@ -49,8 +49,7 @@ class SingleAccessClientTestCase extends TestCase
     {
         $mock = $this->createSoapClientMock();
 
-        return new class($mock) extends SingleAccessClient
-        {
+        return new class($mock) extends SingleAccessClient {
             public function __construct($mock)
             {
                 parent::__construct('foo', 'bar');

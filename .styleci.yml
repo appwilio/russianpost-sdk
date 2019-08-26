@@ -1,1 +1,8 @@
 preset: laravel
+
+enabled:
+    - align_equals
+    - declare_strict_types
+
+disabled:
+    - phpdoc_single_line_var_spacing

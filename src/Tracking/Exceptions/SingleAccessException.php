@@ -15,5 +15,5 @@ namespace Appwilio\RussianPostSDK\Tracking\Exceptions;
 
 class SingleAccessException extends \Exception
 {
-
+    //
 }

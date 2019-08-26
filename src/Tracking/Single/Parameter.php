@@ -15,7 +15,7 @@ namespace Appwilio\RussianPostSDK\Tracking\Single;
 
 class Parameter
 {
-    /** @var integer */
+    /** @var int */
     public $Id;
 
     /** @var string */
