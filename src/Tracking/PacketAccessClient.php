@@ -70,7 +70,7 @@ class PacketAccessClient
         $arguments = $this->assembleTicketRequestArguments($tracks, $language);
 
         /** @var TicketResponse $response */
-        $response = $this->getClient()->{'getTicket'}($arguments);
+        $response = $this->getClient()->__soapCall('getTicket', [$arguments]);
 
         if ($response->hasError()) {
             throw new PacketAccessException($response->getError()->getMessage(), $response->getError()->getCode());
@@ -84,7 +84,7 @@ class PacketAccessClient
         $arguments = $this->assembleTrackingRequestArgument($ticket);
 
         /** @var TrackingResponse $response */
-        $response = $this->getClient()->{'getResponseByTicket'}($arguments);
+        $response = $this->getClient()->__soapCall('getResponseByTicket', [$arguments]);
 
         if ($response->hasError()) {
             throw new PacketAccessException($response->getError()->getMessage(), $response->getError()->getCode());

@@ -81,7 +81,7 @@ class SingleAccessClient
         $arguments = $this->assembleTrackingRequestArguments($track, $language, $type);
 
         try {
-            return $this->getClient()->{'getOperationHistory'}($arguments);
+            return $this->getClient()->__soapCall('getOperationHistory', [$arguments]);
         } catch (\SoapFault $e) {
             $detail = get_object_vars($e->{'detail'});
 
@@ -93,7 +93,7 @@ class SingleAccessClient
     {
         $arguments = $this->assembleCashOnDeliveryRequestArguments($track, $language);
 
-        return $this->getClient()->{'PostalOrderEventsForMail'}($arguments);
+        return $this->getClient()->__soapCall('PostalOrderEventsForMail', [$arguments]);
     }
 
     private function assembleTrackingRequestArguments(string $track, string $language, int $type): \SoapVar
