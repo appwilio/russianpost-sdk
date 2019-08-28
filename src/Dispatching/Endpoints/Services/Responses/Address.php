@@ -135,7 +135,6 @@ final class Address
      * @JMS\SerializedName("address-type")
      * @JMS\Type("string")
      * @var string
-     *
      */
     private $addressType;
 

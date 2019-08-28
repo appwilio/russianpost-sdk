@@ -122,9 +122,9 @@ final class ApiClient
         }
 
         return [
-            'body'  => \json_encode($data),
+            'body'    => \json_encode($data),
             'headers' => [
-                'Content-Type' => 'application/json;charset=UTF-8'
+                'Content-Type' => 'application/json;charset=UTF-8',
             ],
         ];
     }
