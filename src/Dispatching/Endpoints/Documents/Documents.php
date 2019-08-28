@@ -13,6 +13,9 @@ final class Documents
     public const PRINT_TYPE_PAPER  = 'PAPER';
     public const PRINT_TYPE_THERMO = 'THERMO';
 
+    public const PRINT_FORM_ONE_SIDE = 'ONE_SIDED';
+    public const PRINT_FORM_TWO_SIDE = 'TWO_SIDED';
+
     /** @var ApiClient */
     private $client;
 
@@ -41,7 +44,7 @@ final class Documents
     }
 
     /**
-     * Форма Ф112 для заказа.
+     * Форма Ф112ЭК для заказа.
      *
      * @param  string                   $orderId
      * @param  \DateTimeInterface|null  $sendingDate
@@ -79,13 +82,20 @@ final class Documents
     /**
      * Пакет документов для партии.
      *
-     * @param  string  $batchName
+     * @param  string       $batchName
+     * @param  string|null  $printType
+     * @param  string|null  $printTypeForm
      *
      * @return UploadedFile
      */
-    public function batchFormBundle(string $batchName): UploadedFile
+    public function batchFormBundle(string $batchName, ?string $printType = null, ?string $printTypeForm = null): UploadedFile
     {
-        return $this->client->get("/1.0/forms/{$batchName}/zip-all");
+        $request = $this->buildRequest([
+            'print-type'      => $printType,
+            'print-type-form' => $printTypeForm,
+        ]);
+
+        return $this->client->get("/1.0/forms/{$batchName}/zip-all", $request);
     }
 
     /**
@@ -112,6 +122,18 @@ final class Documents
         return $this->client->get("/1.0/forms/{$batchName}/completeness-checking-form");
     }
 
+    /**
+     * Подготовка и отправка электронной формы Ф103 для партии.
+     *
+     * @param  string  $batchName
+     *
+     * @return bool
+     */
+    public function batchCheckIn(string $batchName): bool
+    {
+        return (bool) $this->client->get("/1.0/batch/{$batchName}/checkin");
+    }
+
     private function formatSendingDate(?\DateTimeInterface $sendingDate): ?string
     {
         return $sendingDate ? $sendingDate->format('Y-m-d') : null;
@@ -124,7 +146,7 @@ final class Documents
 
             public function __construct(array $query)
             {
-                $this->query = \array_filter($query);
+                $this->query = $query;
             }
 
             public function toArray(): array
