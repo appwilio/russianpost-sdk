@@ -23,8 +23,10 @@
     },
     "require": {
         "php": ">=7.1",
+        "ext-json": "*",
         "ext-soap": "*",
-        "guzzlehttp/guzzle": "^6.3"
+        "guzzlehttp/guzzle": "^6.3",
+        "jms/serializer": "^1.11"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.5",
@@ -38,5 +40,8 @@
     },
     "scripts": {
         "test": "vendor/bin/phpunit"
+    },
+    "config": {
+        "sort-packages": true
     }
 }

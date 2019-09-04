@@ -8,31 +8,47 @@
 
 ### Это будет самое полное SDK, умеющее работать со всеми API pochta.ru
 
-Возможности:
-
-- [трекинг](https://tracking.pochta.ru/specification)
-  - [x] единичный трекинг почтовых отправлений
-    - [x] информация о наложенном платеже почтового отправления
-  - [x] пакетный трекинг почтовых отправлений
-- [отправка](https://otpravka.pochta.ru/specification)
-  - [ ] расчёт стоимости отправки
-  - [ ] нормализация и валидация данных: ФИО, адреса, телефоны
-  - [ ] работа с единичными заказами и их партиями
-  - [ ] генерация печатных форм
+## Содержание
+- [Трекинг](#трекинг)
+  - [x] [Единичный доступ](#единичный-доступ)
+    - [x] информация о наложенном платеже
+  - [x] [Пакетный доступ](#пакетный-доступ)
+- [Отправка](#отправка)
+  - [x] [Расчёт стоимости пересылки](#расчёт-стоимости-пересылки)
+  - [ ] Получение баланса
+  - [x] Нормализация и валидация данных
+    - [x] [ФИО](#нормализация-ФИО)
+    - [x] [Адреса](#нормализация-адресов)
+    - [x] [Телефоны](#нормализация-телефонов)
+    - [x] [Проверка благонадёжности получателя](#проверка-благонадёжности-получателя)
+  - [x] [Документы](#документы)
+    - [x] [Форма Ф7п для заказа](#форма-Ф7п-для-заказа)
+    - [x] [Форма Ф112ЭК для заказа](#форма-Ф112ЭК-для-заказа)
+    - [x] [Пакет документов для заказа (до формирования партии)](#пакет-документов-для-заказа-(до-формирования-партии))
+    - [x] [Пакет документов для заказа (после формирования партии)](#пакет-документов-для-заказа-(после-формирования-партии))
+    - [x] [Пакет документов для партии](#пакет-документов-для-партии)
+    - [x] [Акт осмотра содержимого партии](#акт-осмотра-содержимого-партии)
+    - [x] [Форма Ф103 для партии](#форма-Ф103-для-партии)
+    - [ ] Подготовка и отправка электронной формы Ф103 для партии
+  - [ ] Настройки
+    - [ ] Точки сдачи
+    - [ ] Настройки пользователя
 
 > Работа с API возможна только при наличии договора с Почтой России (кроме единичного трекинга, где без договора лимит 100 запросов в сутки).
 
 ## Установка
 
-> Минимальные требования — PHP 7.1+, SOAP.
+> Минимальные требования — PHP 7.1+, ext-soap, ext-json.
 
 ```bash
 composer require appwilio/russianpost-sdk
 ```
 
-## Использование
+## Трекинг
 
-Единичный доступ:
+[Документация](https://tracking.pochta.ru/specification)
+
+### Единичный доступ
 ```php
 $tracker = new SingleAccessClient($login, $password);
 
@@ -47,13 +63,13 @@ foreach ($response->getOperations() as $operation) {
 }
 ```
 
-Пакетный доступ:
+### Пакетный доступ
 ```php
 $tracker = new PacketAccessClient($login, $password);
 
 $ticket = $tracker->getTicket(['29014562148754', 'RA325487125CN']); // максимум 3 000 треков
 
-// рекомендуется подождать 15 минут перед запросом информации по билету
+// рекомендуется подождать 15 минут перед запросом информации
 
 $response = $tracker->getTrackingEvents($ticket->getId());
 
@@ -67,6 +83,130 @@ foreach ($response->getEvents() as $event) {
     }
 }
 ```
+
+## Отправка
+
+[Документация](https://otpravka.pochta.ru/specification)
+
+```php
+$client = new DispatchingClient($login $password, $token);
+```
+
+### Расчёт стоимости пересылки
+```php
+$response = $client->services()->calculate(
+    CalculationRequest::create('123456', 200)
+        ->ofMailType(MailType::PARCEL_POSTAL)
+        ->ofMailCategory(MailCategory::ORDINARY)
+        ->ofEntriesType(MailEntryType::SALE_OF_GOODS)
+        ->fragile()
+        ->withSmsNotice();
+);
+
+echo $response->getTotal()->getCost();
+```
+
+### Нормализация и валидация данных
+
+#### Нормализация ФИО
+```php
+$response = $client->services()->normalizeFio(
+    NormalizeFioRequest::one('иванов иван иванович')
+);
+
+if ($response[0]->isUseful()) {
+    echo $response[0]->getFirstName().''.$response[0]->getLastName(); // Иван Иванов
+}
+```
+
+#### Нормализация адресов
+```php
+$response = $client->services()->normalizeAddress(
+    NormalizeAddressRequest::one('Москва варшавское шоссе 37-45')
+);
+```
+
+#### Нормализация телефонов
+```php
+$response = $client->services()->normalizePhone(NormalizePhoneRequest::one('89001234567'));
+```
+
+#### Проверка благонадёжности получателя
+```php
+$response = $client->services()->checkRecipient(
+    CheckRecipientRequest::one('Москва, Варшавское шоссе, 37-45')
+);
+
+$response[0]->isFraud(); // ненадёжный
+$response[0]->isReliable(); // надёжный
+```
+
+```php
+$response = $client->services()->checkRecipient(
+    CheckRecipientRequest::create()
+        ->addRecipient('123456 Москва, Варшавское шоссе, 37-45')
+        ->addRecipient('654321 Владивосток, пер. Староконный, 12-98');
+);
+
+foreach ($response as $recipient) {
+    echo $recipient->getAddress.': '.$recipiend->isReliable();
+}
+```
+
+### Документы
+```php
+$file = $client->documents()->orderF7Form('12345678');
+
+echo $file->getClientFilename(); // f7p.pdf
+
+// Сохранение
+$file->moveTo("storage/printforms/12345678-{$file->getClientFilename()}");
+
+// Перенаправление в браузер (Laravel)
+return \response()->streamDownload(function () use ($file) {
+    (string) $file->getStream();
+}, $file->getClientName(), ['Content-Type' => $file->getClientMediaType()]);
+```
+
+#### Форма Ф7п для заказа
+```php
+$pdf = $client->documents()->orderF7Form(
+    '12345678', new \DateTime('2019-01-01'), Documents::PRINT_TYPE_THERMO
+);
+```
+
+#### Форма Ф112ЭК для заказа
+```php
+$pdf = $client->documents()->orderF112Form('12345678', new \DateTime('2019-01-01'));
+```
+
+#### Пакет документов для заказа (до формирования партии)
+```php
+$zip = $client->documents()->orderFormsBundleBacklog('12345678', new \DateTime('2019-01-01'));
+```
+
+#### Пакет документов для заказа (после формирования партии)
+```php
+$zip = $client->documents()->orderFormBundle(
+    '12345678', new \DateTime('2019-01-01'), Documents::PRINT_TYPE_THERMO
+);
+```
+
+#### Пакет документов для партии
+```php
+$zip = $client->documents()->batchFormBundle('87654321');
+```
+
+#### Акт осмотра содержимого партии
+```php
+$pdf = $client->documents()->batchCheckingForm('87654321');
+```
+
+#### Форма Ф103 для партии
+```php
+$pdf = $client->documents()->batchF103Form('87654321');
+```
+
 ## Запуск тестов
 
 ```
