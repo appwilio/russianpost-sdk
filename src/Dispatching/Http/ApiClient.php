@@ -75,11 +75,12 @@ final class ApiClient
     {
         if (null === $this->serializer) {
             $this->serializer = SerializerBuilder::create()
-                ->configureHandlers(function (HandlerRegistryInterface $registry) {
-                    foreach ($this->customDeserializators as $class => $handler) {
-                        $registry->registerHandler('deserialization', $class, 'json', new $handler);
-                    }
-                })
+                // TODO: нужно ли?
+//                ->configureHandlers(function (HandlerRegistryInterface $registry) {
+//                    foreach ($this->customDeserializators as $class => $handler) {
+//                        $registry->registerHandler('deserialization', $class, 'json', new $handler);
+//                    }
+//                })
                 ->build();
         }
 
