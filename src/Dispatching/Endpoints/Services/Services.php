@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of RussianPost SDK package.
+ *
+ * © Appwilio (http://appwilio.com), JhaoDa (https://github.com/jhaoda)
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Services;
@@ -31,6 +40,8 @@ final class Services
     /**
      * Нормализация телефона(ов).
      *
+     * @link https://otpravka.pochta.ru/specification#/nogroup-normalization_phone
+     *
      * @param  NormalizePhoneRequest  $request
      *
      * @return iterable|Phone[]
@@ -42,6 +53,8 @@ final class Services
 
     /**
      * Нормализация адреса(ов).
+     *
+     * @link https://otpravka.pochta.ru/specification#/nogroup-normalization_adress
      *
      * @param  NormalizeAddressRequest  $request
      *
@@ -55,6 +68,8 @@ final class Services
     /**
      * Нормализация ФИО.
      *
+     * @link https://otpravka.pochta.ru/specification#/nogroup-normalization_fio
+     *
      * @param  NormalizeFioRequest  $request
      *
      * @return iterable|Fio[]
@@ -67,6 +82,8 @@ final class Services
     /**
      * Расчёт стоимости доставки.
      *
+     * @link https://otpravka.pochta.ru/specification#/nogroup-rate_calculate
+     *
      * @param  CalculationRequest  $request
      *
      * @return CalculationResponse
@@ -77,6 +94,10 @@ final class Services
     }
 
     /**
+     * Получение баланса расчётного счёта.
+     *
+     * @link https://otpravka.pochta.ru/specification#/nogroup-counterpart_balance
+     *
      * @return BalanceReponse
      */
     public function getBalance(): BalanceReponse
@@ -86,6 +107,8 @@ final class Services
 
     /**
      * Проверка благонадёжности получателя(ей).
+     *
+     * @link https://otpravka.pochta.ru/specification#/nogroup-unreliable_recipient
      *
      * @param  CheckRecipientRequest  $request
      *
