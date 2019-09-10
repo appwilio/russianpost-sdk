@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests;
 
+use Appwilio\RussianPostSDK\Dispatching\DataAware;
 use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 
 final class NormalizeAddressRequest implements Arrayable
 {
-    private $items = [];
+    use DataAware;
 
     public static function one(string $address): self
     {
@@ -21,14 +22,9 @@ final class NormalizeAddressRequest implements Arrayable
 
     public function addAddress(string $address): void
     {
-        $this->items[] = [
+        $this->data[] = [
             'id'               => \sha1($address),
             'original-address' => $address,
         ];
-    }
-
-    public function toArray(): array
-    {
-        return $this->items;
     }
 }

@@ -13,13 +13,16 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Http;
 
+use Appwilio\RussianPostSDK\Dispatching\Instantiator;
 use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
+use Appwilio\RussianPostSDK\Dispatching\Exceptions\BadRequest;
+use Appwilio\RussianPostSDK\Dispatching\Contracts\DispatchingException;
 use GuzzleHttp\Client as HttpClient;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\UploadedFile;
-use JMS\Serializer\Handler\HandlerRegistryInterface;
-use JMS\Serializer\Serializer;
-use JMS\Serializer\SerializerBuilder;
+use Psr\Http\Message\ResponseInterface;
 
 final class ApiClient
 {
@@ -40,14 +43,8 @@ final class ApiClient
     /** @var HttpClient */
     private $httpClient;
 
-    /** @var Serializer */
-    private $serializer;
-
     /** @var array */
     private $httpOptions;
-
-    /** @var array */
-    private $customDeserializators = [];
 
     public function __construct(Authorization $authorization, array $httpOptions)
     {
@@ -75,32 +72,42 @@ final class ApiClient
         return $this->send('DELETE', ...\func_get_args());
     }
 
-    public function addCustomDeserializator(string $type, string $class): void
-    {
-        $this->customDeserializators[$type] = $class;
-    }
-
-    private function createDesrializer(): Serializer
-    {
-        if (null === $this->serializer) {
-            $this->serializer = SerializerBuilder::create()
-                // TODO: нужно ли?
-//                ->configureHandlers(function (HandlerRegistryInterface $registry) {
-//                    foreach ($this->customDeserializators as $class => $handler) {
-//                        $registry->registerHandler('deserialization', $class, 'json', new $handler);
-//                    }
-//                })
-                ->build();
-        }
-
-        return $this->serializer;
-    }
-
+    /**
+     * Выполнение запроса.
+     *
+     * @param  string          $method
+     * @param  string          $path
+     * @param  Arrayable|null  $request
+     * @param  null            $type
+     *
+     * @throws DispatchingException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     *
+     * @return mixed
+     */
     private function send(string $method, string $path, ?Arrayable $request = null, $type = null)
     {
-        $response = $this->getHttpClient()->request(
-            $method, $path, $request ? $this->buildRequestOptions($method, $request) : []
-        );
+        $response = null;
+
+        try {
+            $response = $this->getHttpClient()->request(
+                $method, $path, $request ? $this->buildRequestOptions($method, $request) : []
+            );
+        } catch (ClientException $e) {
+            if ($e->getCode() === 401) {
+                throw $this->handleAuthenticationException($e);
+            }
+
+            throw $this->handleClientException($e);
+        } catch (ServerException $e) {
+            throw $this->handleServerException($e);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+
+        if (null === $response) {
+            return null;
+        }
 
         $fileType = $this->guessFileType($response);
 
@@ -108,17 +115,13 @@ final class ApiClient
             return $this->buildFile($response, $fileType);
         }
 
-        $content = (string) $response->getBody();
+        $content = $this->getResponseContent($response);
 
         if (null === $type) {
-            return \json_decode($content, false);
+            return $content;
         }
 
-        if ($type instanceof ArrayOf) {
-            $type = "array<{$type->getType()}>";
-        }
-
-        return $this->createDesrializer()->deserialize($content, $type, 'json');
+        return Instantiator::instantiate($type, $content);
     }
 
     private function buildRequestOptions(string $method, Arrayable $request): array
@@ -169,7 +172,7 @@ final class ApiClient
         return null;
     }
 
-    public function buildFile(Response $response, string $type): UploadedFile
+    private function buildFile(Response $response, string $type): UploadedFile
     {
         $name = \explode('=', $response->getHeaderLine('Content-Disposition') ?? '')[1] ?? '';
 
@@ -180,5 +183,35 @@ final class ApiClient
             "{$name}.{$type}",
             $response->getHeaderLine('Content-Type')
         );
+    }
+
+    private function handleClientException(ClientException $exception): DispatchingException
+    {
+        $content = $this->getResponseContent($exception->getResponse());
+
+        return new BadRequest(
+            $content['message'] ?? $content['error'] ?? $content['desc'],
+            (int) ($content['status'] ?? $content['code'] ?? $exception->getCode())
+        );
+    }
+
+    private function handleAuthenticationException(ClientException $exception)
+    {
+        $content = $this->getResponseContent($exception->getResponse());
+
+        return new BadRequest(
+            $content['message'] ?? $content['desc'] ?? '',
+            $content['code'] ? (int) $content['code'] : $exception->getCode()
+        );
+    }
+
+    private function handleServerException(ServerException $e): DispatchingException
+    {
+        throw $e;
+    }
+
+    private function getResponseContent(ResponseInterface $response): array
+    {
+        return \json_decode((string) $response->getBody(), true);
     }
 }

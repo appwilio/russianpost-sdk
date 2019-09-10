@@ -15,6 +15,7 @@ namespace Appwilio\RussianPostSDK\Dispatching;
 
 use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
 use Appwilio\RussianPostSDK\Dispatching\Http\Authorization;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Orders;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Services;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Settings\Settings;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Documents\Documents;
@@ -31,7 +32,7 @@ final class DispatchingClient
 
     public function orders()
     {
-
+        return new Orders($this->client);
     }
 
     public function batches()

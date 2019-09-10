@@ -11,20 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Appwilio\RussianPostSDK\Dispatching\Http;
+namespace Appwilio\RussianPostSDK\Dispatching\Contracts;
 
-final class ArrayOf
+interface DispatchingException
 {
-    /** @var string */
-    private $class;
-
-    public function __construct(string $class)
-    {
-        $this->class = $class;
-    }
-
-    public function getClass(): string
-    {
-        return $this->class;
-    }
+    //
 }

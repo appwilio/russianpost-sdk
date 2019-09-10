@@ -15,17 +15,17 @@ namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Services;
 
 use Appwilio\RussianPostSDK\Dispatching\Http\ArrayOf;
 use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities\Balance;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities\Calculation;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities\CheckedRecipient;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities\NormalizedFio;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities\NormalizedPhone;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities\NormalizedAddress;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\CalculationRequest;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\NormalizeFioRequest;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\NormalizePhoneRequest;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\CheckRecipientRequest;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\NormalizeAddressRequest;
-use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses\Fio;
-use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses\Phone;
-use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses\Address;
-use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses\Recipient;
-use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses\BalanceReponse;
-use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses\CalculationResponse;
 
 final class Services
 {
@@ -44,25 +44,11 @@ final class Services
      *
      * @param  NormalizePhoneRequest  $request
      *
-     * @return iterable|Phone[]
+     * @return iterable|NormalizedPhone[]
      */
     public function normalizePhone(NormalizePhoneRequest $request): iterable
     {
-        return $this->client->post('/1.0/clean/phone', $request, new ArrayOf(Phone::class));
-    }
-
-    /**
-     * Нормализация адреса(ов).
-     *
-     * @link https://otpravka.pochta.ru/specification#/nogroup-normalization_adress
-     *
-     * @param  NormalizeAddressRequest  $request
-     *
-     * @return iterable|Address[]
-     */
-    public function normalizeAddress(NormalizeAddressRequest $request): iterable
-    {
-        return $this->client->post('/1.0/clean/address', $request, new ArrayOf(Address::class));
+        return $this->client->post('/1.0/clean/phone', $request, new ArrayOf(NormalizedPhone::class));
     }
 
     /**
@@ -72,11 +58,25 @@ final class Services
      *
      * @param  NormalizeFioRequest  $request
      *
-     * @return iterable|Fio[]
+     * @return iterable|NormalizedFio[]
      */
     public function normalizeFio(NormalizeFioRequest $request): iterable
     {
-        return $this->client->post('/1.0/clean/physical', $request, new ArrayOf(Fio::class));
+        return $this->client->post('/1.0/clean/physical', $request, new ArrayOf(NormalizedFio::class));
+    }
+
+    /**
+     * Нормализация адреса(ов).
+     *
+     * @link https://otpravka.pochta.ru/specification#/nogroup-normalization_adress
+     *
+     * @param  NormalizeAddressRequest  $request
+     *
+     * @return iterable|NormalizedAddress[]
+     */
+    public function normalizeAddress(NormalizeAddressRequest $request): iterable
+    {
+        return $this->client->post('/1.0/clean/address', $request, new ArrayOf(NormalizedAddress::class));
     }
 
     /**
@@ -86,11 +86,11 @@ final class Services
      *
      * @param  CalculationRequest  $request
      *
-     * @return CalculationResponse
+     * @return Calculation
      */
-    public function calculate(CalculationRequest $request): CalculationResponse
+    public function calculate(CalculationRequest $request): Calculation
     {
-        return $this->client->post('/1.0/tariff', $request, CalculationResponse::class);
+        return $this->client->post('/1.0/tariff', $request, Calculation::class);
     }
 
     /**
@@ -98,11 +98,11 @@ final class Services
      *
      * @link https://otpravka.pochta.ru/specification#/nogroup-counterpart_balance
      *
-     * @return BalanceReponse
+     * @return Balance
      */
-    public function getBalance(): BalanceReponse
+    public function getBalance(): Balance
     {
-        return $this->client->get('/1.0/counterpart/balance', null, BalanceReponse::class);
+        return $this->client->get('/1.0/counterpart/balance', null, Balance::class);
     }
 
     /**
@@ -112,10 +112,10 @@ final class Services
      *
      * @param  CheckRecipientRequest  $request
      *
-     * @return iterable|Recipient[]
+     * @return iterable|CheckedRecipient[]
      */
     public function checkRecipient(CheckRecipientRequest $request): iterable
     {
-        return $this->client->post('/1.0/unreliable-recipient', $request, new ArrayOf(Recipient::class));
+        return $this->client->post('/1.0/unreliable-recipient', $request, new ArrayOf(CheckedRecipient::class));
     }
 }

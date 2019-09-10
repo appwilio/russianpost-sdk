@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests;
 
+use Appwilio\RussianPostSDK\Dispatching\DataAware;
 use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 
 final class CalculationRequest implements Arrayable
 {
-    /** @var array */
-    private $data;
+    use DataAware;
 
-    public static function create(string $to, int $mass): self
+    public static function create(string $to, int $weight): self
     {
         return new self(...\func_get_args());
     }
 
-    public function __construct(string $to, int $mass)
+    public function __construct(string $to, int $weight)
     {
         $this->data = [
             'index-to' => $to,
-            'mass'     => $mass,
+            'mass'     => $weight,
         ];
     }
 
@@ -80,6 +80,27 @@ final class CalculationRequest implements Arrayable
         return $this;
     }
 
+    public function withContentChecking(bool $value = true)
+    {
+        $this->data['conntent-checking'] = $value;
+
+        return $this;
+    }
+
+    public function withInventory(bool $value = true)
+    {
+        $this->data['inventory'] = $value;
+
+        return $this;
+    }
+
+    public function withElectronicNotice(bool $value = true)
+    {
+        $this->data['with-electronic-notice'] = $value;
+
+        return $this;
+    }
+
     public function withSimpleNotice(bool $value = true)
     {
         $this->data['with-simple-notice'] = $value;
@@ -99,10 +120,5 @@ final class CalculationRequest implements Arrayable
         $this->data['sms-notice-recipient'] = $value;
 
         return $this;
-    }
-
-    public function toArray(): array
-    {
-        return $this->data;
     }
 }

@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests;
 
+use Appwilio\RussianPostSDK\Dispatching\DataAware;
 use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 
 final class CheckRecipientRequest implements Arrayable
 {
-    private $items = [];
+    use DataAware;
 
     public static function create(): self
     {
@@ -26,15 +27,10 @@ final class CheckRecipientRequest implements Arrayable
 
     public function addRecipient(string $address, string $fullName, string $phone): void
     {
-        $this->items[] = [
+        $this->data[] = [
             'raw-address'   => $address,
             'raw-telephone' => $phone,
             'raw-full-name' => $fullName,
         ];
-    }
-
-    public function toArray(): array
-    {
-        return $this->items;
     }
 }

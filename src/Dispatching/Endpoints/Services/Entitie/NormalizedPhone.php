@@ -2,12 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Responses;
+namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities;
 
-use JMS\Serializer\Annotation AS JMS;
+use Appwilio\RussianPostSDK\Dispatching\DataAware;
+use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 
-final class Phone
+final class NormalizedPhone implements Arrayable
 {
+    use DataAware;
+
     /**
      * Коды качества нормализации телефона.
      *
@@ -29,89 +32,46 @@ final class Phone
     public const QUALITY_GOOD_REGION_CONFLICT = 'GOOD_REGION_CONFLICT';
     public const QUALITY_CONFIRMED_MANUALLY = 'CONFIRMED_MANUALLY';
 
-    /**
-     * @JMS\Type("string")
-     * @var string
-     */
-    private $id;
-
-    /**
-     * @JMS\SerializedName("phone-country-code")
-     * @JMS\Type("string")
-     * @var string
-     */
-    private $countryCode;
-
-    /**
-     * @JMS\SerializedName("phone-city-code")
-     * @JMS\Type("string")
-     * @var string
-     */
-    private $cityCode;
-
-    /**
-     * @JMS\SerializedName("phone-number")
-     * @JMS\Type("string")
-     * @var string
-     */
-    private $number;
-
-    /**
-     * @JMS\SerializedName("phone-extension")
-     * @JMS\Type("string")
-     * @var string
-     */
-    private $extension;
-
-    /**
-     * @JMS\SerializedName("original-phone")
-     * @JMS\Type("string")
-     * @var string
-     */
-    private $originalPhone;
-
-    /**
-     * @JMS\SerializedName("quality-code")
-     * @JMS\Type("string")
-     * @var string
-     */
-    private $qualityCode;
-
     public function getId(): string
     {
-        return $this->id;
+        return $this->get('id');
     }
 
     public function getCountryCode(): string
     {
-        return $this->countryCode;
+        return $this->get('phone-country-code');
     }
 
     public function getCityCode(): string
     {
-        return $this->cityCode;
+        return $this->get('phone-city-code');
     }
 
     public function getNumber(): string
     {
-        return $this->number;
+        return $this->get('phone-number');
     }
 
     public function getExtension(): string
     {
-        return $this->extension;
+        return $this->get('phone-extension');
     }
 
     public function getOriginalPhone(): string
     {
-        return $this->originalPhone;
+        return $this->get('original-phone');
+    }
+
+    public function getQualityCode(): string
+    {
+        return $this->get('quality-code');
     }
 
     public function isUseful(): bool
     {
         return
-            $this->qualityCode === self::QUALITY_CONFIRMED_MANUALLY
+            $this->getQualityCode() === self::QUALITY_CONFIRMED_MANUALLY
             ||
-            \strpos($this->qualityCode, self::QUALITY_GOOD) === 0;
+            \strpos($this->getQualityCode(), self::QUALITY_GOOD) === 0;
     }
 }
