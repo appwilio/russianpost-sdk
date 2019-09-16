@@ -129,7 +129,7 @@ final class OrderRequest implements Arrayable
     private function convertAddress(Address $address): \Generator
     {
         foreach ($address->toArray() as $key => $value) {
-            if ($key === 'index' && ! \preg_match(self::RUSSIA_POSTAL_CODE, $value)) {
+            if ($key === 'index' && !\preg_match(self::RUSSIA_POSTAL_CODE, $value)) {
                 yield 'str-index-to' => $value;
             } elseif ($key === 'mail-direct') {
                 yield $key => $value;
