@@ -1,10 +1,12 @@
 # SDK для [бизнес-сервисов](https://www.pochta.ru/support/business/api) Почты России
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/appwilio/russianpost-sdk/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/appwilio/russianpost-sdk/?branch=master)
-[![Build Status](https://travis-ci.org/appwilio/russianpost-sdk.svg?branch=master)](https://travis-ci.org/appwilio/russianpost-sdk)
-[![Total Downloads](https://poser.pugx.org/appwilio/russianpost-sdk/downloads)](https://packagist.org/packages/appwilio/russianpost-sdk)
-[![Latest Stable Version](https://poser.pugx.org/appwilio/russianpost-sdk/version)](https://packagist.org/packages/appwilio/russianpost-sdk)
-[![License](https://poser.pugx.org/appwilio/russianpost-sdk/license)](https://packagist.org/packages/appwilio/russianpost-sdk)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/appwilio/russianpost-sdk.svg?style=flat-square)](https://packagist.org/packages/appwilio/russianpost-sdk)
+[![Build Status](https://img.shields.io/travis/appwilio/russianpost-sdk/master.svg?style=flat-square)](https://travis-ci.org/appwilio/russianpost-sdk)
+[![StyleCI](https://styleci.io/repos/101485954/shield)](https://styleci.io/repos/101485954)
+[![Quality Score](https://img.shields.io/scrutinizer/g/appwilio/russianpost-sdk.svg?style=flat-square)](https://scrutinizer-ci.com/g/appwilio/russianpost-sdk)
+[![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/appwilio/russianpost-sdk/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/appwilio/russianpost-sdk/?branch=master)
+[![Total Downloads](https://img.shields.io/packagist/dt/appwilio/russianpost-sdk.svg?style=flat-square)](https://packagist.org/packages/appwilio/russianpost-sdk)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 
 ## Содержание
 - [Трекинг](#трекинг)
