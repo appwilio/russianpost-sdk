@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking;
 
-use Appwilio\RussianPostSDK\Tracking\Single\Authentication;
 use Appwilio\RussianPostSDK\Tracking\Single\TrackingResponse;
 use Appwilio\RussianPostSDK\Tracking\Exceptions\SingleAccessException;
 use Appwilio\RussianPostSDK\Tracking\Single\PostalOrderEventsForMailInput;
@@ -50,7 +49,6 @@ class SingleAccessClient
             'PostalOrderEvent'                 => Single\PostalOrderEvent::class,
             'AddressParameters'                => Single\AddressParameters::class,
             'FinanceParameters'                => Single\FinanceParameters::class,
-            'AuthorizationHeader'              => Single\Authentication::class,
             'OperationParameters'              => Single\OperationParameters::class,
             'OperationHistoryData'             => Single\OperationHistoryData::class,
             'OperationHistoryRecord'           => Single\OperationHistoryRecord::class,
@@ -62,9 +60,19 @@ class SingleAccessClient
         ],
     ];
 
+    /** @var \SoapClient */
+    protected $client;
+
+    /** @var string */
+    private $login;
+
+    /** @var string */
+    private $password;
+
     public function __construct(string $login, string $password)
     {
-        $this->authentication = new Authentication($login, $password);
+        $this->login = $login;
+        $this->password = $password;
     }
 
     public function getTrackingUrl(string $number): string
@@ -107,7 +115,10 @@ class SingleAccessClient
                 new \SoapVar($type, \XSD_STRING, '', '', 'MessageType', self::XML_NS_DATA),
                 new \SoapVar($language, \XSD_STRING, '', '', 'Language', self::XML_NS_DATA),
             ], \SOAP_ENC_OBJECT, '', '', 'OperationHistoryRequest', self::XML_NS_DATA),
-            new \SoapVar($this->authentication, \SOAP_ENCODED, '', '', 'AuthorizationHeader', self::XML_NS_DATA),
+            new \SoapVar([
+                new \SoapVar($this->login, XSD_STRING, '', '', 'login', self::XML_NS_DATA),
+                new \SoapVar($this->password, XSD_STRING, '', '', 'password', self::XML_NS_DATA),
+            ], SOAP_ENC_OBJECT, '', '', 'AuthorizationHeader', self::XML_NS_DATA),
         ], \SOAP_ENC_OBJECT);
     }
 
@@ -117,7 +128,10 @@ class SingleAccessClient
 
         return new \SoapVar([
             new \SoapVar($input, \SOAP_ENC_OBJECT, '', '', 'PostalOrderEventsForMailInput', self::XML_NS_COD_HISTORY),
-            new \SoapVar($this->authentication, \SOAP_ENCODED, '', '', 'AuthorizationHeader', self::XML_NS_DATA),
+            new \SoapVar([
+                new \SoapVar($this->login, XSD_STRING, '', '', 'login', self::XML_NS_DATA),
+                new \SoapVar($this->password, XSD_STRING, '', '', 'password', self::XML_NS_DATA),
+            ], SOAP_ENC_OBJECT, '', '', 'AuthorizationHeader', self::XML_NS_DATA),
         ], \SOAP_ENC_OBJECT);
     }
 
