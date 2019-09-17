@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Single;
 
-class AuthorizationHeader
+class Authentication
 {
     /** @var string */
     public $login;

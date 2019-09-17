@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking;
 
+use Appwilio\RussianPostSDK\Tracking\Single\Authentication;
 use Appwilio\RussianPostSDK\Tracking\Single\TrackingResponse;
 use Appwilio\RussianPostSDK\Tracking\Single\AuthorizationHeader;
 use Appwilio\RussianPostSDK\Tracking\Single\PostalOrderEventsForMail;
@@ -30,11 +31,11 @@ class SingleAccessClient
     protected const LINK_URL = 'https://www.pochta.ru/tracking';
     protected const WSDL_URL = 'https://tracking.pochta.ru/tracking-web-static/rtm34_wsdl.xml';
 
-    protected const XML_NS_HISTORY = 'http://russianpost.org/operationhistory';
-    protected const XML_NS_DATA    = 'http://russianpost.org/operationhistory/data';
+    protected const XML_NS_DATA        = 'http://russianpost.org/operationhistory/data';
+    protected const XML_NS_COD_HISTORY = 'http://www.russianpost.org/RTM/DataExchangeESPP/Data';
 
-    /** @var AuthorizationHeader */
-    protected $auth;
+    /** @var Authentication */
+    protected $authentication;
 
     /** @var \SoapClient */
     protected $client;
@@ -51,11 +52,10 @@ class SingleAccessClient
             'PostalOrderEvent'                 => Single\PostalOrderEvent::class,
             'AddressParameters'                => Single\AddressParameters::class,
             'FinanceParameters'                => Single\FinanceParameters::class,
-            'AuthorizationHeader'              => Single\AuthorizationHeader::class,
+            'AuthorizationHeader'              => Single\Authentication::class,
             'OperationParameters'              => Single\OperationParameters::class,
             'OperationHistoryData'             => Single\OperationHistoryData::class,
             'OperationHistoryRecord'           => Single\OperationHistoryRecord::class,
-            'PostalOrderEventsForMail'         => Single\PostalOrderEventsForMail::class,
             'getOperationHistoryResponse'      => Single\TrackingResponse::class,
             'PostalOrderEventsForMailInput'    => Single\PostalOrderEventsForMailInput::class,
             // Mai – не опечатка
@@ -66,7 +66,7 @@ class SingleAccessClient
 
     public function __construct(string $login, string $password)
     {
-        $this->auth = new AuthorizationHeader($login, $password);
+        $this->authentication = new Authentication($login, $password);
     }
 
     public function getTrackingUrl(string $number): ?string
@@ -109,20 +109,18 @@ class SingleAccessClient
                 new \SoapVar($type, \XSD_STRING, '', '', 'MessageType', self::XML_NS_DATA),
                 new \SoapVar($language, \XSD_STRING, '', '', 'Language', self::XML_NS_DATA),
             ], \SOAP_ENC_OBJECT, '', '', 'OperationHistoryRequest', self::XML_NS_DATA),
-            new \SoapVar($this->auth, \SOAP_ENCODED, '', '', 'AuthorizationHeader', self::XML_NS_DATA),
+            new \SoapVar($this->authentication, \SOAP_ENCODED, '', '', 'AuthorizationHeader', self::XML_NS_DATA),
         ], \SOAP_ENC_OBJECT);
     }
 
     private function assembleCashOnDeliveryRequestArguments(string $code, string $language): \SoapVar
     {
-        $request = new PostalOrderEventsForMail(
-            new PostalOrderEventsForMailInput($code, $language),
-            $this->auth
-        );
+        $input = new PostalOrderEventsForMailInput($code, $language);
 
-        return new \SoapVar(
-            $request, \SOAP_ENC_OBJECT, '', '', 'PostalOrderEventsForMail', self::XML_NS_HISTORY
-        );
+        return new \SoapVar([
+            new \SoapVar($input, \SOAP_ENC_OBJECT, '', '', 'PostalOrderEventsForMailInput', self::XML_NS_COD_HISTORY),
+            new \SoapVar($this->authentication, \SOAP_ENCODED, '', '', 'AuthorizationHeader', self::XML_NS_DATA),
+        ], \SOAP_ENC_OBJECT);
     }
 
     protected function getClient(): \SoapClient
