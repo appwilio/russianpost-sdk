@@ -29,11 +29,19 @@ class SingleAccessClientTestCase extends TestCase
         );
     }
 
+    public function test_can_get_tracking_url(): void
+    {
+        $this->assertEquals(
+            'https://www.pochta.ru/tracking#RA644000001RU',
+            $this->getClient()->getTrackingUrl('RA644000001RU')
+        );
+    }
+
     public function test_can_get_tracking_events(): void
     {
         Assert::assertInstanceOf(
             TrackingResponse::class,
-            $this->getClient()->getTrackingEvents('29500098765432')
+            $this->getClient()->getTrackingEvents('RA644000001RU')
         );
     }
 
@@ -41,15 +49,13 @@ class SingleAccessClientTestCase extends TestCase
     {
         Assert::assertInstanceOf(
             CashOnDeliveryResponse::class,
-            $this->getClient()->getCashOnDeliveryEvents('29500098765432')
+            $this->getClient()->getCashOnDeliveryEvents('RA644000001RU')
         );
     }
 
     private function getClient()
     {
-        $mock = $this->createSoapClientMock();
-
-        return new class($mock) extends SingleAccessClient {
+        return new class($this->createSoapClientMock()) extends SingleAccessClient {
             public function __construct($mock)
             {
                 parent::__construct('foo', 'bar');

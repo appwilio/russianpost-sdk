@@ -34,7 +34,7 @@ class PacketAccessClientTestCase extends TestCase
     {
         Assert::assertInstanceOf(
             TicketResponse::class,
-            $this->getClient()->getTicket(['29500098765432'])
+            $this->getClient()->getTicket(['RA644000001RU'])
         );
     }
 
@@ -43,8 +43,8 @@ class PacketAccessClientTestCase extends TestCase
         $this->expectException(PacketAccessException::class);
 
         $source = (static function () {
-            foreach (range(1, 3001) as $item) {
-                yield sprintf('2950009876%04d', $item);
+            foreach (\range(1, 3001) as $item) {
+                yield \sprintf('2950009876%04d', $item);
             }
         })();
 
@@ -55,15 +55,13 @@ class PacketAccessClientTestCase extends TestCase
     {
         Assert::assertInstanceOf(
             TrackingResponse::class,
-            $this->getClient()->getTrackingEvents('20170801000000foo')
+            $this->getClient()->getTrackingEvents('RA644000001RU')
         );
     }
 
     private function getClient()
     {
-        $mock = $this->createSoapClientMock();
-
-        return new class($mock) extends PacketAccessClient {
+        return new class($this->createSoapClientMock()) extends PacketAccessClient {
             public function __construct($mock)
             {
                 parent::__construct('foo', 'bar');
