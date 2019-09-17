@@ -24,7 +24,7 @@ class Authentication
     /** @var string */
     public $mustUnderstand;
 
-    public function __construct(?string $login = null, ?string $password = null)
+    public function __construct(string $login, string $password)
     {
         $this->login = $login;
         $this->password = $password;
