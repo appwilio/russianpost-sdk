@@ -38,13 +38,16 @@ class SingleAccessClient implements LoggerAwareInterface
     protected const XML_NS_DATA        = 'http://russianpost.org/operationhistory/data';
     protected const XML_NS_COD_HISTORY = 'http://www.russianpost.org/RTM/DataExchangeESPP/Data';
 
-    /** @var Authentication */
-    protected $authentication;
-
     /** @var \SoapClient */
     protected $client;
 
-    protected $options = [
+    /** @var string */
+    private $login;
+
+    /** @var string */
+    private $password;
+
+    private $options = [
         'soap_version' => SOAP_1_2,
         'trace'        => 1,
         'classmap'     => [
@@ -66,15 +69,6 @@ class SingleAccessClient implements LoggerAwareInterface
             'PostalOrderEventsForMailResponse' => Single\CashOnDeliveryResponse::class,
         ],
     ];
-
-    /** @var \SoapClient */
-    protected $client;
-
-    /** @var string */
-    private $login;
-
-    /** @var string */
-    private $password;
 
     public function __construct(string $login, string $password)
     {
@@ -163,14 +157,5 @@ class SingleAccessClient implements LoggerAwareInterface
                 new \SoapVar($this->password, XSD_STRING, '', '', 'password', self::XML_NS_DATA),
             ], SOAP_ENC_OBJECT, '', '', 'AuthorizationHeader', self::XML_NS_DATA),
         ], \SOAP_ENC_OBJECT);
-    }
-
-    protected function getClient(): \SoapClient
-    {
-        if (! $this->client) {
-            $this->client = new \SoapClient(self::WSDL_URL, $this->options);
-        }
-
-        return $this->client;
     }
 }
