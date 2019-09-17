@@ -9,6 +9,7 @@
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 
 ## Содержание
+- [Установка](#установка)
 - [Трекинг](#трекинг)
   - [x] [Единичный доступ](#единичный-доступ)
     - [x] информация о наложенном платеже
@@ -71,8 +72,30 @@
 
 > Минимальные требования — PHP 7.1+, ext-soap, ext-json.
 
+Для установки используйте менеджер пакетов [Composer](https://getcomposer.org/):
 ```bash
 composer require appwilio/russianpost-sdk
+```
+
+При использовании фреймворка [Laravel](https://laravel.com/) SDK автоматически регистрирует доступные сервисы.
+
+## Логирование
+
+Для логирования запросов и ответов можно подключить любой логгер, реализующий стандарт [PSR-3](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md), например, [Monolog](https://github.com/Seldaek/monolog):
+```php
+$log = (new Logger('pochta.ru'))
+    ->pushHandler(new StreamHandler('path/to/your.log', Logger::INFO));
+
+// SingleAccessClient, PacketAccessClient, DispatchingClient
+$client->setLogger($log);
+```
+
+В случае использования фреймворка [Laravel](https://laravel.com/) следует добавить логгер в контейнер под именем `appwilio.russianpost.logger`: 
+```php
+$this->app->singleton('appwilio.russianpost.logger', function () {
+    return (new Logger('pochta.ru'))
+        ->pushHandler(new StreamHandler('path/to/your.log', Logger::INFO));
+});
 ```
 
 ## Трекинг
@@ -80,12 +103,16 @@ composer require appwilio/russianpost-sdk
 [Документация](https://tracking.pochta.ru/specification)
 
 ### Единичный доступ
+
+#### Конфигурация
 ```php
 $tracker = new SingleAccessClient($login, $password);
 
-$response = $tracker->getTrackingEvents('29014562148754');
+#### Получение данных по ШПИ (трек-комеру)
+```php
+$operations = $tracker->getTrackingEvents('29014562148754');
 
-foreach ($response->getOperations() as $operation) {
+foreach ($operations as $operation) {
     $parameters = $operation->getOperationParameters();
     
     echo $parameters->getOperationId();
@@ -94,10 +121,28 @@ foreach ($response->getOperations() as $operation) {
 }
 ```
 
+#### Получение информации о наложенном платеже по ШПИ (трек-комеру)
+```php
+$events = $tracker->getCashOnDeliveryEvents('29014562148754');
+
+foreach ($events as $event) {
+    $parameters = $operation->getOperationParameters();
+    
+    echo $parameters->getTransferNumber();
+    echo $parameters->getPayment();          // 7410
+    echo $parameters->getPerformedAt();
+}
+```
+
 ### Пакетный доступ
+
+#### Конфигурация
 ```php
 $tracker = new PacketAccessClient($login, $password);
+```
 
+#### Получение данных по ШПИ (трек-комеру)
+```php
 $ticket = $tracker->getTicket(['29014562148754', 'RA325487125CN']); // максимум 3 000 треков
 
 // рекомендуется подождать 15 минут перед запросом информации
