@@ -15,8 +15,6 @@ namespace Appwilio\RussianPostSDK\Tracking;
 
 use Appwilio\RussianPostSDK\Tracking\Single\Authentication;
 use Appwilio\RussianPostSDK\Tracking\Single\TrackingResponse;
-use Appwilio\RussianPostSDK\Tracking\Single\AuthorizationHeader;
-use Appwilio\RussianPostSDK\Tracking\Single\PostalOrderEventsForMail;
 use Appwilio\RussianPostSDK\Tracking\Exceptions\SingleAccessException;
 use Appwilio\RussianPostSDK\Tracking\Single\PostalOrderEventsForMailInput;
 
