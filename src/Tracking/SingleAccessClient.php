@@ -13,12 +13,19 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking;
 
+use Psr\Log\NullLogger;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerAwareInterface;
 use Appwilio\RussianPostSDK\Tracking\Single\TrackingResponse;
+use Appwilio\RussianPostSDK\Tracking\Single\CashOnDeliveryResponse;
+use Appwilio\RussianPostSDK\Tracking\Single\CashOnDeliveryEventsInput;
 use Appwilio\RussianPostSDK\Tracking\Exceptions\SingleAccessException;
 use Appwilio\RussianPostSDK\Tracking\Single\PostalOrderEventsForMailInput;
 
-class SingleAccessClient
+class SingleAccessClient implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     public const LANG_ENG = 'ENG';
     public const LANG_RUS = 'RUS';
 
@@ -71,6 +78,8 @@ class SingleAccessClient
 
     public function __construct(string $login, string $password)
     {
+        $this->logger = new NullLogger();
+
         $this->login = $login;
         $this->password = $password;
     }
@@ -85,10 +94,35 @@ class SingleAccessClient
         string $language = self::LANG_RUS,
         int $type = self::HISTORY_OPERATIONS
     ): TrackingResponse {
-        $arguments = $this->assembleTrackingRequestArguments($track, $language, $type);
+        return $this->callSoapMethod(
+            'getOperationHistory',
+            $this->assembleTrackingRequestArguments($track, $language, $type)
+        );
+    }
 
+    public function getCashOnDeliveryEvents(
+        string $track,
+        string $language = self::LANG_RUS
+    ): CashOnDeliveryResponse {
+        return $this->callSoapMethod(
+            'PostalOrderEventsForMail',
+            $this->assembleCashOnDeliveryRequestArguments($track, $language)
+        );
+    }
+
+    protected function getClient(): \SoapClient
+    {
+        if (! $this->client) {
+            $this->client = new \SoapClient(self::WSDL_URL, $this->options);
+        }
+
+        return $this->client;
+    }
+
+    private function callSoapMethod(string $method, \SoapVar $arguments)
+    {
         try {
-            return $this->getClient()->__soapCall('getOperationHistory', [$arguments]);
+            return $this->getClient()->__soapCall($method, [$arguments]);
         } catch (\SoapFault $e) {
             if (\property_exists($e, 'detail')) {
                 $detail = \get_object_vars($e->{'detail'});
@@ -97,14 +131,10 @@ class SingleAccessClient
             }
 
             throw new SingleAccessException($e->getMessage(), $e->getCode(), $e);
+        } finally {
+            $this->logger->info("pochta.ru Single Tracking request: {$this->getClient()->__getLastRequest()}");
+            $this->logger->info("pochta.ru Single Tracking response: {$this->getClient()->__getLastResponse()}");
         }
-    }
-
-    public function getCashOnDeliveryEvents(string $track, string $language = self::LANG_RUS)
-    {
-        $arguments = $this->assembleCashOnDeliveryRequestArguments($track, $language);
-
-        return $this->getClient()->__soapCall('PostalOrderEventsForMail', [$arguments]);
     }
 
     private function assembleTrackingRequestArguments(string $track, string $language, int $type): \SoapVar
