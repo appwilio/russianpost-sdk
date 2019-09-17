@@ -67,9 +67,9 @@ class SingleAccessClient
         $this->authentication = new Authentication($login, $password);
     }
 
-    public function getTrackingUrl(string $number): ?string
+    public function getTrackingUrl(string $number): string
     {
-        return self::LINK_URL.'#'.$number;
+        return self::LINK_URL."#{$number}";
     }
 
     public function getTrackingEvents(
