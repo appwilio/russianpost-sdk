@@ -20,7 +20,6 @@ use Appwilio\RussianPostSDK\Tracking\Single\TrackingResponse;
 use Appwilio\RussianPostSDK\Tracking\Single\CashOnDeliveryResponse;
 use Appwilio\RussianPostSDK\Tracking\Single\CashOnDeliveryEventsInput;
 use Appwilio\RussianPostSDK\Tracking\Exceptions\SingleAccessException;
-use Appwilio\RussianPostSDK\Tracking\Single\PostalOrderEventsForMailInput;
 
 class SingleAccessClient implements LoggerAwareInterface
 {
