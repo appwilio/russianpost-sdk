@@ -13,31 +13,32 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Single;
 
-class Parameter
+class TrackingOperationAddress
 {
     /** @var int */
-    private $Id;
+    private $Index;
 
     /** @var string */
-    private $Name;
+    private $Description;
 
     /**
-     * Код/идентификатор (Id).
+     * Почтовый индекс места проведения операции (Index).
+     * Не возвращается для зарубежных операций.
      *
      * @return int
      */
-    public function getId(): int
+    public function getIndex(): int
     {
-        return $this->Id;
+        return $this->Index;
     }
 
     /**
-     * Название (Name).
+     * Адрес и/или название места проведения операции (Description).
      *
      * @return string
      */
-    public function getName(): string
+    public function getDescription(): string
     {
-        return $this->Name;
+        return $this->Description;
     }
 }

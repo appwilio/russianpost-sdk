@@ -13,8 +13,17 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Single;
 
-class PostalOrderEventsForMailOutput
+class CashOnDeliveryEventsInput
 {
-    /** @var PostalOrderEvent[] */
-    public $PostalOrderEvent = [];
+    /** @var string */
+    public $Barcode;
+
+    /** @var string */
+    public $Language;
+
+    public function __construct($Barcode = null, $Language = null)
+    {
+        $this->Barcode = $Barcode;
+        $this->Language = $Language;
+    }
 }

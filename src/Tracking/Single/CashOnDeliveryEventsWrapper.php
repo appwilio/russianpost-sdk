@@ -13,14 +13,16 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Single;
 
-class UserParameters
+class CashOnDeliveryEventsWrapper
 {
-    /** @var Parameter */
-    public $SendCtg;
+    /** @var CashOnDeliveryEvent[] */
+    private $PostalOrderEvent = [];
 
-    /** @var string */
-    public $Sndr;
-
-    /** @var string */
-    public $Rcpn;
+    /**
+     * @return CashOnDeliveryEvent[]
+     */
+    public function getPostalOrderEvent(): array
+    {
+        return $this->PostalOrderEvent;
+    }
 }

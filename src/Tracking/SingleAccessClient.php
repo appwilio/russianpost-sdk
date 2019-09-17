@@ -51,22 +51,24 @@ class SingleAccessClient implements LoggerAwareInterface
         'soap_version' => SOAP_1_2,
         'trace'        => 1,
         'classmap'     => [
-            'Address'                          => Single\Address::class,
-            'Country'                          => Single\Country::class,
             'Rtm02Parameter'                   => Single\Parameter::class,
-            'UserParameters'                   => Single\UserParameters::class,
-            'ItemParameters'                   => Single\ItemParameters::class,
-            'PostalOrderEvent'                 => Single\PostalOrderEvent::class,
-            'AddressParameters'                => Single\AddressParameters::class,
-            'FinanceParameters'                => Single\FinanceParameters::class,
-            'OperationParameters'              => Single\OperationParameters::class,
-            'OperationHistoryData'             => Single\OperationHistoryData::class,
-            'OperationHistoryRecord'           => Single\OperationHistoryRecord::class,
+
             'getOperationHistoryResponse'      => Single\TrackingResponse::class,
-            'PostalOrderEventsForMailInput'    => Single\PostalOrderEventsForMailInput::class,
-            // Mai – не опечатка
-            'PostalOrderEventsForMaiOutput'    => Single\PostalOrderEventsForMailOutput::class,
+            'OperationHistoryRecord'           => Single\TrackingOperation::class,
+            'Address'                          => Single\TrackingOperationAddress::class,
+            'Country'                          => Single\TrackingOperationCountry::class,
+            'OperationHistoryData'             => Single\TrackingOperationsWrapper::class,
+            'OperationParameters'              => Single\TrackingOperationParameters::class,
+            'UserParameters'                   => Single\TrackingOperationUserParameters::class,
+            'ItemParameters'                   => Single\TrackingOperationItemParameters::class,
+            'AddressParameters'                => Single\TrackingOperationAddressParameters::class,
+            'FinanceParameters'                => Single\TrackingOperationFinanceParameters::class,
+
+            'PostalOrderEvent'                 => Single\CashOnDeliveryEvent::class,
             'PostalOrderEventsForMailResponse' => Single\CashOnDeliveryResponse::class,
+            'PostalOrderEventsForMailInput'    => Single\CashOnDeliveryEventsInput::class,
+            // Mai – не опечатка
+            'PostalOrderEventsForMaiOutput'    => Single\CashOnDeliveryEventsWrapper::class,
         ],
     ];
 
@@ -148,7 +150,7 @@ class SingleAccessClient implements LoggerAwareInterface
 
     private function assembleCashOnDeliveryRequestArguments(string $code, string $language): \SoapVar
     {
-        $input = new PostalOrderEventsForMailInput($code, $language);
+        $input = new CashOnDeliveryEventsInput($code, $language);
 
         return new \SoapVar([
             new \SoapVar($input, \SOAP_ENC_OBJECT, '', '', 'PostalOrderEventsForMailInput', self::XML_NS_COD_HISTORY),

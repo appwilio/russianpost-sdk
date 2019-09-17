@@ -13,17 +13,17 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Single;
 
-class OperationHistoryData
+class TrackingOperationsWrapper
 {
-    /** @var OperationHistoryRecord[] */
-    public $historyRecord = [];
+    /** @var TrackingOperation[]|TrackingOperation */
+    private $historyRecord;
 
     /**
-     * @return OperationHistoryRecord[]
+     * @return TrackingOperation[]
      */
     public function getHistoryRecords()
     {
-        if (is_object($this->historyRecord)) {
+        if (\is_object($this->historyRecord)) {
             $this->historyRecord = [$this->historyRecord];
         }
 

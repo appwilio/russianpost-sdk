@@ -13,16 +13,27 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Single;
 
-class TrackingResponse
+class TrackingResponse implements \IteratorAggregate
 {
-    /** @var OperationHistoryData */
-    public $OperationHistoryData;
+    /** @var TrackingOperationsWrapper */
+    private $OperationHistoryData;
 
     /**
-     * @return OperationHistoryRecord[]
+     * Список операций над почтовым отправлением.
+     *
+     * @return TrackingOperation[]
      */
     public function getOperations()
     {
         return $this->OperationHistoryData->getHistoryRecords();
+    }
+
+    public function getIterator()
+    {
+        return (function () {
+            foreach ($this->getOperations() as $operation) {
+                yield $operation;
+            }
+        })();
     }
 }
