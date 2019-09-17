@@ -107,6 +107,7 @@ $this->app->singleton('appwilio.russianpost.logger', function () {
 #### Конфигурация
 ```php
 $tracker = new SingleAccessClient($login, $password);
+```
 
 #### Получение данных по ШПИ (трек-комеру)
 ```php
@@ -126,7 +127,7 @@ foreach ($operations as $operation) {
 $events = $tracker->getCashOnDeliveryEvents('29014562148754');
 
 foreach ($events as $event) {
-    $parameters = $operation->getOperationParameters();
+    $parameters = $event->getOperationParameters();
     
     echo $parameters->getTransferNumber();
     echo $parameters->getPayment();          // 7410
