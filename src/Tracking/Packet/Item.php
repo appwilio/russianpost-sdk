@@ -13,20 +13,22 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Packet;
 
-class Event
+class Item implements \IteratorAggregate
 {
     use ErrorAware;
 
-    /** @var Error */
-    public $Error;
+    /** @var Error|null */
+    private $Error;
 
     /** @var string */
-    public $Barcode;
+    private $Barcode;
 
     /** @var Operation[] */
-    public $Operation;
+    private $Operation;
 
     /**
+     * Список операций над постовым отправлением.
+     *
      * @return Operation[]
      */
     public function getOperations()
@@ -34,6 +36,11 @@ class Event
         return $this->Operation;
     }
 
+    /**
+     * Идентификатор (ШПИ) почтового отправления (Barcode).
+     *
+     * @return string
+     */
     public function getBarcode(): string
     {
         return $this->Barcode;
@@ -42,5 +49,14 @@ class Event
     public function isFound(): bool
     {
         return (bool) count($this->Operation);
+    }
+
+    public function getIterator()
+    {
+        return (function () {
+            foreach ($this->getOperations() as $operation) {
+                yield $operation;
+            }
+        })();
     }
 }

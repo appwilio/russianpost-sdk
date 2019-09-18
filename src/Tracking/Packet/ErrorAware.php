@@ -20,6 +20,11 @@ trait ErrorAware
         return (bool) ($this->error ?? $this->Error ?? null);
     }
 
+    /**
+     * Информация об ошибке.
+     *
+     * @return Error|null
+     */
     public function getError(): ?Error
     {
         if (! $this->hasError()) {

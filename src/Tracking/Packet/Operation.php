@@ -15,41 +15,72 @@ namespace Appwilio\RussianPostSDK\Tracking\Packet;
 
 class Operation
 {
-    /** @var string */
-    public $DateOper;
-
-    /** @var string */
-    public $OperName;
-
-    /** @var string */
-    public $IndexOper;
+    /** @var int */
+    private $OperTypeID;
 
     /** @var int */
-    public $OperCtgID;
+    private $OperCtgID;
 
-    /** @var int */
-    public $OperTypeID;
+    /** @var string */
+    private $OperName;
 
+    /** @var string */
+    private $DateOper;
+
+    /** @var string */
+    private $IndexOper;
+
+    /**
+     * Код операции (OperTypeID).
+     *
+     * @link https://tracking.pochta.ru/support/dictionaries/operation_codes
+     *
+     * @return int
+     */
+    public function getOperationId(): int
+    {
+        return $this->OperTypeID;
+    }
+
+    /**
+     * Код атрибута (OperCtgID).
+     *
+     * @link https://tracking.pochta.ru/support/dictionaries/operation_codes
+     *
+     * @return int
+     */
+    public function getAttributeId(): int
+    {
+        return $this->OperCtgID;
+    }
+
+    /**
+     * Название операции (OperName).
+     *
+     * @link https://tracking.pochta.ru/support/dictionaries/operation_codes
+     *
+     * @return string
+     */
     public function getOperationName(): string
     {
         return $this->OperName;
     }
 
-    public function getOperationId(): int
-    {
-        return (int) $this->OperTypeID;
-    }
-
-    public function getAttributeId(): int
-    {
-        return (int) $this->OperCtgID;
-    }
-
+    /**
+     * Время (локальное) проведения операции (DateOper).
+     *
+     * @return \DateTimeImmutable
+     */
     public function getPerformedAt(): \DateTimeImmutable
     {
         return \DateTimeImmutable::createFromFormat('d.m.Y H:i:s', $this->DateOper);
     }
 
+    /**
+     * Почтовый индекс места проведения операции (IndexOper).
+     *
+     * @return string
+     */
     public function getPostalCode(): string
     {
         return $this->IndexOper;

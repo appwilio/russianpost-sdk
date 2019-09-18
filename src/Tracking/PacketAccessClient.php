@@ -43,11 +43,12 @@ class PacketAccessClient
         'soap_version' => \SOAP_1_1,
         'trace'        => 1,
         'classmap'     => [
-            'item'                   => Packet\Event::class,     // Item согласно wsdl-описанию называется item
-            'file'                   => Packet\Value::class,     // value согласно wsdl-описанию называется file
+            'item'                   => Packet\Item::class,      // Item согласно wsdl-описанию называется item
             'error'                  => Packet\Error::class,     // корневая ошибка
             'Error'                  => Packet\Error::class,     // ошибка конкретного трека
+            'file'                   => Packet\Wrapper::class,   // value согласно wsdl-описанию называется file
             'operation'              => Packet\Operation::class, // Operation согласно wsdl-описанию называется operation
+
             'ticketResponse'         => TicketResponse::class,
             'answerByTicketResponse' => TrackingResponse::class,
         ],

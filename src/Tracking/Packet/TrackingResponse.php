@@ -13,26 +13,42 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Packet;
 
-class TrackingResponse
+class TrackingResponse implements \IteratorAggregate
 {
     use ErrorAware;
 
-    /** @var Value */
-    public $value;
+    /** @var Error|null */
+    private $error;
 
-    /** @var Error */
-    public $error;
+    /** @var Wrapper */
+    private $value;
 
-    public function getValue(): Value
+    /**
+     * Дата и время формирования билета по MSK (UTC+3).
+     *
+     * @return \DateTimeImmutable
+     */
+    public function getPreparedAt(): \DateTimeImmutable
     {
-        return $this->value;
+        return $this->value->getPreparedAt();
     }
 
     /**
-     * @return Event[]
+     * Список почтовых отправлений.
+     *
+     * @return Item[]
      */
-    public function getEvents()
+    public function getItems()
     {
-        return $this->getValue()->getEvents();
+        return $this->value->getItems();
+    }
+
+    public function getIterator()
+    {
+        return (function () {
+            foreach ($this->getItems() as $item) {
+                yield $item;
+            }
+        })();
     }
 }

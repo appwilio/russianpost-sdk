@@ -17,11 +17,11 @@ class TicketResponse
 {
     use ErrorAware;
 
-    /** @var Error */
-    public $error;
+    /** @var Error|null */
+    private $error;
 
     /** @var string */
-    public $value;
+    private $value;
 
     public function getId(): string
     {

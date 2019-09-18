@@ -21,11 +21,21 @@ class Error
     /** @var string */
     public $ErrorName;
 
+    /**
+     * Идентификатор ошибки (ErrorTypeID).
+     *
+     * @return int
+     */
     public function getCode(): int
     {
         return (int) $this->ErrorTypeID;
     }
 
+    /**
+     * Текст ошибки (ErrorName).
+     *
+     * @return string
+     */
     public function getMessage(): string
     {
         return $this->ErrorName;
