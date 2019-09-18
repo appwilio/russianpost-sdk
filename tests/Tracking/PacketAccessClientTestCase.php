@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tests\Tracking;
 
-use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
+use Appwilio\RussianPostSDK\Tracking\Packet\Error;
 use Appwilio\RussianPostSDK\Tracking\PacketAccessClient;
 use Appwilio\RussianPostSDK\Tracking\Packet\TicketResponse;
 use Appwilio\RussianPostSDK\Tracking\Packet\TrackingResponse;
@@ -24,17 +24,22 @@ class PacketAccessClientTestCase extends TestCase
 {
     public function test_client_is_instantiable(): void
     {
-        Assert::assertInstanceOf(
+        $this->assertInstanceOf(
             PacketAccessClient::class,
-            $this->getClient()
+            $this->createClient()
         );
     }
 
     public function test_can_get_ticket(): void
     {
-        Assert::assertInstanceOf(
+        ($soap = $this->mockSoap())->expects($this->once())
+            ->method('__soapCall')
+            ->with('getTicket', $this->isType('array'), ...\array_fill(0, 3, $this->isNull()))
+            ->willReturn(new TicketResponse());
+
+        $this->assertInstanceOf(
             TicketResponse::class,
-            $this->getClient()->getTicket(['RA644000001RU'])
+            $this->createClient($soap)->getTicket(['RA644000001RU'])
         );
     }
 
@@ -48,20 +53,58 @@ class PacketAccessClientTestCase extends TestCase
             }
         })();
 
-        $this->getClient()->getTicket($source);
+        $this->createClient()->getTicket($source);
     }
 
     public function test_can_get_tracking_events(): void
     {
-        Assert::assertInstanceOf(
+        ($soap = $this->mockSoap())->expects($this->once())
+            ->method('__soapCall')
+            ->with('getResponseByTicket', $this->isType('array'), ...\array_fill(0, 3, $this->isNull()))
+            ->willReturn(new TrackingResponse());
+
+        $this->assertInstanceOf(
             TrackingResponse::class,
-            $this->getClient()->getTrackingEvents('RA644000001RU')
+            $this->createClient($soap)->getTrackingEvents('20190101010101000FOO')
         );
     }
 
-    private function getClient()
+    public function test_exception_thrown_on_soap_fault(): void
     {
-        return new class($this->createSoapClientMock()) extends PacketAccessClient {
+        $this->expectExceptionMessage('error');
+        $this->expectException(PacketAccessException::class);
+
+        ($soap = $this->mockSoap())->expects($this->once())
+            ->method('__soapCall')
+            ->will($this->throwException(new \SoapFault('error_code', 'error_message')));
+
+        $this->createClient($soap)->getTrackingEvents('20190101010101000FOO');
+    }
+
+    public function test_exception_thrown_on_response_error(): void
+    {
+        $this->expectExceptionCode(1);
+        $this->expectExceptionMessage('service_error');
+        $this->expectException(PacketAccessException::class);
+
+        $error = $this->createMock(Error::class);
+        $error->method('getCode')->willReturn(1);
+        $error->method('getMessage')->willReturn('service_error');
+
+        $response = $this->createMock(TrackingResponse::class);
+        $response->method('hasError')->willReturn(true);
+        $response->method('getError')->willReturn($error);
+
+        ($soap = $this->mockSoap())->expects($this->once())
+            ->method('__soapCall')
+            ->willReturn($response);
+
+        $this->createClient($soap)->getTrackingEvents('20190101010101000FOO');
+    }
+
+    private function createClient($soap = null)
+    {
+        return new class($soap ?? $this->mockSoap()) extends PacketAccessClient {
             public function __construct($mock)
             {
                 parent::__construct('foo', 'bar');
@@ -71,21 +114,11 @@ class PacketAccessClientTestCase extends TestCase
         };
     }
 
-    private function createSoapClientMock(): \SoapClient
+    private function mockSoap()
     {
-        $mock = $this->getMockBuilder(\SoapClient::class)
+        return $this->getMockBuilder(\SoapClient::class)
             ->setMethods(['__soapCall'])
             ->disableOriginalConstructor()
             ->getMock();
-
-        $mock->method('__soapCall')->willReturnCallback(static function ($method) {
-            return ([
-                'getTicket'           => new TicketResponse(),
-                'getResponseByTicket' => new TrackingResponse(),
-            ])[$method];
-        });
-
-        /** @var \SoapClient $mock */
-        return $mock;
     }
 }
