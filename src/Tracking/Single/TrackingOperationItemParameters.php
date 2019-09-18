@@ -52,7 +52,7 @@ class TrackingOperationItemParameters
     private $MaxMassEn;
 
     /**
-     * Идентификатор почтового отправления (ШПИ), текущий для данной операции (Barcode).
+     * Идентификатор (ШПИ) почтового отправления, текущий для данной операции (Barcode).
      *
      * @return string
      */

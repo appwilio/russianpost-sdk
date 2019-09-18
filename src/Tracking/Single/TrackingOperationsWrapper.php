@@ -21,7 +21,7 @@ class TrackingOperationsWrapper
     /**
      * @return TrackingOperation[]
      */
-    public function getHistoryRecords()
+    public function getOperations()
     {
         if (\is_object($this->historyRecord)) {
             $this->historyRecord = [$this->historyRecord];

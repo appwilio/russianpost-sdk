@@ -25,7 +25,7 @@ class TrackingResponse implements \IteratorAggregate
      */
     public function getOperations()
     {
-        return $this->OperationHistoryData->getHistoryRecords();
+        return $this->OperationHistoryData->getOperations();
     }
 
     public function getIterator()

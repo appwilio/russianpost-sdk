@@ -31,8 +31,8 @@ class CashOnDeliveryResponse implements \IteratorAggregate
     public function getIterator()
     {
         return (function () {
-            foreach ($this->getEvents() as $operation) {
-                yield $operation;
+            foreach ($this->getEvents() as $event) {
+                yield $event;
             }
         })();
     }
