@@ -13,19 +13,19 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tests\Tracking;
 
-use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Appwilio\RussianPostSDK\Tracking\SingleAccessClient;
 use Appwilio\RussianPostSDK\Tracking\Single\TrackingResponse;
 use Appwilio\RussianPostSDK\Tracking\Single\CashOnDeliveryResponse;
+use Appwilio\RussianPostSDK\Tracking\Exceptions\SingleAccessException;
 
 class SingleAccessClientTestCase extends TestCase
 {
     public function test_client_is_instantiable(): void
     {
-        Assert::assertInstanceOf(
+        $this->assertInstanceOf(
             SingleAccessClient::class,
-            $this->getClient()
+            $this->createClient()
         );
     }
 
@@ -33,29 +33,63 @@ class SingleAccessClientTestCase extends TestCase
     {
         $this->assertEquals(
             'https://www.pochta.ru/tracking#RA644000001RU',
-            $this->getClient()->getTrackingUrl('RA644000001RU')
+            $this->createClient()->getTrackingUrl('RA644000001RU')
         );
     }
 
     public function test_can_get_tracking_events(): void
     {
-        Assert::assertInstanceOf(
+        ($soap = $this->mockSoap())->expects($this->once())
+            ->method('__soapCall')
+            ->with('getOperationHistory', $this->isType('array'), ...\array_fill(0, 3, $this->isNull()))
+            ->willReturn(new TrackingResponse());
+
+        $this->assertInstanceOf(
             TrackingResponse::class,
-            $this->getClient()->getTrackingEvents('RA644000001RU')
+            $this->createClient($soap)->getTrackingEvents('RA644000001RU')
         );
     }
 
     public function test_can_get_cod_events(): void
     {
-        Assert::assertInstanceOf(
+        ($soap = $this->mockSoap())->expects($this->once())
+            ->method('__soapCall')
+            ->with('PostalOrderEventsForMail', $this->isType('array'), ...\array_fill(0, 3, $this->isNull()))
+            ->willReturn(new CashOnDeliveryResponse());
+
+        $this->assertInstanceOf(
             CashOnDeliveryResponse::class,
-            $this->getClient()->getCashOnDeliveryEvents('RA644000001RU')
+            $this->createClient($soap)->getCashOnDeliveryEvents('RA644000001RU')
         );
     }
 
-    private function getClient()
+    public function test_exception_thrown_on_soap_fault(): void
     {
-        return new class($this->createSoapClientMock()) extends SingleAccessClient {
+        $this->expectExceptionMessage('error');
+        $this->expectException(SingleAccessException::class);
+
+        ($soap = $this->mockSoap())->expects($this->once())
+            ->method('__soapCall')
+            ->will($this->throwException(new \SoapFault('error_code', 'error_message')));
+
+        $this->createClient($soap)->getTrackingEvents('RA644000001RU');
+    }
+
+    public function test_exception_thrown_on_soap_fault_with_detail(): void
+    {
+        $this->expectExceptionMessage('one: one_error');
+        $this->expectException(SingleAccessException::class);
+
+        ($soap = $this->mockSoap())->expects($this->once())
+            ->method('__soapCall')
+            ->will($this->throwException(new \SoapFault('error', 'error', null, (object) ['one' => 'one_error'])));
+
+        $this->createClient($soap)->getTrackingEvents('RA644000001RU');
+    }
+
+    private function createClient($soap = null)
+    {
+        return new class($soap ?? $this->mockSoap()) extends SingleAccessClient {
             public function __construct($mock)
             {
                 parent::__construct('foo', 'bar');
@@ -65,21 +99,11 @@ class SingleAccessClientTestCase extends TestCase
         };
     }
 
-    private function createSoapClientMock(): \SoapClient
+    private function mockSoap()
     {
-        $mock = $this->getMockBuilder(\SoapClient::class)
+        return $this->getMockBuilder(\SoapClient::class)
             ->setMethods(['__soapCall'])
             ->disableOriginalConstructor()
             ->getMock();
-
-        $mock->method('__soapCall')->willReturnCallback(static function ($method) {
-            return ([
-                'getOperationHistory'      => new TrackingResponse(),
-                'PostalOrderEventsForMail' => new CashOnDeliveryResponse(),
-            ])[$method];
-        });
-
-        /** @var \SoapClient $mock */
-        return $mock;
     }
 }
