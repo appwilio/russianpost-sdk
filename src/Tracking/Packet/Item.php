@@ -27,7 +27,7 @@ class Item implements \IteratorAggregate
     private $Operation;
 
     /**
-     * Список операций над постовым отправлением.
+     * Список операций над почтовым отправлением.
      *
      * @return Operation[]
      */

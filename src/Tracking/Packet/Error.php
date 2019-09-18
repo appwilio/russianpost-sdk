@@ -16,10 +16,10 @@ namespace Appwilio\RussianPostSDK\Tracking\Packet;
 class Error
 {
     /** @var int */
-    public $ErrorTypeID;
+    private $ErrorTypeID;
 
     /** @var string */
-    public $ErrorName;
+    private $ErrorName;
 
     /**
      * Идентификатор ошибки (ErrorTypeID).
@@ -28,7 +28,7 @@ class Error
      */
     public function getCode(): int
     {
-        return (int) $this->ErrorTypeID;
+        return $this->ErrorTypeID;
     }
 
     /**

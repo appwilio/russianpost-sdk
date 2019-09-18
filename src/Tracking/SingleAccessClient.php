@@ -34,8 +34,8 @@ class SingleAccessClient implements LoggerAwareInterface
     protected const LINK_URL = 'https://www.pochta.ru/tracking';
     protected const WSDL_URL = 'https://tracking.pochta.ru/tracking-web-static/rtm34_wsdl.xml';
 
-    protected const XML_NS_DATA        = 'http://russianpost.org/operationhistory/data';
-    protected const XML_NS_COD_HISTORY = 'http://www.russianpost.org/RTM/DataExchangeESPP/Data';
+    protected const XML_NS_DATA     = 'http://russianpost.org/operationhistory/data';
+    protected const XML_NS_COD_DATA = 'http://www.russianpost.org/RTM/DataExchangeESPP/Data';
 
     /** @var \SoapClient */
     protected $client;
@@ -140,10 +140,7 @@ class SingleAccessClient implements LoggerAwareInterface
                 new \SoapVar($type, \XSD_STRING, '', '', 'MessageType', self::XML_NS_DATA),
                 new \SoapVar($language, \XSD_STRING, '', '', 'Language', self::XML_NS_DATA),
             ], \SOAP_ENC_OBJECT, '', '', 'OperationHistoryRequest', self::XML_NS_DATA),
-            new \SoapVar([
-                new \SoapVar($this->login, XSD_STRING, '', '', 'login', self::XML_NS_DATA),
-                new \SoapVar($this->password, XSD_STRING, '', '', 'password', self::XML_NS_DATA),
-            ], SOAP_ENC_OBJECT, '', '', 'AuthorizationHeader', self::XML_NS_DATA),
+            $this->assembleAuthorizationHeader(),
         ], \SOAP_ENC_OBJECT);
     }
 
@@ -152,11 +149,16 @@ class SingleAccessClient implements LoggerAwareInterface
         $input = new CashOnDeliveryEventsInput($code, $language);
 
         return new \SoapVar([
-            new \SoapVar($input, \SOAP_ENC_OBJECT, '', '', 'PostalOrderEventsForMailInput', self::XML_NS_COD_HISTORY),
-            new \SoapVar([
-                new \SoapVar($this->login, XSD_STRING, '', '', 'login', self::XML_NS_DATA),
-                new \SoapVar($this->password, XSD_STRING, '', '', 'password', self::XML_NS_DATA),
-            ], SOAP_ENC_OBJECT, '', '', 'AuthorizationHeader', self::XML_NS_DATA),
+            new \SoapVar($input, \SOAP_ENC_OBJECT, '', '', 'PostalOrderEventsForMailInput', self::XML_NS_COD_DATA),
+            $this->assembleAuthorizationHeader(),
         ], \SOAP_ENC_OBJECT);
+    }
+
+    private function assembleAuthorizationHeader(): \SoapVar
+    {
+        return new \SoapVar([
+            new \SoapVar($this->login, \XSD_STRING, '', '', 'login', self::XML_NS_DATA),
+            new \SoapVar($this->password, \XSD_STRING, '', '', 'password', self::XML_NS_DATA),
+        ], \SOAP_ENC_OBJECT, '', '', 'AuthorizationHeader', self::XML_NS_DATA);
     }
 }

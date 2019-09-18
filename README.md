@@ -114,14 +114,14 @@ $tracker = new SingleAccessClient($login, $password);
 $response = $tracker->getTrackingEvents('29014562148754');
 ```
 
-`$response` реализует интерфейс `\IteratorAggregate`, поэтому его можно сразу перебирать в цикле:
+Объект `$response` реализует интерфейс `\IteratorAggregate`, поэтому его можно сразу перебирать в цикле:
 ```php
 foreach ($response as $operation) {
     $parameters = $operation->getOperationParameters();
     
     echo $parameters->getOperationId();
     echo $parameters->getAttributeId();
-    echo $parameters->getPerformedAt()->format('d.m.Y в h:m:s');
+    echo $parameters->getPerformedAt()->format('d.m.Y в h:m:s'); // 17.09.2019 в 17:20:48
 }
 ```
 
@@ -130,14 +130,14 @@ foreach ($response as $operation) {
 $response = $tracker->getCashOnDeliveryEvents('29014562148754');
 ```
 
-`$response` реализует интерфейс `\IteratorAggregate`, поэтому его можно сразу перебирать в цикле:
+Объект `$response` реализует интерфейс `\IteratorAggregate`, поэтому его можно сразу перебирать в цикле:
 ```php
 foreach ($response as $event) {
     $parameters = $event->getOperationParameters();
     
     echo $parameters->getTransferNumber();
     echo $parameters->getPayment(); // 7410
-    echo $parameters->getPerformedAt()->format('d.m.Y в h:m:s');
+    echo $parameters->getPerformedAt()->format('d.m.Y в h:m:s'); // 17.09.2019 в 17:20:48
 }
 ```
 
@@ -161,7 +161,7 @@ $response = $tracker->getTrackingEvents($ticket->getId());
 echo $response->getPreparedAt()->format('d.m.Y в h:m:s');
 ```
 
-`$response` реализует интерфейс `\IteratorAggregate`, поэтому его можно сразу перебирать в цикле:
+Объект `$response` реализует интерфейс `\IteratorAggregate`, поэтому его можно сразу перебирать в цикле:
 ```php
 foreach ($response as $item) {
     echo $item->getBarcode();
@@ -169,7 +169,7 @@ foreach ($response as $item) {
     foreach ($item as $operation) {
         echo $operation->getOperationId();
         echo $operation->getAttributeId();
-        echo $operation->getPerformedAt()->format('d.m.Y в h:m:s');
+        echo $operation->getPerformedAt()->format('d.m.Y в h:m:s'); // 17.09.2019 в 17:20:48
     }
 }
 ```
