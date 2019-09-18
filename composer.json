@@ -1,8 +1,8 @@
 {
     "name": "appwilio/russianpost-sdk",
-    "keywords": ["Russian Post", "Почта России", "delivery"],
+    "keywords": ["Russian Post", "pochta", "Почта России", "delivery", "служба доставки"],
     "homepage": "https://github.com/appwilio/russianpost-sdk",
-    "description": "Russian Post SDK (pochta.ru)",
+    "description": "Russian Post (pochta.ru) SDK",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -38,6 +38,9 @@
         "psr-4": {
             "Appwilio\\RussianPostSDK\\": "src/"
         }
+    },
+    "suggest": {
+    	"monolog/monolog": "Для логирования и отладки",
     },
     "config": {
         "sort-packages": true
