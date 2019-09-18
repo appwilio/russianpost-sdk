@@ -40,7 +40,7 @@
         }
     },
     "suggest": {
-    	"monolog/monolog": "Для логирования и отладки",
+    	"monolog/monolog": "Для логирования и отладки"
     },
     "config": {
         "sort-packages": true
