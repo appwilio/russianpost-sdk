@@ -13,12 +13,17 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking;
 
+use Psr\Log\NullLogger;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerAwareInterface;
 use Appwilio\RussianPostSDK\Tracking\Packet\TicketResponse;
 use Appwilio\RussianPostSDK\Tracking\Packet\TrackingResponse;
 use Appwilio\RussianPostSDK\Tracking\Exceptions\PacketAccessException;
 
-class PacketAccessClient
+class PacketAccessClient implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     public const LANG_ENG = 'ENG';
     public const LANG_RUS = 'RUS';
 
@@ -56,6 +61,8 @@ class PacketAccessClient
 
     public function __construct(string $login, string $password)
     {
+        $this->logger = new NullLogger();
+
         $this->login = $login;
         $this->password = $password;
     }
@@ -70,30 +77,45 @@ class PacketAccessClient
             throw PacketAccessException::trackNumberLimitExceeded();
         }
 
-        $arguments = $this->assembleTicketRequestArguments($tracks, $language);
-
-        /** @var TicketResponse $response */
-        $response = $this->getClient()->__soapCall('getTicket', [$arguments]);
-
-        if ($response->hasError()) {
-            throw new PacketAccessException($response->getError()->getMessage(), $response->getError()->getCode());
-        }
-
-        return $response;
+        return $this->callSoapMethod(
+            'getTicket',
+            $this->assembleTicketRequestArguments($tracks, $language)
+        );
     }
 
     public function getTrackingEvents(string $ticket): TrackingResponse
     {
-        $arguments = $this->assembleTrackingRequestArgument($ticket);
+        return $this->callSoapMethod(
+            'getResponseByTicket',
+            $this->assembleTrackingRequestArgument($ticket)
+        );
+    }
 
-        /** @var TrackingResponse $response */
-        $response = $this->getClient()->__soapCall('getResponseByTicket', [$arguments]);
-
-        if ($response->hasError()) {
-            throw new PacketAccessException($response->getError()->getMessage(), $response->getError()->getCode());
+    protected function getClient(): \SoapClient
+    {
+        if (! $this->client) {
+            $this->client = new \SoapClient(self::WSDL_URL, $this->options);
         }
 
-        return $response;
+        return $this->client;
+    }
+
+    private function callSoapMethod(string $method, \SoapVar $arguments)
+    {
+        try {
+            $response = $this->getClient()->__soapCall($method, [$arguments]);
+
+            if ($response->hasError()) {
+                throw new PacketAccessException($response->getError()->getMessage(), $response->getError()->getCode());
+            }
+
+            return $response;
+        } catch (\SoapFault $e) {
+            throw new PacketAccessException($e->getMessage(), $e->getCode(), $e);
+        } finally {
+            $this->logger->info("pochta.ru Packet Tracking request: {$this->getClient()->__getLastRequest()}");
+            $this->logger->info("pochta.ru Packet Tracking response: {$this->getClient()->__getLastResponse()}");
+        }
     }
 
     private function assembleTicketRequestArguments(iterable $tracks, string $language): \SoapVar
@@ -119,14 +141,5 @@ class PacketAccessClient
             new \SoapVar($this->login, \XSD_STRING, '', '', 'login'),
             new \SoapVar($this->password, \XSD_STRING, '', '', 'password'),
         ], \SOAP_ENC_OBJECT);
-    }
-
-    public function getClient(): \SoapClient
-    {
-        if (! $this->client) {
-            $this->client = new \SoapClient(self::WSDL_URL, $this->options);
-        }
-
-        return $this->client;
     }
 }
