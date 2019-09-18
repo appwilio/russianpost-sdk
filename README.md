@@ -111,27 +111,33 @@ $tracker = new SingleAccessClient($login, $password);
 
 #### Получение данных по ШПИ (трек-комеру)
 ```php
-$operations = $tracker->getTrackingEvents('29014562148754');
+$response = $tracker->getTrackingEvents('29014562148754');
+```
 
-foreach ($operations as $operation) {
+`$response` реализует интерфейс `\IteratorAggregate`, поэтому его можно сразу перебирать в цикле:
+```php
+foreach ($response as $operation) {
     $parameters = $operation->getOperationParameters();
     
     echo $parameters->getOperationId();
     echo $parameters->getAttributeId();
-    echo $parameters->getPerformedAt();
+    echo $parameters->getPerformedAt()->format('d.m.Y в h:m:s');
 }
 ```
 
 #### Получение информации о наложенном платеже по ШПИ (трек-комеру)
 ```php
-$events = $tracker->getCashOnDeliveryEvents('29014562148754');
+$response = $tracker->getCashOnDeliveryEvents('29014562148754');
+```
 
-foreach ($events as $event) {
+`$response` реализует интерфейс `\IteratorAggregate`, поэтому его можно сразу перебирать в цикле:
+```php
+foreach ($response as $event) {
     $parameters = $event->getOperationParameters();
     
     echo $parameters->getTransferNumber();
-    echo $parameters->getPayment();          // 7410
-    echo $parameters->getPerformedAt();
+    echo $parameters->getPayment(); // 7410
+    echo $parameters->getPerformedAt()->format('d.m.Y в h:m:s');
 }
 ```
 
@@ -145,18 +151,25 @@ $tracker = new PacketAccessClient($login, $password);
 #### Получение данных по ШПИ (трек-комеру)
 ```php
 $ticket = $tracker->getTicket(['29014562148754', 'RA325487125CN']); // максимум 3 000 треков
+```
 
-// рекомендуется подождать 15 минут перед запросом информации
+Рекомендуется подождать 15 минут перед запросом информации.
 
+```php
 $response = $tracker->getTrackingEvents($ticket->getId());
 
-foreach ($response->getEvents() as $event) {
-    echo $event->getBarcode();
+echo $response->getPreparedAt()->format('d.m.Y в h:m:s');
+```
+
+`$response` реализует интерфейс `\IteratorAggregate`, поэтому его можно сразу перебирать в цикле:
+```php
+foreach ($response as $item) {
+    echo $item->getBarcode();
     
-    foreach ($event->getOperations as $operation) {
+    foreach ($item as $operation) {
         echo $operation->getOperationId();
         echo $operation->getAttributeId();
-        echo $operation->getPerformedAt();
+        echo $operation->getPerformedAt()->format('d.m.Y в h:m:s');
     }
 }
 ```
