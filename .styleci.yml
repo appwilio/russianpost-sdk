@@ -5,5 +5,7 @@ enabled:
 
 disabled:
     - unalign_equals
+    - alpha_ordered_imports
+    - simplified_null_return
     - phpdoc_inline_tag
     - phpdoc_single_line_var_spacing

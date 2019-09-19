@@ -35,7 +35,7 @@ class Instantiator
             $this->class = $class;
         }
 
-        $this->reflector = new \ReflectionClass($class);
+        $this->reflector = new \ReflectionClass($this->class);
     }
 
     /**
@@ -76,7 +76,7 @@ class Instantiator
 
     private function build(string $class, array $data)
     {
-        $object = new $class;
+        $object = new $class();
 
         $property = $this->reflector->getProperty('data');
 
