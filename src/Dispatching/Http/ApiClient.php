@@ -13,43 +13,34 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Http;
 
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Psr7\UploadedFile;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Appwilio\RussianPostSDK\Dispatching\Instantiator;
 use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 use Appwilio\RussianPostSDK\Dispatching\Exceptions\BadRequest;
 use Appwilio\RussianPostSDK\Dispatching\Contracts\DispatchingException;
-use GuzzleHttp\Client as HttpClient;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ServerException;
-use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\UploadedFile;
-use Psr\Http\Message\ResponseInterface;
+use function GuzzleHttp\Psr7\stream_for;
+use function GuzzleHttp\Psr7\build_query;
 
 final class ApiClient
 {
     private const API_URL = 'https://otpravka-api.pochta.ru';
 
-    private const COMMON_HEADERS = [
-        'Accept' => 'application/json;charset=UTF-8',
-    ];
+    /** @var Authentication */
+    private $authentication;
 
-    private const FILE_SIGNATURES = [
-        'zip' => 'PK',
-        'pdf' => '%PDF-',
-    ];
-
-    /** @var Authorization */
-    private $auth;
-
-    /** @var HttpClient */
+    /** @var ClientInterface */
     private $httpClient;
 
-    /** @var array */
-    private $httpOptions;
-
-    public function __construct(Authorization $authorization, array $httpOptions)
+    public function __construct(Authentication $authentication, ClientInterface $httpClient)
     {
-        $this->auth = $authorization;
-        $this->httpOptions = $httpOptions;
+        $this->authentication = $authentication;
+        $this->httpClient = $httpClient;
     }
 
     public function get(string $path, ?Arrayable $request = null, $type = null)
@@ -78,115 +69,83 @@ final class ApiClient
      * @param  string          $method
      * @param  string          $path
      * @param  Arrayable|null  $request
-     * @param  null            $type
+     * @param  mixed           $responseType
      *
      * @throws DispatchingException
      * @throws \GuzzleHttp\Exception\GuzzleException
      *
      * @return mixed
      */
-    private function send(string $method, string $path, ?Arrayable $request = null, $type = null)
+    private function send(string $method, string $path, ?Arrayable $request = null, $responseType = null)
     {
-        $response = null;
-
         try {
-            $response = $this->getHttpClient()->request(
-                $method, $path, $request ? $this->buildRequestOptions($method, $request) : []
-            );
-        } catch (ClientException $e) {
-            if ($e->getCode() === 401) {
-                throw $this->handleAuthenticationException($e);
+            $response = $this->httpClient->send($this->buildHttpRequest($method, $path, $request));
+
+            $contenType = $response->getHeaderLine('Content-Type');
+
+            if (\preg_match('~^application/(pdf|zip)$~', $contenType, $matches)) {
+                return $this->buildFile($response, $matches[1]);
             }
 
+            if (\preg_match('~^application/json~', $contenType)) {
+                $content = $this->getResponseContent($response);
+
+                return $responseType === null
+                    ? $content
+                    : Instantiator::instantiate($responseType, $content);
+            }
+
+            throw new BadRequest();
+        } catch (ClientException $e) {
             throw $this->handleClientException($e);
         } catch (ServerException $e) {
             throw $this->handleServerException($e);
         } catch (\Exception $e) {
             throw $e;
         }
-
-        if (null === $response) {
-            return null;
-        }
-
-        $fileType = $this->guessFileType($response);
-
-        if ($fileType) {
-            return $this->buildFile($response, $fileType);
-        }
-
-        $content = $this->getResponseContent($response);
-
-        if (null === $type) {
-            return $content;
-        }
-
-        return Instantiator::instantiate($type, $content);
     }
 
-    private function buildRequestOptions(string $method, Arrayable $request): array
+    private function buildHttpRequest(string $method, string $path, ?Arrayable $payload): RequestInterface
     {
-        $data = \array_filter($request->toArray());
+        $request = $this->authentication->authenticate(
+            new Request($method, self::API_URL.$path, ['Accept' => 'application/json;charset=UTF-8'])
+        );
 
-        if ($method === 'GET') {
-            return [
-                'query' => $data,
-            ];
+        if ($payload === null) {
+            return $request;
         }
 
-        return [
-            'body'    => \json_encode($data),
-            'headers' => [
-                'Content-Type' => 'application/json;charset=UTF-8',
-            ],
-        ];
-    }
+        $data = \array_filter($payload->toArray());
 
-    private function getHttpClient(): HttpClient
-    {
-        if ($this->httpClient === null) {
-            $this->httpClient = new HttpClient(\array_merge(
-                $this->httpOptions,
-                [
-                    'base_uri' => self::API_URL,
-                    'headers'  => \array_merge(self::COMMON_HEADERS, $this->auth->toArray()),
-                ]
-            ));
+        if (\strtoupper($method) === 'GET') {
+            return $request->withBody(stream_for(build_query($data)));
         }
 
-        return $this->httpClient;
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        return $request
+            ->withHeader('Content-Type', 'application/json;charset=UTF-8')
+            ->withBody(stream_for(\json_encode($data)));
     }
 
-    private function guessFileType(Response $response): ?string
+    private function buildFile(ResponseInterface $response, string $type): UploadedFile
     {
-        $chunk = $response->getBody()->read(10);
-
-        foreach (self::FILE_SIGNATURES as $type => $signature) {
-            if (0 === \stripos($chunk, $signature)) {
-                $response->getBody()->rewind();
-
-                return $type;
-            }
-        }
-
-        return null;
-    }
-
-    private function buildFile(Response $response, string $type): UploadedFile
-    {
-        $name = \explode('=', $response->getHeaderLine('Content-Disposition') ?? '')[1] ?? '';
+        \preg_match('~=(.+)$~', $response->getHeaderLine('Content-Disposition'), $matches);
 
         return new UploadedFile(
             $response->getBody(),
             $response->getBody()->getSize(),
             \UPLOAD_ERR_OK,
-            "{$name}.{$type}",
+            "{$matches[1]}.{$type}",
             $response->getHeaderLine('Content-Type')
         );
     }
 
     private function handleClientException(ClientException $exception): DispatchingException
     {
+        if (\in_array($exception->getCode(), [401, 403])) {
+            throw $this->handleAuthenticationException($exception);
+        }
+
         $content = $this->getResponseContent($exception->getResponse());
 
         return new BadRequest(

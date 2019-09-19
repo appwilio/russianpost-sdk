@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Http;
 
-final class Authorization
+use Psr\Http\Message\RequestInterface;
+
+final class Authentication
 {
     /** @var string */
     private $token;
@@ -28,11 +30,10 @@ final class Authorization
         $this->basic = \base64_encode("{$login}:{$password}");
     }
 
-    public function toArray(): array
+    public function authenticate(RequestInterface $request): RequestInterface
     {
-        return [
-            'Authorization'        => "AccessToken {$this->token}",
-            'X-User-Authorization' => "Basic {$this->basic}",
-        ];
+        return $request
+            ->withHeader('Authorization', "AccessToken {$this->token}")
+            ->withHeader('X-User-Authorization', "Basic {$this->basic}");
     }
 }

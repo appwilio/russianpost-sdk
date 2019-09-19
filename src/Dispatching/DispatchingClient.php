@@ -18,7 +18,7 @@ use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
 use GuzzleHttp\ClientInterface;
 use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
-use Appwilio\RussianPostSDK\Dispatching\Http\Authorization;
+use Appwilio\RussianPostSDK\Dispatching\Http\Authentication;
 use Appwilio\RussianPostSDK\Dispatching\Exceptions\UnknownEndpoint;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Orders;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Services;
@@ -49,11 +49,11 @@ final class DispatchingClient implements LoggerAwareInterface
     /** @var ApiClient */
     private $client;
 
-    public function __construct(string $login, string $password, string $token, array $httpOptions = [])
+    public function __construct(string $login, string $password, string $token, ClientInterface $httpClient)
     {
         $this->logger = new NullLogger();
 
-        $this->client = new ApiClient(new Authorization($login, $password, $token), $httpOptions);
+        $this->client = new ApiClient(new Authentication($login, $password, $token), $httpClient);
     }
 
     public function __get(string $property)
