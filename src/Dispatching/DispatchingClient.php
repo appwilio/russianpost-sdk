@@ -15,13 +15,31 @@ namespace Appwilio\RussianPostSDK\Dispatching;
 
 use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
 use Appwilio\RussianPostSDK\Dispatching\Http\Authorization;
+use Appwilio\RussianPostSDK\Dispatching\Exceptions\UnknownEndpoint;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Orders;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Services;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Settings\Settings;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Documents\Documents;
 
+/**
+ * Class DispatchingClient
+ *
+ * @property-read  Orders     $orders
+ * @property-read  Documents  $documents
+ * @property-read  Services   $services
+ * @property-read  Settings   $settings
+ *
+ * @package Appwilio\RussianPostSDK\Dispatching
+ */
 final class DispatchingClient
 {
+    private const ENDPOINTS = [
+        'orders'    => Orders::class,
+        'services'  => Services::class,
+        'settings'  => Settings::class,
+        'documents' => Documents::class,
+    ];
+
     /** @var ApiClient */
     private $client;
 
@@ -30,38 +48,14 @@ final class DispatchingClient
         $this->client = new ApiClient(new Authorization($login, $password, $token), $httpOptions);
     }
 
-    public function orders()
+    public function __get(string $property)
     {
-        return new Orders($this->client);
-    }
+        if (isset(self::ENDPOINTS[$property])) {
+            $class = self::ENDPOINTS[$property];
 
-    public function batches()
-    {
-        //
-    }
+            return new $class($this->client);
+        }
 
-    public function documents(): Documents
-    {
-        return new Documents($this->client);
-    }
-
-    public function archive()
-    {
-        //
-    }
-
-    public function postoffices()
-    {
-        
-    }
-
-    public function services(): Services
-    {
-        return new Services($this->client);
-    }
-
-    public function settings()
-    {
-        return new Settings($this->client);
+        throw new UnknownEndpoint($property);
     }
 }
