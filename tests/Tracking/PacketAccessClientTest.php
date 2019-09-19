@@ -20,7 +20,7 @@ use Appwilio\RussianPostSDK\Tracking\Packet\TicketResponse;
 use Appwilio\RussianPostSDK\Tracking\Packet\TrackingResponse;
 use Appwilio\RussianPostSDK\Tracking\Exceptions\PacketAccessException;
 
-class PacketAccessClientTestCase extends TestCase
+class PacketAccessClientTest extends TestCase
 {
     public function test_client_is_instantiable(): void
     {
@@ -32,9 +32,9 @@ class PacketAccessClientTestCase extends TestCase
 
     public function test_can_get_ticket(): void
     {
-        ($soap = $this->mockSoap())->expects($this->once())
+        ($soap = $this->mockSoap())
             ->method('__soapCall')
-            ->with('getTicket', $this->isType('array'), ...\array_fill(0, 3, $this->isNull()))
+            ->with('getTicket', $this->isType('array'))
             ->willReturn(new TicketResponse());
 
         $this->assertInstanceOf(
@@ -58,9 +58,9 @@ class PacketAccessClientTestCase extends TestCase
 
     public function test_can_get_tracking_events(): void
     {
-        ($soap = $this->mockSoap())->expects($this->once())
+        ($soap = $this->mockSoap())
             ->method('__soapCall')
-            ->with('getResponseByTicket', $this->isType('array'), ...\array_fill(0, 3, $this->isNull()))
+            ->with('getResponseByTicket', $this->isType('array'))
             ->willReturn(new TrackingResponse());
 
         $this->assertInstanceOf(
@@ -74,7 +74,7 @@ class PacketAccessClientTestCase extends TestCase
         $this->expectExceptionMessage('error');
         $this->expectException(PacketAccessException::class);
 
-        ($soap = $this->mockSoap())->expects($this->once())
+        ($soap = $this->mockSoap())
             ->method('__soapCall')
             ->will($this->throwException(new \SoapFault('error_code', 'error_message')));
 
@@ -95,7 +95,7 @@ class PacketAccessClientTestCase extends TestCase
         $response->method('hasError')->willReturn(true);
         $response->method('getError')->willReturn($error);
 
-        ($soap = $this->mockSoap())->expects($this->once())
+        ($soap = $this->mockSoap())
             ->method('__soapCall')
             ->willReturn($response);
 

@@ -107,11 +107,7 @@ class SingleAccessClient implements LoggerAwareInterface
 
     protected function getClient(): \SoapClient
     {
-        if (! $this->client) {
-            $this->client = new \SoapClient(self::WSDL_URL, $this->options);
-        }
-
-        return $this->client;
+        return $this->client ?? ($this->client = new \SoapClient(self::WSDL_URL, $this->options));
     }
 
     private function callSoapMethod(string $method, \SoapVar $arguments)

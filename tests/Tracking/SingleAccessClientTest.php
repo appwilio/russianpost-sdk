@@ -19,7 +19,7 @@ use Appwilio\RussianPostSDK\Tracking\Single\TrackingResponse;
 use Appwilio\RussianPostSDK\Tracking\Single\CashOnDeliveryResponse;
 use Appwilio\RussianPostSDK\Tracking\Exceptions\SingleAccessException;
 
-class SingleAccessClientTestCase extends TestCase
+class SingleAccessClientTest extends TestCase
 {
     public function test_client_is_instantiable(): void
     {
@@ -39,9 +39,9 @@ class SingleAccessClientTestCase extends TestCase
 
     public function test_can_get_tracking_events(): void
     {
-        ($soap = $this->mockSoap())->expects($this->once())
+        ($soap = $this->mockSoap())
             ->method('__soapCall')
-            ->with('getOperationHistory', $this->isType('array'), ...\array_fill(0, 3, $this->isNull()))
+            ->with('getOperationHistory', $this->isType('array'))
             ->willReturn(new TrackingResponse());
 
         $this->assertInstanceOf(
@@ -52,9 +52,9 @@ class SingleAccessClientTestCase extends TestCase
 
     public function test_can_get_cod_events(): void
     {
-        ($soap = $this->mockSoap())->expects($this->once())
+        ($soap = $this->mockSoap())
             ->method('__soapCall')
-            ->with('PostalOrderEventsForMail', $this->isType('array'), ...\array_fill(0, 3, $this->isNull()))
+            ->with('PostalOrderEventsForMail', $this->isType('array'))
             ->willReturn(new CashOnDeliveryResponse());
 
         $this->assertInstanceOf(
@@ -68,7 +68,7 @@ class SingleAccessClientTestCase extends TestCase
         $this->expectExceptionMessage('error');
         $this->expectException(SingleAccessException::class);
 
-        ($soap = $this->mockSoap())->expects($this->once())
+        ($soap = $this->mockSoap())
             ->method('__soapCall')
             ->will($this->throwException(new \SoapFault('error_code', 'error_message')));
 
@@ -80,7 +80,7 @@ class SingleAccessClientTestCase extends TestCase
         $this->expectExceptionMessage('one: one_error');
         $this->expectException(SingleAccessException::class);
 
-        ($soap = $this->mockSoap())->expects($this->once())
+        ($soap = $this->mockSoap())
             ->method('__soapCall')
             ->will($this->throwException(new \SoapFault('error', 'error', null, (object) ['one' => 'one_error'])));
 
