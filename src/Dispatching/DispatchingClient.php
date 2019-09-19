@@ -13,6 +13,10 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching;
 
+use Psr\Log\NullLogger;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerAwareInterface;
+use GuzzleHttp\ClientInterface;
 use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
 use Appwilio\RussianPostSDK\Dispatching\Http\Authorization;
 use Appwilio\RussianPostSDK\Dispatching\Exceptions\UnknownEndpoint;
@@ -31,8 +35,10 @@ use Appwilio\RussianPostSDK\Dispatching\Endpoints\Documents\Documents;
  *
  * @package Appwilio\RussianPostSDK\Dispatching
  */
-final class DispatchingClient
+final class DispatchingClient implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     private const ENDPOINTS = [
         'orders'    => Orders::class,
         'services'  => Services::class,
@@ -45,6 +51,8 @@ final class DispatchingClient
 
     public function __construct(string $login, string $password, string $token, array $httpOptions = [])
     {
+        $this->logger = new NullLogger();
+
         $this->client = new ApiClient(new Authorization($login, $password, $token), $httpOptions);
     }
 
