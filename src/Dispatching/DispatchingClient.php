@@ -26,14 +26,12 @@ use Appwilio\RussianPostSDK\Dispatching\Endpoints\Settings\Settings;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Documents\Documents;
 
 /**
- * Class DispatchingClient
+ * Class DispatchingClient.
  *
  * @property-read  Orders     $orders
  * @property-read  Documents  $documents
  * @property-read  Services   $services
  * @property-read  Settings   $settings
- *
- * @package Appwilio\RussianPostSDK\Dispatching
  */
 final class DispatchingClient implements LoggerAwareInterface
 {

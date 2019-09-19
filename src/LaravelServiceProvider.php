@@ -50,9 +50,7 @@ class LaravelServiceProvider extends ServiceProvider
                 $config['login'], $config['password'], $config['token'], new GuzzleClient()
             );
 
-            $this->setLoggerToClient($client);
-
-            return $client;
+            return $this->setLoggerToClient($client);
         });
     }
 
@@ -70,5 +68,7 @@ class LaravelServiceProvider extends ServiceProvider
         if ($this->app->bound('appwilio.russianpost.logger')) {
             $client->setLogger($this->app['appwilio.russianpost.logger']);
         }
+
+        return $client;
     }
 }
