@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Appwilio\RussianPostSDK\Tests\Dispatching;
 
 use GuzzleHttp\Psr7\Request;
-use PHPUnit\Framework\TestCase;
+use Appwilio\RussianPostSDK\Tests\TestCase;
 use Appwilio\RussianPostSDK\Dispatching\Http\Authentication;
 
 class AuthenticationTest extends TestCase

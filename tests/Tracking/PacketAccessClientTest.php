@@ -13,8 +13,11 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tests\Tracking;
 
-use PHPUnit\Framework\TestCase;
+use Appwilio\RussianPostSDK\Tests\TestCase;
+use Appwilio\RussianPostSDK\Tracking\Packet\Item;
 use Appwilio\RussianPostSDK\Tracking\Packet\Error;
+use Appwilio\RussianPostSDK\Tracking\Packet\Wrapper;
+use Appwilio\RussianPostSDK\Tracking\Packet\Operation;
 use Appwilio\RussianPostSDK\Tracking\PacketAccessClient;
 use Appwilio\RussianPostSDK\Tracking\Packet\TicketResponse;
 use Appwilio\RussianPostSDK\Tracking\Packet\TrackingResponse;
@@ -24,10 +27,7 @@ class PacketAccessClientTest extends TestCase
 {
     public function test_client_is_instantiable(): void
     {
-        $this->assertInstanceOf(
-            PacketAccessClient::class,
-            $this->createClient()
-        );
+        $this->assertInstanceOf(PacketAccessClient::class, $this->createClient());
     }
 
     public function test_can_get_ticket(): void
@@ -35,12 +35,14 @@ class PacketAccessClientTest extends TestCase
         ($soap = $this->mockSoap())
             ->method('__soapCall')
             ->with('getTicket', $this->isType('array'))
-            ->willReturn(new TicketResponse());
+            ->willReturn($this->buildClass(TicketResponse::class, [
+                'value' => ($ticketId = '20190101010101000FOO')
+            ]));
 
-        $this->assertInstanceOf(
-            TicketResponse::class,
-            $this->createClient($soap)->getTicket(['RA644000001RU'])
-        );
+        $ticket = $this->createClient($soap)->getTicket(['RA644000001RU']);
+
+        $this->assertInstanceOf(TicketResponse::class, $ticket);
+        $this->assertEquals($ticketId, $ticket->getId());
     }
 
     public function test_cannot_get_ticket_if_tracks_number_limit_exceeded(): void
@@ -58,15 +60,61 @@ class PacketAccessClientTest extends TestCase
 
     public function test_can_get_tracking_events(): void
     {
+        $operId = 1;
+        $operCat = 1;
+        $operName = 'Приём';
+        $operDate = '02.01.2019 01:02:03';
+        $postalCode = '644008';
+        $barcode = 'RA644000001RU';
+        $preparedAt = '01.01.2019 01:02:03';
+
+        $response = $this->buildClass(TrackingResponse::class, [
+            'value' => $this->buildClass(Wrapper::class, [
+                'DatePreparation' => $preparedAt,
+                'Item' => $this->buildClass(Item::class, [
+                    'Barcode' => $barcode,
+                    'Operation' => [$this->buildClass(Operation::class, [
+                        'OperTypeID' => $operId,
+                        'OperCtgID' => $operCat,
+                        'OperName' => $operName,
+                        'DateOper' => $operDate,
+                        'IndexOper' => $postalCode
+                    ])]
+                ])
+            ])
+        ]);
+
         ($soap = $this->mockSoap())
             ->method('__soapCall')
             ->with('getResponseByTicket', $this->isType('array'))
-            ->willReturn(new TrackingResponse());
+            ->willReturn($response);
 
-        $this->assertInstanceOf(
-            TrackingResponse::class,
-            $this->createClient($soap)->getTrackingEvents('20190101010101000FOO')
-        );
+        $trackingResponse = $this->createClient($soap)->getTrackingEvents('20190101010101000FOO');
+
+        $this->assertInstanceOf(TrackingResponse::class, $trackingResponse);
+        $this->assertInstanceOf(\Traversable::class, $trackingResponse->getIterator());
+        $this->assertEquals($preparedAt, $trackingResponse->getPreparedAt()->format('d.m.Y h:i:s'));
+
+        foreach ($trackingResponse as $item) {
+            $this->assertInstanceOf(Item::class, $item);
+        }
+
+        $item = $trackingResponse->getItems()[0];
+
+        $this->assertEquals($barcode, $item->getBarcode());
+        $this->assertInstanceOf(\Traversable::class, $item->getIterator());
+
+        foreach ($item as $operation) {
+            $this->assertInstanceOf(Operation::class, $operation);
+        }
+
+        $operation = $item->getOperations()[0];
+
+        $this->assertEquals($postalCode, $operation->getPostalCode());
+        $this->assertEquals($operId, $operation->getOperationId());
+        $this->assertEquals($operCat, $operation->getAttributeId());
+        $this->assertEquals($operName, $operation->getOperationName());
+        $this->assertEquals($operDate, $operation->getPerformedAt()->format('d.m.Y h:i:s'));
     }
 
     public function test_exception_thrown_on_soap_fault(): void

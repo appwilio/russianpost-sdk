@@ -39,6 +39,11 @@
             "Appwilio\\RussianPostSDK\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Appwilio\\RussianPostSDK\\Tests\\": "tests/"
+        }
+    },
     "suggest": {
     	"monolog/monolog": "Для логирования и отладки"
     },

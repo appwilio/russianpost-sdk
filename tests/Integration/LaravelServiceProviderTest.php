@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Appwilio\RussianPostSDK\Tests;
+namespace Appwilio\RussianPostSDK\Tests\Integration;
 
-use PHPUnit\Framework\TestCase;
+use Appwilio\RussianPostSDK\Tests\TestCase;
 use Appwilio\RussianPostSDK\LaravelServiceProvider;
 use Appwilio\RussianPostSDK\Tracking\PacketAccessClient;
 use Appwilio\RussianPostSDK\Tracking\SingleAccessClient;

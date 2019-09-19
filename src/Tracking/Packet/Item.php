@@ -46,11 +46,6 @@ class Item implements \IteratorAggregate
         return $this->Barcode;
     }
 
-    public function isFound(): bool
-    {
-        return (bool) count($this->Operation);
-    }
-
     public function getIterator()
     {
         return (function () {

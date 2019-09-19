@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tests\Dispatching;
 
-use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Client as HttpClient;
 use PHPUnit\Framework\MockObject\MockObject;
+use Appwilio\RussianPostSDK\Tests\TestCase;
 use Appwilio\RussianPostSDK\Dispatching\DispatchingClient;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Orders;
 use Appwilio\RussianPostSDK\Dispatching\Exceptions\UnknownEndpoint;

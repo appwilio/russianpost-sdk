@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tests\Tracking;
 
-use PHPUnit\Framework\TestCase;
+use Appwilio\RussianPostSDK\Tests\TestCase;
 use Appwilio\RussianPostSDK\Tracking\SingleAccessClient;
 use Appwilio\RussianPostSDK\Tracking\Single\TrackingResponse;
 use Appwilio\RussianPostSDK\Tracking\Single\CashOnDeliveryResponse;
@@ -23,10 +23,7 @@ class SingleAccessClientTest extends TestCase
 {
     public function test_client_is_instantiable(): void
     {
-        $this->assertInstanceOf(
-            SingleAccessClient::class,
-            $this->createClient()
-        );
+        $this->assertInstanceOf(SingleAccessClient::class, $this->createClient());
     }
 
     public function test_can_get_tracking_url(): void
