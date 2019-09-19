@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK;
 
+use Psr\Log\LoggerAwareInterface;
+use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Container\Container;
 use Appwilio\RussianPostSDK\Tracking\PacketAccessClient;
@@ -28,19 +30,29 @@ class LaravelServiceProvider extends ServiceProvider
         $this->app->singleton(SingleAccessClient::class, static function (Container $app) {
             $config = $app['config']['services.russianpost.tracking'];
 
-            return new SingleAccessClient($config['login'], $config['password']);
+            return $this->setLoggerToClient(
+                new SingleAccessClient($config['login'], $config['password'])
+            );
         });
 
         $this->app->singleton(PacketAccessClient::class, static function (Container $app) {
             $config = $app['config']['services.russianpost.tracking'];
 
-            return new PacketAccessClient($config['login'], $config['password']);
+            return $this->setLoggerToClient(
+                new PacketAccessClient($config['login'], $config['password'])
+            );
         });
 
         $this->app->singleton(DispatchingClient::class, static function (Container $app) {
             $config = $app['config']['services.russianpost.dispatching'];
 
-            return new DispatchingClient($config['login'], $config['password'], $config['token']);
+            $client = new DispatchingClient(
+                $config['login'], $config['password'], $config['token'], new GuzzleClient()
+            );
+
+            $this->setLoggerToClient($client);
+
+            return $client;
         });
     }
 
@@ -51,5 +63,12 @@ class LaravelServiceProvider extends ServiceProvider
             SingleAccessClient::class,
             PacketAccessClient::class,
         ];
+    }
+
+    private function setLoggerToClient(LoggerAwareInterface $client)
+    {
+        if ($this->app->bound('appwilio.russianpost.logger')) {
+            $client->setLogger($this->app['appwilio.russianpost.logger']);
+        }
     }
 }
