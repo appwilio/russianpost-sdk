@@ -17,7 +17,7 @@ trait ErrorAware
 {
     public function hasError(): bool
     {
-        return (bool) ($this->error ?? $this->Error ?? null);
+        return (bool) $this->getError();
     }
 
     /**
@@ -27,10 +27,6 @@ trait ErrorAware
      */
     public function getError(): ?Error
     {
-        if (! $this->hasError()) {
-            return null;
-        }
-
-        return $this->error ?? $this->Error;
+        return $this->error ?? $this->Error ?? null;
     }
 }

@@ -36,7 +36,7 @@ class PacketAccessClientTest extends TestCase
             ->method('__soapCall')
             ->with('getTicket', $this->isType('array'))
             ->willReturn($this->buildClass(TicketResponse::class, [
-                'value' => ($ticketId = '20190101010101000FOO')
+                'value' => ($ticketId = '20190101010101000FOO'),
             ]));
 
         $ticket = $this->createClient($soap)->getTicket(['RA644000001RU']);
@@ -71,17 +71,17 @@ class PacketAccessClientTest extends TestCase
         $response = $this->buildClass(TrackingResponse::class, [
             'value' => $this->buildClass(Wrapper::class, [
                 'DatePreparation' => $preparedAt,
-                'Item' => $this->buildClass(Item::class, [
-                    'Barcode' => $barcode,
+                'Item'            => $this->buildClass(Item::class, [
+                    'Barcode'   => $barcode,
                     'Operation' => [$this->buildClass(Operation::class, [
                         'OperTypeID' => $operId,
-                        'OperCtgID' => $operCat,
-                        'OperName' => $operName,
-                        'DateOper' => $operDate,
-                        'IndexOper' => $postalCode
-                    ])]
-                ])
-            ])
+                        'OperCtgID'  => $operCat,
+                        'OperName'   => $operName,
+                        'DateOper'   => $operDate,
+                        'IndexOper'  => $postalCode,
+                    ])],
+                ]),
+            ]),
         ]);
 
         ($soap = $this->mockSoap())
@@ -135,13 +135,12 @@ class PacketAccessClientTest extends TestCase
         $this->expectExceptionMessage('service_error');
         $this->expectException(PacketAccessException::class);
 
-        $error = $this->createMock(Error::class);
-        $error->method('getCode')->willReturn(1);
-        $error->method('getMessage')->willReturn('service_error');
-
-        $response = $this->createMock(TrackingResponse::class);
-        $response->method('hasError')->willReturn(true);
-        $response->method('getError')->willReturn($error);
+        $response = $this->buildClass(TrackingResponse::class, [
+            'error' => $this->buildClass(Error::class, [
+                'ErrorTypeID' => 1,
+                'ErrorName'   => 'service_error',
+            ])
+        ]);
 
         ($soap = $this->mockSoap())
             ->method('__soapCall')
