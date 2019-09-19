@@ -11,6 +11,8 @@
 
 declare(strict_types=1);
 
+namespace Appwilio\RussianPostSDK\Tests;
+
 use PHPUnit\Framework\TestCase;
 use Appwilio\RussianPostSDK\LaravelServiceProvider;
 use Appwilio\RussianPostSDK\Tracking\PacketAccessClient;
@@ -31,7 +33,26 @@ class LaravelServiceProviderTest extends TestCase
         parent::setUp();
 
         $this->app = $this->createMock(ApplicationContract::class);
+
         $this->provider = new LaravelServiceProvider($this->app);
+    }
+
+    public function test_register(): void
+    {
+        $bindings = [];
+
+        $this->app->expects($this->exactly(3))
+            ->method('singleton')
+            ->willReturnCallback(static function ($abstract) use (&$bindings) {
+                $bindings[] = $abstract;
+            });
+
+        $this->provider->register();
+
+        $this->assertEqualsCanonicalizing(
+            [SingleAccessClient::class, PacketAccessClient::class, DispatchingClient::class],
+            $bindings
+        );
     }
 
     public function test_provides(): void

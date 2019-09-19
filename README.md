@@ -178,8 +178,14 @@ foreach ($response as $item) {
 
 [Документация](https://otpravka.pochta.ru/specification)
 
+### Конфигурация
 ```php
-$client = new DispatchingClient($login $password, $token);
+use GuzzleHttp\Client as GuzzleClient;
+
+$dispatching = new DispatchingClient(
+    new Authentication($login, $password, $token),
+    new GuzzleClient()
+);
 ```
 
 ### Расчёт стоимости пересылки
