@@ -102,6 +102,23 @@ $this->app->singleton('appwilio.russianpost.logger', function () {
 
 [Документация](https://tracking.pochta.ru/specification)
 
+### Конфигурация в Laravel
+
+Добавьте следющие ключи в `services.php`:
+```php
+// ...
+'russianpost' => [
+    'tracking' => [
+        'login' => \env('RUSSIAN_POST_TRACKING_LOGIN'),
+        'password' => \env('RUSSIAN_POST_TRACKING_PASSWORD'),
+    ],
+]
+// ...
+```
+
+Не забудьте перегенерировать кэш настроек, если они были закэшированы!
+
+
 ### Единичный доступ
 
 #### Конфигурация
@@ -187,6 +204,23 @@ $dispatching = new DispatchingClient(
     new GuzzleClient()
 );
 ```
+
+#### Конфигурация в Laravel
+
+Добавьте следющие ключи в `services.php`:
+```php
+// ...
+'russianpost' => [
+    'dispatching' => [
+        'token' => \env('RUSSIAN_POST_TRACKING_TOKEN'),
+        'login' => \env('RUSSIAN_POST_TRACKING_LOGIN'),
+        'password' => \env('RUSSIAN_POST_TRACKING_PASSWORD'),
+    ],
+]
+// ...
+```
+
+Не забудьте перегенерировать кэш настроек, если они были закэшированы!
 
 ### Расчёт стоимости пересылки
 ```php
