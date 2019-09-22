@@ -15,7 +15,7 @@ namespace Appwilio\RussianPostSDK\Tests;
 
 class TestCase extends \PHPUnit\Framework\TestCase
 {
-    protected function buildClass(string $class, array $properties)
+    protected function buildClass(string $class, array $properties = [])
     {
         $object = new $class();
 

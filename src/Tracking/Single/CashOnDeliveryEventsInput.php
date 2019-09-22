@@ -16,10 +16,10 @@ namespace Appwilio\RussianPostSDK\Tracking\Single;
 class CashOnDeliveryEventsInput
 {
     /** @var string */
-    public $Barcode;
+    protected $Barcode;
 
     /** @var string */
-    public $Language;
+    protected $Language;
 
     public function __construct($Barcode = null, $Language = null)
     {

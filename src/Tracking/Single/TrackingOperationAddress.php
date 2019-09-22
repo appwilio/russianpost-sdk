@@ -15,7 +15,7 @@ namespace Appwilio\RussianPostSDK\Tracking\Single;
 
 class TrackingOperationAddress
 {
-    /** @var int */
+    /** @var string */
     private $Index;
 
     /** @var string */
@@ -25,9 +25,9 @@ class TrackingOperationAddress
      * Почтовый индекс места проведения операции (Index).
      * Не возвращается для зарубежных операций.
      *
-     * @return int
+     * @return string
      */
-    public function getIndex(): int
+    public function getIndex(): string
     {
         return $this->Index;
     }

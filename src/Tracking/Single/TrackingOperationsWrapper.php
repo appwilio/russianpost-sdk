@@ -23,7 +23,7 @@ class TrackingOperationsWrapper
      */
     public function getOperations()
     {
-        if (\is_object($this->historyRecord)) {
+        if ($this->historyRecord instanceof TrackingOperation) {
             $this->historyRecord = [$this->historyRecord];
         }
 

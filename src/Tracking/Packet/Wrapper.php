@@ -26,7 +26,11 @@ class Wrapper
      */
     public function getItems()
     {
-        return $this->Item instanceof Item ? [$this->Item] : $this->Item;
+        if ($this->Item instanceof Item) {
+            $this->Item = [$this->Item];
+        }
+
+        return $this->Item;
     }
 
     /**

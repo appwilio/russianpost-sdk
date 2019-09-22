@@ -55,6 +55,8 @@ class TrackingOperationParameters
      */
     public function getPerformedAt(): \DateTimeImmutable
     {
-        return \DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s.uP', $this->OperDate);
+        // Использовать \DATE_RFC3339_EXTENDED можно только в PHP 7.3+
+        // @see https://bugs.php.net/bug.php?id=76009
+        return \DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s.???P', $this->OperDate);
     }
 }
