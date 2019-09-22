@@ -15,6 +15,11 @@ namespace Appwilio\RussianPostSDK\Tracking\Packet;
 
 trait ErrorAware
 {
+    /**
+     * Ответ с ошибкой?
+     *
+     * @return bool
+     */
     public function hasError(): bool
     {
         return (bool) $this->getError();

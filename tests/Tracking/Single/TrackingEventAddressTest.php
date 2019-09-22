@@ -14,19 +14,19 @@ declare(strict_types=1);
 namespace Appwilio\RussianPostSDK\Tests\Tracking\Single;
 
 use Appwilio\RussianPostSDK\Tests\TestCase;
-use Appwilio\RussianPostSDK\Tracking\Single\Parameter;
+use Appwilio\RussianPostSDK\Tracking\Single\TrackingEventAddress;
 
-class ParameterTest extends TestCase
+class TrackingEventAddressTest extends TestCase
 {
     public function test_getters(): void
     {
-        /** @var Parameter $parameter */
-        $parameter = $this->buildClass(Parameter::class, [
-            'Id'   => ($id = 1),
-            'Name' => ($name = 'Прием'),
+        /** @var TrackingEventAddress $address */
+        $address = $this->buildClass(TrackingEventAddress::class, [
+            'Index'       => '644008',
+            'Description' => 'Томск',
         ]);
 
-        $this->assertEquals($id, $parameter->getId());
-        $this->assertEquals($name, $parameter->getName());
+        $this->assertEquals('644008', $address->getPostalCode());
+        $this->assertEquals('Томск', $address->getDescription());
     }
 }

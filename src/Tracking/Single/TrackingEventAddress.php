@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Single;
 
-class TrackingOperationAddress
+final class TrackingEventAddress
 {
     /** @var string */
     private $Index;
@@ -27,7 +27,7 @@ class TrackingOperationAddress
      *
      * @return string
      */
-    public function getIndex(): string
+    public function getPostalCode(): string
     {
         return $this->Index;
     }

@@ -13,26 +13,26 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Single;
 
-class CashOnDeliveryResponse implements \IteratorAggregate
+final class TrackingEventsResponse implements \IteratorAggregate
 {
-    /** @var CashOnDeliveryEventsWrapper */
-    private $PostalOrderEventsForMaiOutput;
+    /** @var TrackingEventsWrapper */
+    private $OperationHistoryData;
 
     /**
-     * Список операций с наложенным платежом, который связан с почтовым отправлением.
+     * Список операций над почтовым отправлением.
      *
-     * @return CashOnDeliveryEvent[]
+     * @return TrackingEvent[]
      */
-    public function getEvents()
+    public function getOperations()
     {
-        return $this->PostalOrderEventsForMaiOutput->getPostalOrderEvent();
+        return $this->OperationHistoryData->getOperations();
     }
 
     public function getIterator()
     {
         return (function () {
-            foreach ($this->getEvents() as $event) {
-                yield $event;
+            foreach ($this->getOperations() as $operation) {
+                yield $operation;
             }
         })();
     }

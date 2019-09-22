@@ -15,7 +15,7 @@ namespace Appwilio\RussianPostSDK\Tests\Tracking\Packet;
 
 use Appwilio\RussianPostSDK\Tests\TestCase;
 use Appwilio\RussianPostSDK\Tracking\Packet\Item;
-use Appwilio\RussianPostSDK\Tracking\Packet\Operation;
+use Appwilio\RussianPostSDK\Tracking\Packet\TrackingEvent;
 
 class ItemTest extends TestCase
 {
@@ -25,8 +25,8 @@ class ItemTest extends TestCase
         $item = $this->buildClass(Item::class, [
             'Barcode'   => ($barcode = 'RA644000001RU'),
             'Operation' => [
-                $this->buildClass(Operation::class),
-                $this->buildClass(Operation::class),
+                $this->buildClass(TrackingEvent::class),
+                $this->buildClass(TrackingEvent::class),
             ],
         ]);
 
@@ -35,7 +35,7 @@ class ItemTest extends TestCase
         $this->assertInstanceOf(\Traversable::class, $item->getIterator());
 
         foreach ($item as $operation) {
-            $this->assertInstanceOf(Operation::class, $operation);
+            $this->assertInstanceOf(TrackingEvent::class, $operation);
         }
     }
 }

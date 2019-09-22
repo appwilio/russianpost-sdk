@@ -16,9 +16,9 @@ namespace Appwilio\RussianPostSDK\Tracking;
 use Psr\Log\NullLogger;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
-use Appwilio\RussianPostSDK\Tracking\Single\TrackingResponse;
-use Appwilio\RussianPostSDK\Tracking\Single\CashOnDeliveryResponse;
-use Appwilio\RussianPostSDK\Tracking\Single\CashOnDeliveryEventsInput;
+use Appwilio\RussianPostSDK\Tracking\Single\TrackingEventsResponse;
+use Appwilio\RussianPostSDK\Tracking\Single\CashOnDeliveryEventsRequest;
+use Appwilio\RussianPostSDK\Tracking\Single\CashOnDeliveryEventsResponse;
 use Appwilio\RussianPostSDK\Tracking\Exceptions\SingleAccessException;
 
 class SingleAccessClient implements LoggerAwareInterface
@@ -52,20 +52,20 @@ class SingleAccessClient implements LoggerAwareInterface
         'classmap'     => [
             'Rtm02Parameter'                   => Single\Parameter::class,
 
-            'getOperationHistoryResponse'      => Single\TrackingResponse::class,
-            'OperationHistoryRecord'           => Single\TrackingOperation::class,
-            'Address'                          => Single\TrackingOperationAddress::class,
-            'Country'                          => Single\TrackingOperationCountry::class,
-            'OperationHistoryData'             => Single\TrackingOperationsWrapper::class,
-            'OperationParameters'              => Single\TrackingOperationParameters::class,
-            'UserParameters'                   => Single\TrackingOperationUserParameters::class,
-            'ItemParameters'                   => Single\TrackingOperationItemParameters::class,
-            'AddressParameters'                => Single\TrackingOperationAddressParameters::class,
-            'FinanceParameters'                => Single\TrackingOperationFinanceParameters::class,
+            'getOperationHistoryResponse'      => Single\TrackingEventsResponse::class,
+            'OperationHistoryRecord'           => Single\TrackingEvent::class,
+            'Address'                          => Single\TrackingEventAddress::class,
+            'Country'                          => Single\TrackingEventCountry::class,
+            'OperationHistoryData'             => Single\TrackingEventsWrapper::class,
+            'OperationParameters'              => Single\TrackingEventOperationParameters::class,
+            'UserParameters'                   => Single\TrackingEventUserParameters::class,
+            'ItemParameters'                   => Single\TrackingEventItemParameters::class,
+            'AddressParameters'                => Single\TrackingEventAddressParameters::class,
+            'FinanceParameters'                => Single\TrackingEventFinanceParameters::class,
 
             'PostalOrderEvent'                 => Single\CashOnDeliveryEvent::class,
-            'PostalOrderEventsForMailResponse' => Single\CashOnDeliveryResponse::class,
-            'PostalOrderEventsForMailInput'    => Single\CashOnDeliveryEventsInput::class,
+            'PostalOrderEventsForMailResponse' => Single\CashOnDeliveryEventsResponse::class,
+            'PostalOrderEventsForMailInput'    => Single\CashOnDeliveryEventsRequest::class,
             // Mai – не опечатка
             'PostalOrderEventsForMaiOutput'    => Single\CashOnDeliveryEventsWrapper::class,
         ],
@@ -73,10 +73,10 @@ class SingleAccessClient implements LoggerAwareInterface
 
     public function __construct(string $login, string $password)
     {
-        $this->logger = new NullLogger();
-
         $this->login = $login;
         $this->password = $password;
+
+        $this->logger = new NullLogger();
     }
 
     public function getTrackingUrl(string $number): string
@@ -88,7 +88,7 @@ class SingleAccessClient implements LoggerAwareInterface
         string $track,
         string $language = self::LANG_RUS,
         int $type = self::HISTORY_OPERATIONS
-    ): TrackingResponse {
+    ): TrackingEventsResponse {
         return $this->callSoapMethod(
             'getOperationHistory',
             $this->assembleTrackingRequestArguments($track, $language, $type)
@@ -98,7 +98,7 @@ class SingleAccessClient implements LoggerAwareInterface
     public function getCashOnDeliveryEvents(
         string $track,
         string $language = self::LANG_RUS
-    ): CashOnDeliveryResponse {
+    ): CashOnDeliveryEventsResponse {
         return $this->callSoapMethod(
             'PostalOrderEventsForMail',
             $this->assembleCashOnDeliveryRequestArguments($track, $language)
@@ -142,7 +142,7 @@ class SingleAccessClient implements LoggerAwareInterface
 
     private function assembleCashOnDeliveryRequestArguments(string $code, string $language): \SoapVar
     {
-        $input = new CashOnDeliveryEventsInput($code, $language);
+        $input = new CashOnDeliveryEventsRequest($code, $language);
 
         return new \SoapVar([
             new \SoapVar($input, \SOAP_ENC_OBJECT, '', '', 'PostalOrderEventsForMailInput', self::XML_NS_COD_DATA),

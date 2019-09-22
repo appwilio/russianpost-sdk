@@ -14,14 +14,14 @@ declare(strict_types=1);
 namespace Appwilio\RussianPostSDK\Tests\Tracking\Single;
 
 use Appwilio\RussianPostSDK\Tests\TestCase;
-use Appwilio\RussianPostSDK\Tracking\Single\TrackingOperationCountry;
+use Appwilio\RussianPostSDK\Tracking\Single\TrackingEventCountry;
 
-class TrackingOperationCountryTest extends TestCase
+class TrackingEventCountryTest extends TestCase
 {
     public function test_getters(): void
     {
-        /** @var TrackingOperationCountry $country */
-        $country = $this->buildClass(TrackingOperationCountry::class, [
+        /** @var TrackingEventCountry $country */
+        $country = $this->buildClass(TrackingEventCountry::class, [
             'Id'     => 643,
             'Code2A' => 'RU',
             'Code3A' => 'RUS',

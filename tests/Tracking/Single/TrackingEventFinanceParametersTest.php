@@ -14,14 +14,14 @@ declare(strict_types=1);
 namespace Appwilio\RussianPostSDK\Tests\Tracking\Single;
 
 use Appwilio\RussianPostSDK\Tests\TestCase;
-use Appwilio\RussianPostSDK\Tracking\Single\TrackingOperationFinanceParameters;
+use Appwilio\RussianPostSDK\Tracking\Single\TrackingEventFinanceParameters;
 
-class TrackingOperationFinanceParametersTest extends TestCase
+class TrackingEventFinanceParametersTest extends TestCase
 {
     public function test_getters(): void
     {
-        /** @var TrackingOperationFinanceParameters $parameters */
-        $parameters = $this->buildClass(TrackingOperationFinanceParameters::class, [
+        /** @var TrackingEventFinanceParameters $parameters */
+        $parameters = $this->buildClass(TrackingEventFinanceParameters::class, [
             'Payment'    => 1000 * 100,
             'Value'      => 800 * 100,
             'MassRate'   => 100 * 100,
@@ -35,7 +35,7 @@ class TrackingOperationFinanceParametersTest extends TestCase
         $this->assertEquals(0, $parameters->getExtraRate());
         $this->assertEquals(0, $parameters->getCustomsDuty());
         $this->assertEquals(1000 * 100, $parameters->getPayment());
-        $this->assertEquals(100 * 100, $parameters->getMassRate());
+        $this->assertEquals(100 * 100, $parameters->getWeightRate());
         $this->assertEquals(50 * 100, $parameters->getInsuranceRate());
         $this->assertEquals(800 * 100, $parameters->getDeclaredValue());
     }

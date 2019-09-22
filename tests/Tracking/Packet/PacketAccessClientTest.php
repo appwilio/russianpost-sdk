@@ -16,9 +16,9 @@ namespace Appwilio\RussianPostSDK\Tests\Tracking\Packet;
 use Appwilio\RussianPostSDK\Tests\TestCase;
 use Appwilio\RussianPostSDK\Tracking\Packet\Item;
 use Appwilio\RussianPostSDK\Tracking\Packet\Error;
-use Appwilio\RussianPostSDK\Tracking\Packet\Wrapper;
 use Appwilio\RussianPostSDK\Tests\Tracking\MockSoap;
 use Appwilio\RussianPostSDK\Tracking\PacketAccessClient;
+use Appwilio\RussianPostSDK\Tracking\Packet\ItemsWrapper;
 use Appwilio\RussianPostSDK\Tracking\Packet\TicketResponse;
 use Appwilio\RussianPostSDK\Tracking\Packet\TrackingResponse;
 use Appwilio\RussianPostSDK\Tracking\Exceptions\PacketAccessException;
@@ -62,7 +62,7 @@ class PacketAccessClientTest extends TestCase
     public function test_can_get_tracking_events(): void
     {
         $response = $this->buildClass(TrackingResponse::class, [
-            'value' => $this->buildClass(Wrapper::class, [
+            'value' => $this->buildClass(ItemsWrapper::class, [
                 'DatePreparation' => ($preparedAt = '02.01.2019 01:02:03'),
                 'Item'            => $this->buildClass(Item::class),
             ]),

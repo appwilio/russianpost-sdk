@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Packet;
 
-class TicketResponse
+final class TicketResponse
 {
     use ErrorAware;
 

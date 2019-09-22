@@ -15,14 +15,14 @@ namespace Appwilio\RussianPostSDK\Tests\Tracking\Single;
 
 use Appwilio\RussianPostSDK\Tests\TestCase;
 use Appwilio\RussianPostSDK\Tracking\Single\Parameter;
-use Appwilio\RussianPostSDK\Tracking\Single\TrackingOperationItemParameters;
+use Appwilio\RussianPostSDK\Tracking\Single\TrackingEventItemParameters;
 
-class TrackingOperationItemParametersTest extends TestCase
+class TrackingEventItemParametersTest extends TestCase
 {
     public function test_getters(): void
     {
-        /** @var TrackingOperationItemParameters $parameters */
-        $parameters = $this->buildClass(TrackingOperationItemParameters::class, [
+        /** @var TrackingEventItemParameters $parameters */
+        $parameters = $this->buildClass(TrackingEventItemParameters::class, [
             'Barcode'   => ($barcode = 'RA644000001RU'),
             //'Internum',
             //'ValidRuType',

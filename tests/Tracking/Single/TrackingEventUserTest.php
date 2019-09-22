@@ -15,21 +15,21 @@ namespace Appwilio\RussianPostSDK\Tests\Tracking\Single;
 
 use Appwilio\RussianPostSDK\Tests\TestCase;
 use Appwilio\RussianPostSDK\Tracking\Single\Parameter;
-use Appwilio\RussianPostSDK\Tracking\Single\TrackingOperationUserParameters;
+use Appwilio\RussianPostSDK\Tracking\Single\TrackingEventUserParameters;
 
-class TrackingOperationUserTest extends TestCase
+class TrackingEventUserTest extends TestCase
 {
     public function test_getters(): void
     {
-        /** @var TrackingOperationUserParameters $user */
-        $user = $this->buildClass(TrackingOperationUserParameters::class, [
+        /** @var TrackingEventUserParameters $parameters */
+        $parameters = $this->buildClass(TrackingEventUserParameters::class, [
             'SendCtg' => $this->buildClass(Parameter::class),
             'Sndr'    => ($sender = 'ИВАНОВ А. Н.'),
             'Rcpn'    => ($resipient = 'ПЕТРОВ И. К.'),
         ]);
 
-        $this->assertInstanceOf(Parameter::class, $user->getSenderCategory());
-        $this->assertEquals($sender, $user->getSender());
-        $this->assertEquals($resipient, $user->getRecipient());
+        $this->assertInstanceOf(Parameter::class, $parameters->getSenderCategory());
+        $this->assertEquals($sender, $parameters->getSender());
+        $this->assertEquals($resipient, $parameters->getRecipient());
     }
 }

@@ -16,12 +16,12 @@ namespace Appwilio\RussianPostSDK\Tests\Tracking\Single;
 use Appwilio\RussianPostSDK\Tests\TestCase;
 use Appwilio\RussianPostSDK\Tests\Tracking\MockSoap;
 use Appwilio\RussianPostSDK\Tracking\SingleAccessClient;
-use Appwilio\RussianPostSDK\Tracking\Single\TrackingResponse;
-use Appwilio\RussianPostSDK\Tracking\Single\TrackingOperation;
+use Appwilio\RussianPostSDK\Tracking\Single\TrackingEvent;
+use Appwilio\RussianPostSDK\Tracking\Single\TrackingEventsWrapper;
+use Appwilio\RussianPostSDK\Tracking\Single\TrackingEventsResponse;
 use Appwilio\RussianPostSDK\Tracking\Single\CashOnDeliveryEvent;
-use Appwilio\RussianPostSDK\Tracking\Single\CashOnDeliveryResponse;
+use Appwilio\RussianPostSDK\Tracking\Single\CashOnDeliveryEventsResponse;
 use Appwilio\RussianPostSDK\Tracking\Exceptions\SingleAccessException;
-use Appwilio\RussianPostSDK\Tracking\Single\TrackingOperationsWrapper;
 use Appwilio\RussianPostSDK\Tracking\Single\CashOnDeliveryEventsWrapper;
 
 class SingleAccessClientTest extends TestCase
@@ -43,11 +43,11 @@ class SingleAccessClientTest extends TestCase
 
     public function test_can_get_tracking_events(): void
     {
-        $response = $this->buildClass(TrackingResponse::class, [
-            'OperationHistoryData' => $this->buildClass(TrackingOperationsWrapper::class, [
+        $response = $this->buildClass(TrackingEventsResponse::class, [
+            'OperationHistoryData' => $this->buildClass(TrackingEventsWrapper::class, [
                 'historyRecord' => [
-                    $this->buildClass(TrackingOperation::class),
-                    $this->buildClass(TrackingOperation::class),
+                    $this->buildClass(TrackingEvent::class),
+                    $this->buildClass(TrackingEvent::class),
                 ],
             ]),
         ]);
@@ -58,13 +58,13 @@ class SingleAccessClientTest extends TestCase
 
         $trackingResponse = $this->createClient()->getTrackingEvents('RA644000001RU');
 
-        $this->assertInstanceOf(TrackingResponse::class, $trackingResponse);
+        $this->assertInstanceOf(TrackingEventsResponse::class, $trackingResponse);
 
-        $this->assertInstanceOf(TrackingResponse::class, $trackingResponse);
+        $this->assertInstanceOf(TrackingEventsResponse::class, $trackingResponse);
         $this->assertInstanceOf(\Traversable::class, $trackingResponse->getIterator());
 
         foreach ($trackingResponse as $operation) {
-            $this->assertInstanceOf(TrackingOperation::class, $operation);
+            $this->assertInstanceOf(TrackingEvent::class, $operation);
         }
     }
 
@@ -72,18 +72,18 @@ class SingleAccessClientTest extends TestCase
     {
         $this->soapMock
             ->with('PostalOrderEventsForMail', $this->isType('array'))
-            ->willReturn($this->buildClass(CashOnDeliveryResponse::class, [
+            ->willReturn($this->buildClass(CashOnDeliveryEventsResponse::class, [
                 'PostalOrderEventsForMaiOutput' => $this->buildClass(CashOnDeliveryEventsWrapper::class, [
                     'PostalOrderEvent' => [
                         $this->buildClass(CashOnDeliveryEvent::class),
                         $this->buildClass(CashOnDeliveryEvent::class),
-                    ]
-                ])
+                    ],
+                ]),
             ]));
 
         $response = $this->createClient()->getCashOnDeliveryEvents('RA644000001RU');
 
-        $this->assertInstanceOf(CashOnDeliveryResponse::class, $response);
+        $this->assertInstanceOf(CashOnDeliveryEventsResponse::class, $response);
 
         $this->assertInstanceOf(\Traversable::class, $response->getIterator());
 

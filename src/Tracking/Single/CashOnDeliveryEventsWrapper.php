@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Single;
 
-class CashOnDeliveryEventsWrapper
+final class CashOnDeliveryEventsWrapper
 {
     /** @var CashOnDeliveryEvent[] */
     private $PostalOrderEvent = [];
@@ -21,7 +21,7 @@ class CashOnDeliveryEventsWrapper
     /**
      * @return CashOnDeliveryEvent[]
      */
-    public function getPostalOrderEvent(): array
+    public function getEvents(): array
     {
         return $this->PostalOrderEvent;
     }

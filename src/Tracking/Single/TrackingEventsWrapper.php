@@ -13,17 +13,20 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Single;
 
-class CashOnDeliveryEventsInput
+final class TrackingEventsWrapper
 {
-    /** @var string */
-    protected $Barcode;
+    /** @var TrackingEvent[]|TrackingEvent */
+    private $historyRecord;
 
-    /** @var string */
-    protected $Language;
-
-    public function __construct($Barcode = null, $Language = null)
+    /**
+     * @return TrackingEvent[]
+     */
+    public function getOperations()
     {
-        $this->Barcode = $Barcode;
-        $this->Language = $Language;
+        if ($this->historyRecord instanceof TrackingEvent) {
+            $this->historyRecord = [$this->historyRecord];
+        }
+
+        return $this->historyRecord;
     }
 }

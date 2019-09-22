@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Single;
 
-class TrackingOperationFinanceParameters
+final class TrackingEventFinanceParameters
 {
     /** @var int */
     private $Payment;
@@ -37,7 +37,7 @@ class TrackingOperationFinanceParameters
     private $CustomDuty;
 
     /**
-     * Сумма наложенного платежа в копейках.
+     * Сумма наложенного платежа в копейках (Payment).
      *
      * @return int
      */
@@ -47,7 +47,7 @@ class TrackingOperationFinanceParameters
     }
 
     /**
-     * Сумма объявленной ценности в копейках.
+     * Сумма объявленной ценности в копейках (Value).
      *
      * @return int
      */
@@ -57,7 +57,7 @@ class TrackingOperationFinanceParameters
     }
 
     /**
-     * Сумма платы за объявленную ценность в копейках.
+     * Сумма платы за объявленную ценность в копейках (InsrRate).
      *
      * @return int
      */
@@ -67,17 +67,17 @@ class TrackingOperationFinanceParameters
     }
 
     /**
-     * Общая сумма платы за пересылку наземным и воздушным транспортом в копейках.
+     * Общая сумма платы за пересылку наземным и воздушным транспортом в копейках (MassRate).
      *
      * @return int
      */
-    public function getMassRate(): int
+    public function getWeightRate(): int
     {
         return $this->MassRate;
     }
 
     /**
-     * Выделенная сумма платы за пересылку воздушным транспортом из общей суммы платы за пересылку в копейках.
+     * Выделенная сумма платы за пересылку воздушным транспортом из общей суммы платы за пересылку в копейках (AirRate).
      *
      * @return int
      */
@@ -87,7 +87,7 @@ class TrackingOperationFinanceParameters
     }
 
     /**
-     * Сумма дополнительного тарифного сбора в копейках.
+     * Сумма дополнительного тарифного сбора в копейках (Rate).
      *
      * @return int
      */
@@ -97,7 +97,7 @@ class TrackingOperationFinanceParameters
     }
 
     /**
-     * Сумма таможенного платежа в копейках.
+     * Сумма таможенного платежа в копейках (CustomDuty).
      *
      * @return int
      */

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Packet;
 
-class Wrapper
+final class ItemsWrapper
 {
     /** @var Item[]|Item */
     private $Item;

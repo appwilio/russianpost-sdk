@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Packet;
 
-class Error
+final class Error
 {
     /** @var int */
     private $ErrorTypeID;

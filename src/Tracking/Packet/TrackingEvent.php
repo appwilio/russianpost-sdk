@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Packet;
 
-class Operation
+final class TrackingEvent
 {
     /** @var int */
     private $OperTypeID;

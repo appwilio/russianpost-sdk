@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Packet;
 
-class Item implements \IteratorAggregate
+final class Item implements \IteratorAggregate
 {
     use ErrorAware;
 
@@ -23,13 +23,13 @@ class Item implements \IteratorAggregate
     /** @var string */
     private $Barcode;
 
-    /** @var Operation[] */
+    /** @var TrackingEvent[] */
     private $Operation;
 
     /**
      * Список операций над почтовым отправлением.
      *
-     * @return Operation[]
+     * @return TrackingEvent[]
      */
     public function getOperations()
     {

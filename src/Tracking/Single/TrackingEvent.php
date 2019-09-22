@@ -13,29 +13,29 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Single;
 
-class TrackingOperation
+final class TrackingEvent
 {
-    /** @var TrackingOperationAddressParameters */
+    /** @var TrackingEventAddressParameters */
     private $AddressParameters;
 
-    /** @var TrackingOperationFinanceParameters */
+    /** @var TrackingEventFinanceParameters */
     private $FinanceParameters;
 
-    /** @var TrackingOperationItemParameters */
+    /** @var TrackingEventItemParameters */
     private $ItemParameters;
 
-    /** @var TrackingOperationParameters */
+    /** @var TrackingEventOperationParameters */
     private $OperationParameters;
 
-    /** @var TrackingOperationUserParameters */
+    /** @var TrackingEventUserParameters */
     private $UserParameters;
 
     /**
      * Адресные данные операции (AddressParameters).
      *
-     * @return TrackingOperationAddressParameters
+     * @return TrackingEventAddressParameters
      */
-    public function getAddressParameters(): TrackingOperationAddressParameters
+    public function getAddressParameters(): TrackingEventAddressParameters
     {
         return $this->AddressParameters;
     }
@@ -43,9 +43,9 @@ class TrackingOperation
     /**
      * Финансовые данные операции (FinanceParameters).
      *
-     * @return TrackingOperationFinanceParameters
+     * @return TrackingEventFinanceParameters
      */
-    public function getFinanceParameters(): TrackingOperationFinanceParameters
+    public function getFinanceParameters(): TrackingEventFinanceParameters
     {
         return $this->FinanceParameters;
     }
@@ -53,9 +53,9 @@ class TrackingOperation
     /**
      * Данные о почтовом отправлении (ItemParameters).
      *
-     * @return TrackingOperationItemParameters
+     * @return TrackingEventItemParameters
      */
-    public function getItemParameters(): TrackingOperationItemParameters
+    public function getItemParameters(): TrackingEventItemParameters
     {
         return $this->ItemParameters;
     }
@@ -63,9 +63,9 @@ class TrackingOperation
     /**
      * Параметры операции (OperationParameters).
      *
-     * @return TrackingOperationParameters
+     * @return TrackingEventOperationParameters
      */
-    public function getOperationParameters(): TrackingOperationParameters
+    public function getOperationParameters(): TrackingEventOperationParameters
     {
         return $this->OperationParameters;
     }
@@ -73,9 +73,9 @@ class TrackingOperation
     /**
      * Данные субъектов, связанных с операцией (UserParameters).
      *
-     * @return TrackingOperationUserParameters
+     * @return TrackingEventUserParameters
      */
-    public function getUserParameters(): TrackingOperationUserParameters
+    public function getUserParameters(): TrackingEventUserParameters
     {
         return $this->UserParameters;
     }

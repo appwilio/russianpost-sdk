@@ -116,12 +116,12 @@ $response = $tracker->getTrackingEvents('29014562148754');
 
 Объект `$response` реализует интерфейс `\IteratorAggregate`, поэтому его можно сразу перебирать в цикле:
 ```php
-foreach ($response as $operation) {
-    $parameters = $operation->getOperationParameters();
+foreach ($response as $events) {
+    $parameters = $events->getOperationParameters();
     
     echo $parameters->getOperationId();
     echo $parameters->getAttributeId();
-    echo $parameters->getPerformedAt()->format('d.m.Y в h:m:s'); // 17.09.2019 в 17:20:48
+    echo $parameters->getPerformedAt()->format('d.m.Y в h:i:s'); // 17.09.2019 в 17:20:48
 }
 ```
 
@@ -137,7 +137,7 @@ foreach ($response as $event) {
     
     echo $parameters->getTransferNumber();
     echo $parameters->getPayment(); // 7410
-    echo $parameters->getPerformedAt()->format('d.m.Y в h:m:s'); // 17.09.2019 в 17:20:48
+    echo $parameters->getPerformedAt()->format('d.m.Y в h:i:s'); // 17.09.2019 в 17:20:48
 }
 ```
 
@@ -166,10 +166,10 @@ echo $response->getPreparedAt()->format('d.m.Y в h:m:s');
 foreach ($response as $item) {
     echo $item->getBarcode();
     
-    foreach ($item as $operation) {
-        echo $operation->getOperationId();
-        echo $operation->getAttributeId();
-        echo $operation->getPerformedAt()->format('d.m.Y в h:m:s'); // 17.09.2019 в 17:20:48
+    foreach ($item as $events) {
+        echo $events->getOperationId();
+        echo $events->getAttributeId();
+        echo $events->getPerformedAt()->format('d.m.Y в h:m:s'); // 17.09.2019 в 17:20:48
     }
 }
 ```

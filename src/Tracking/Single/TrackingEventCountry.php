@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Single;
 
-class TrackingOperationCountry
+final class TrackingEventCountry
 {
     /** @var int */
     private $Id;

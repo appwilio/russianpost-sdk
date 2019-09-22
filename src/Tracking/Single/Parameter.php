@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Single;
 
-class Parameter
+final class Parameter
 {
     /** @var int */
     private $Id;

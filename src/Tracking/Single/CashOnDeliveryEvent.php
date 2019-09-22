@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Single;
 
-class CashOnDeliveryEvent
+final class CashOnDeliveryEvent
 {
     /** @var string */
     private $Number;
@@ -59,7 +59,9 @@ class CashOnDeliveryEvent
      */
     public function getPerformedAt(): \DateTimeImmutable
     {
-        return \DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s.uP', $this->EventDateTime);
+        // Использовать \DATE_RFC3339_EXTENDED можно только в PHP 7.3+
+        // @see https://bugs.php.net/bug.php?id=76009
+        return \DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s.???P', $this->EventDateTime);
     }
 
     /**
@@ -67,11 +69,11 @@ class CashOnDeliveryEvent
      *
      * @link https://tracking.pochta.ru/support/dictionaries/event_type
      *
-     * @return string
+     * @return int
      */
-    public function getEventType(): string
+    public function getOperationId(): int
     {
-        return $this->EventType;
+        return (int) $this->EventType;
     }
 
     /**
@@ -81,7 +83,7 @@ class CashOnDeliveryEvent
      *
      * @return string
      */
-    public function getEventName(): string
+    public function getOperationName(): string
     {
         return $this->EventName;
     }
@@ -97,7 +99,7 @@ class CashOnDeliveryEvent
     /**
      * @return string
      */
-    public function getIndexEvent(): string
+    public function getEventPostalCode(): string
     {
         return $this->IndexEvent;
     }
@@ -115,7 +117,7 @@ class CashOnDeliveryEvent
     /**
      * @return string
      */
-    public function getCountryEventCode(): string
+    public function getEventCountryCode(): string
     {
         return $this->CountryEventCode;
     }
@@ -123,7 +125,7 @@ class CashOnDeliveryEvent
     /**
      * @return string
      */
-    public function getCountryToCode(): string
+    public function getDestinationCountryCode(): string
     {
         return $this->CountryToCode;
     }

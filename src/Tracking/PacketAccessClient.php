@@ -48,11 +48,12 @@ class PacketAccessClient implements LoggerAwareInterface
         'soap_version' => \SOAP_1_1,
         'trace'        => 1,
         'classmap'     => [
-            'item'                   => Packet\Item::class,      // Item согласно wsdl-описанию называется item
-            'error'                  => Packet\Error::class,     // корневая ошибка
-            'Error'                  => Packet\Error::class,     // ошибка конкретного трека
-            'file'                   => Packet\Wrapper::class,   // value согласно wsdl-описанию называется file
-            'operation'              => Packet\Operation::class, // Operation согласно wsdl-описанию называется operation
+            // в wsdl-файле некоторые элементы называются не так, как в документации
+            'item'                   => Packet\Item::class,          // Item → item
+            'error'                  => Packet\Error::class,         // корневая ошибка
+            'Error'                  => Packet\Error::class,         // ошибка конкретного РПО
+            'file'                   => Packet\ItemsWrapper::class,  // value → file
+            'operation'              => Packet\TrackingEvent::class, // Operation → operation
 
             'ticketResponse'         => TicketResponse::class,
             'answerByTicketResponse' => TrackingResponse::class,
@@ -61,10 +62,10 @@ class PacketAccessClient implements LoggerAwareInterface
 
     public function __construct(string $login, string $password)
     {
-        $this->logger = new NullLogger();
-
         $this->login = $login;
         $this->password = $password;
+
+        $this->logger = new NullLogger();
     }
 
     public function getTicket(iterable $tracks, string $language = self::LANG_RUS): TicketResponse

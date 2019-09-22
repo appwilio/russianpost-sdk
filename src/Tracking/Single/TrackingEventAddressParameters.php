@@ -13,29 +13,29 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Single;
 
-class TrackingOperationAddressParameters
+final class TrackingEventAddressParameters
 {
-    /** @var TrackingOperationAddress */
+    /** @var TrackingEventAddress */
     private $DestinationAddress;
 
-    /** @var TrackingOperationAddress */
+    /** @var TrackingEventAddress */
     private $OperationAddress;
 
-    /** @var TrackingOperationCountry */
+    /** @var TrackingEventCountry */
     private $MailDirect;
 
-    /** @var TrackingOperationCountry */
+    /** @var TrackingEventCountry */
     private $CountryOper;
 
-    /** @var TrackingOperationCountry */
+    /** @var TrackingEventCountry */
     private $CountryFrom;
 
     /**
      * Адресные данные места назначения (DestinationAddress).
      *
-     * @return TrackingOperationAddress
+     * @return TrackingEventAddress
      */
-    public function getDestinationAddress(): TrackingOperationAddress
+    public function getDestinationAddress(): TrackingEventAddress
     {
         return $this->DestinationAddress;
     }
@@ -43,9 +43,9 @@ class TrackingOperationAddressParameters
     /**
      * Адресные данные места проведения операции (OperationAddress).
      *
-     * @return TrackingOperationAddress
+     * @return TrackingEventAddress
      */
-    public function getOperationAddress(): TrackingOperationAddress
+    public function getOperationAddress(): TrackingEventAddress
     {
         return $this->OperationAddress;
     }
@@ -53,9 +53,9 @@ class TrackingOperationAddressParameters
     /**
      * Страна места назначения (MailDirect).
      *
-     * @return TrackingOperationCountry
+     * @return TrackingEventCountry
      */
-    public function getDestinationCountry(): TrackingOperationCountry
+    public function getDestinationCountry(): TrackingEventCountry
     {
         return $this->MailDirect;
     }
@@ -63,9 +63,9 @@ class TrackingOperationAddressParameters
     /**
      * Страна приема (CountryFrom).
      *
-     * @return TrackingOperationCountry
+     * @return TrackingEventCountry
      */
-    public function getDepartureCountry(): TrackingOperationCountry
+    public function getDepartureCountry(): TrackingEventCountry
     {
         return $this->CountryFrom;
     }
@@ -73,9 +73,9 @@ class TrackingOperationAddressParameters
     /**
      * Страна проведения операции (CountryOper).
      *
-     * @return TrackingOperationCountry
+     * @return TrackingEventCountry
      */
-    public function getOperationCountry(): TrackingOperationCountry
+    public function getOperationCountry(): TrackingEventCountry
     {
         return $this->CountryOper;
     }

@@ -13,14 +13,14 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Packet;
 
-class TrackingResponse implements \IteratorAggregate
+final class TrackingResponse implements \IteratorAggregate
 {
     use ErrorAware;
 
     /** @var Error|null */
     private $error;
 
-    /** @var Wrapper */
+    /** @var ItemsWrapper */
     private $value;
 
     /**

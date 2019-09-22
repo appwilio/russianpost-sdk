@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tracking\Single;
 
-class TrackingOperationParameters
+final class TrackingEventOperationParameters
 {
     /** @var Parameter */
     private $OperType;
@@ -25,27 +25,51 @@ class TrackingOperationParameters
     private $OperDate;
 
     /**
-     * Информация об операции (OperType).
+     * Код операции (OperType→Id).
      *
      * @link https://tracking.pochta.ru/support/dictionaries/operation_codes
      *
-     * @return Parameter
+     * @return int
      */
-    public function getOperation(): Parameter
+    public function getOperationId(): int
     {
-        return $this->OperType;
+        return $this->OperType->getId();
     }
 
     /**
-     * Атрибут операции (OperAttr).
+     * Название операции (OperType→Name).
      *
      * @link https://tracking.pochta.ru/support/dictionaries/operation_codes
      *
-     * @return Parameter
+     * @return string
      */
-    public function getAttribute(): Parameter
+    public function getOperationName(): string
     {
-        return $this->OperAttr;
+        return $this->OperType->getName();
+    }
+
+    /**
+     * Код атрибута операции (OperAttr→Id).
+     *
+     * @link https://tracking.pochta.ru/support/dictionaries/operation_codes
+     *
+     * @return int
+     */
+    public function getAttributeId(): int
+    {
+        return $this->OperAttr->getId();
+    }
+
+    /**
+     * Название атрибута операции (OperAttr→Name).
+     *
+     * @link https://tracking.pochta.ru/support/dictionaries/operation_codes
+     *
+     * @return string
+     */
+    public function getAttributeName(): string
+    {
+        return $this->OperAttr->getName();
     }
 
     /**

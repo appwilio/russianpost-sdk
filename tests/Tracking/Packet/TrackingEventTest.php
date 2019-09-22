@@ -14,14 +14,14 @@ declare(strict_types=1);
 namespace Appwilio\RussianPostSDK\Tests\Tracking\Packet;
 
 use Appwilio\RussianPostSDK\Tests\TestCase;
-use Appwilio\RussianPostSDK\Tracking\Packet\Operation;
+use Appwilio\RussianPostSDK\Tracking\Packet\TrackingEvent;
 
-class OperationTest extends TestCase
+class TrackingEventTest extends TestCase
 {
     public function test_getters(): void
     {
-        /** @var Operation $operation */
-        $operation = $this->buildClass(Operation::class, [
+        /** @var TrackingEvent $event */
+        $event = $this->buildClass(TrackingEvent::class, [
             'OperTypeID' => ($operId = 1),
             'OperCtgID'  => ($operCat = 1),
             'OperName'   => ($operName = 'Приём'),
@@ -29,10 +29,10 @@ class OperationTest extends TestCase
             'IndexOper'  => ($postalCode = '644008'),
         ]);
 
-        $this->assertEquals($operId, $operation->getOperationId());
-        $this->assertEquals($operCat, $operation->getAttributeId());
-        $this->assertEquals($postalCode, $operation->getPostalCode());
-        $this->assertEquals($operName, $operation->getOperationName());
-        $this->assertEquals($operDate, $operation->getPerformedAt()->format('d.m.Y h:i:s'));
+        $this->assertEquals($operId, $event->getOperationId());
+        $this->assertEquals($operCat, $event->getAttributeId());
+        $this->assertEquals($postalCode, $event->getPostalCode());
+        $this->assertEquals($operName, $event->getOperationName());
+        $this->assertEquals($operDate, $event->getPerformedAt()->format('d.m.Y h:i:s'));
     }
 }
