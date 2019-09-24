@@ -21,7 +21,7 @@ final class TrackingEventsWrapper
     /**
      * @return TrackingEvent[]
      */
-    public function getOperations()
+    public function getEvents()
     {
         if ($this->historyRecord instanceof TrackingEvent) {
             $this->historyRecord = [$this->historyRecord];

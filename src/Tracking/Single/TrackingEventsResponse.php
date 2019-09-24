@@ -19,20 +19,20 @@ final class TrackingEventsResponse implements \IteratorAggregate
     private $OperationHistoryData;
 
     /**
-     * Список операций над почтовым отправлением.
+     * Список событий обработки почтового отправления.
      *
      * @return TrackingEvent[]
      */
-    public function getOperations()
+    public function getEvents()
     {
-        return $this->OperationHistoryData->getOperations();
+        return $this->OperationHistoryData->getEvents();
     }
 
     public function getIterator()
     {
         return (function () {
-            foreach ($this->getOperations() as $operation) {
-                yield $operation;
+            foreach ($this->getEvents() as $event) {
+                yield $event;
             }
         })();
     }
