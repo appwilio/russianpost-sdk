@@ -33,7 +33,7 @@ use function GuzzleHttp\Psr7\stream_for as guzzle_stream_for;
 use function GuzzleHttp\Psr7\build_query as guzzle_build_query;
 use function GuzzleHttp\Psr7\modify_request as guzzle_modify_request;
 
-final class ApiClient
+final class ApiClient implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
@@ -45,7 +45,7 @@ final class ApiClient
     /** @var ClientInterface */
     private $httpClient;
 
-    public function __construct(Authentication $authentication, ClientInterface $httpClient)
+    public function __construct(Authentication $authentication, ClientInterface $httpClient, LoggerInterface $logger)
     {
         $this->authentication = $authentication;
         $this->httpClient = $httpClient;
