@@ -78,6 +78,8 @@ final class ApiClient
      */
     private function send(string $method, string $path, ?Arrayable $request = null, $responseType = null)
     {
+        $method = \strtoupper($method);
+
         try {
             $response = $this->httpClient->send($this->buildHttpRequest($method, $path, $request));
 
@@ -117,8 +119,10 @@ final class ApiClient
 
         $data = \array_filter($payload->toArray());
 
-        if (\strtoupper($method) === 'GET') {
-            return $request->withBody(stream_for(build_query($data)));
+        if ($method === 'GET') {
+            $query = guzzle_build_query($data);
+
+            return guzzle_modify_request($request, \compact('query'));
         }
 
         /** @noinspection PhpIncompatibleReturnTypeInspection */
