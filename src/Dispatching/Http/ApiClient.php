@@ -14,8 +14,11 @@ declare(strict_types=1);
 namespace Appwilio\RussianPostSDK\Dispatching\Http;
 
 use GuzzleHttp\Psr7\Request;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerAwareTrait;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7\UploadedFile;
+use Psr\Log\LoggerAwareInterface;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use Psr\Http\Message\RequestInterface;
@@ -29,6 +32,8 @@ use function GuzzleHttp\Psr7\build_query;
 
 final class ApiClient
 {
+    use LoggerAwareTrait;
+
     private const API_URL = 'https://otpravka-api.pochta.ru';
 
     /** @var Authentication */
@@ -41,6 +46,7 @@ final class ApiClient
     {
         $this->authentication = $authentication;
         $this->httpClient = $httpClient;
+        $this->logger = $logger;
     }
 
     public function get(string $path, ?Arrayable $request = null, $type = null)
@@ -92,6 +98,8 @@ final class ApiClient
             if (\preg_match('~^application/json~', $contenType)) {
                 $content = $this->getResponseContent($response);
 
+                $this->logger->info("pochta.ru Dispatching response: {$response->getBody()->getContents()}.");
+
                 return $responseType === null
                     ? $content
                     : Instantiator::instantiate($responseType, $content);
@@ -125,7 +133,10 @@ final class ApiClient
             return guzzle_modify_request($request, \compact('query'));
         }
 
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        $body = guzzle_json_encode($data);
+
+        $this->logger->info('pochta.ru Dispatching request: '.self::API_URL.$path, [$body]);
+
         return $request
             ->withHeader('Content-Type', 'application/json;charset=UTF-8')
             ->withBody(stream_for(\json_encode($data)));
@@ -134,6 +145,8 @@ final class ApiClient
     private function buildFile(ResponseInterface $response, string $type): UploadedFile
     {
         \preg_match('~=(.+)$~', $response->getHeaderLine('Content-Disposition'), $matches);
+
+        $this->logger->info("pochta.ru Dispatching response: file {$matches[1]}.{$type} ({$response->getBody()->getSize()} butes).");
 
         return new UploadedFile(
             $response->getBody(),

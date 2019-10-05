@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Appwilio\RussianPostSDK\Dispatching;
 
 use Psr\Log\NullLogger;
-use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerAwareInterface;
 use GuzzleHttp\ClientInterface;
 use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
@@ -24,6 +24,7 @@ use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Orders;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Services;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Settings\Settings;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Documents\Documents;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\PostOffices\PostOffices;
 
 /**
  * Class DispatchingClient.
@@ -35,8 +36,6 @@ use Appwilio\RussianPostSDK\Dispatching\Endpoints\Documents\Documents;
  */
 final class DispatchingClient implements LoggerAwareInterface
 {
-    use LoggerAwareTrait;
-
     private const ENDPOINTS = [
         'orders'    => Orders::class,
         'services'  => Services::class,
@@ -49,9 +48,7 @@ final class DispatchingClient implements LoggerAwareInterface
 
     public function __construct(string $login, string $password, string $token, ClientInterface $httpClient)
     {
-        $this->logger = new NullLogger();
-
-        $this->client = new ApiClient(new Authentication($login, $password, $token), $httpClient);
+        $this->client = new ApiClient(new Authentication($login, $password, $token), $httpClient, new NullLogger());
     }
 
     public function __get(string $property)
@@ -63,5 +60,15 @@ final class DispatchingClient implements LoggerAwareInterface
         }
 
         throw new UnknownEndpoint($property);
+    }
+
+    /**
+     * Sets a logger.
+     *
+     * @param LoggerInterface $logger
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->client->setLogger($logger);
     }
 }
