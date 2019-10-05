@@ -27,8 +27,11 @@ use Appwilio\RussianPostSDK\Dispatching\Instantiator;
 use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 use Appwilio\RussianPostSDK\Dispatching\Exceptions\BadRequest;
 use Appwilio\RussianPostSDK\Dispatching\Contracts\DispatchingException;
-use function GuzzleHttp\Psr7\stream_for;
-use function GuzzleHttp\Psr7\build_query;
+use function GuzzleHttp\json_encode as guzzle_json_encode;
+use function GuzzleHttp\json_decode as guzzle_json_decode;
+use function GuzzleHttp\Psr7\stream_for as guzzle_stream_for;
+use function GuzzleHttp\Psr7\build_query as guzzle_build_query;
+use function GuzzleHttp\Psr7\modify_request as guzzle_modify_request;
 
 final class ApiClient
 {
@@ -139,7 +142,7 @@ final class ApiClient
 
         return $request
             ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-            ->withBody(stream_for(\json_encode($data)));
+            ->withBody(guzzle_stream_for($body));
     }
 
     private function buildFile(ResponseInterface $response, string $type): UploadedFile
@@ -188,6 +191,6 @@ final class ApiClient
 
     private function getResponseContent(ResponseInterface $response): array
     {
-        return \json_decode((string) $response->getBody(), true);
+        return guzzle_json_decode((string) $response->getBody(), true);
     }
 }
