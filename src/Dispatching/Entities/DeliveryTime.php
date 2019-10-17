@@ -13,11 +13,11 @@ final class DeliveryTime implements Arrayable
 
     public function getMin(): int
     {
-        return $this->get('min');
+        return $this->get('min-days');
     }
 
     public function getMax(): int
     {
-        return $this->get('max');
+        return $this->get('max-days');
     }
 }
