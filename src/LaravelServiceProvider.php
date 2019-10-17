@@ -27,7 +27,7 @@ class LaravelServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app->singleton(SingleAccessClient::class, static function (Container $app) {
+        $this->app->singleton(SingleAccessClient::class, function (Container $app) {
             $config = $app['config']['services.russianpost.tracking'];
 
             return $this->setLoggerToClient(
@@ -35,7 +35,7 @@ class LaravelServiceProvider extends ServiceProvider
             );
         });
 
-        $this->app->singleton(PacketAccessClient::class, static function (Container $app) {
+        $this->app->singleton(PacketAccessClient::class, function (Container $app) {
             $config = $app['config']['services.russianpost.tracking'];
 
             return $this->setLoggerToClient(
@@ -43,7 +43,7 @@ class LaravelServiceProvider extends ServiceProvider
             );
         });
 
-        $this->app->singleton(DispatchingClient::class, static function (Container $app) {
+        $this->app->singleton(DispatchingClient::class, function (Container $app) {
             $config = $app['config']['services.russianpost.dispatching'];
 
             $client = new DispatchingClient(
