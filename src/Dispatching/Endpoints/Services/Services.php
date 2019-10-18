@@ -25,6 +25,7 @@ use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\CalculationR
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\NormalizeFioRequest;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\NormalizePhoneRequest;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\CheckRecipientRequest;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Exceptions\CalculationException;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\NormalizeAddressRequest;
 
 final class Services
@@ -90,7 +91,14 @@ final class Services
      */
     public function calculate(CalculationRequest $request): Calculation
     {
-        return $this->client->post('/1.0/tariff', $request, Calculation::class);
+        /** @var Calculation $calculation */
+        $calculation = $this->client->post('/1.0/tariff', $request, Calculation::class);
+
+        if ($calculation->getTotal()->getRate() === 0) {
+            throw CalculationException::becauseZeroTotalRate();
+        }
+
+        return $calculation;
     }
 
     /**
