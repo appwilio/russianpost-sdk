@@ -121,10 +121,12 @@ $this->app->singleton('appwilio.russianpost.logger', function () {
 
 ### Единичный доступ
 
-#### Конфигурация
 ```php
 $tracker = new SingleAccessClient($login, $password);
 ```
+
+> Если инфрмации по ШПИ (трек-комеру) не найдено, то выбрасывается исключение
+>`Appwilio\RussianPostSDK\Tracking\Exceptions\SingleAccessException` с соответствующим сообщением.
 
 #### Получение данных по ШПИ (трек-комеру)
 ```php
@@ -160,7 +162,6 @@ foreach ($response as $event) {
 
 ### Пакетный доступ
 
-#### Конфигурация
 ```php
 $tracker = new PacketAccessClient($login, $password);
 ```

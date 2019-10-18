@@ -15,5 +15,22 @@ namespace Appwilio\RussianPostSDK\Tracking\Exceptions;
 
 class SingleAccessException extends \Exception
 {
-    //
+    public const EMPTY_TRACKING_RESPONSE = 1;
+    public const EMPTY_COD_RESPONSE      = 2;
+
+    public static function becauseEmptyTrackingResponse(string $trackingNumber): self
+    {
+        return new self(
+            "Почта России не смогла найти событий трекинга для РПО #{$trackingNumber}.",
+            self::EMPTY_TRACKING_RESPONSE
+        );
+    }
+
+    public static function becauseEmptyCODResponse(string $trackingNumber): self
+    {
+        return new self(
+            "Почта России не смогла найти событий обработки наложенного платежа для РПО #{$trackingNumber}.",
+            self::EMPTY_COD_RESPONSE
+        );
+    }
 }

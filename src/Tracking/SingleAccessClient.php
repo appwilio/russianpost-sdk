@@ -89,20 +89,34 @@ class SingleAccessClient implements LoggerAwareInterface
         string $language = self::LANG_RUS,
         int $type = self::HISTORY_OPERATIONS
     ): TrackingEventsResponse {
-        return $this->callSoapMethod(
+        /** @var TrackingEventsResponse $response */
+        $response = $this->callSoapMethod(
             'getOperationHistory',
             $this->assembleTrackingRequestArguments($track, $language, $type)
         );
+
+        if (\count($response->getEvents()) === 0) {
+            throw SingleAccessException::becauseEmptyTrackingResponse($track);
+        }
+
+        return $response;
     }
 
     public function getCashOnDeliveryEvents(
         string $track,
         string $language = self::LANG_RUS
     ): CashOnDeliveryEventsResponse {
-        return $this->callSoapMethod(
+        /** @var CashOnDeliveryEventsResponse $response */
+        $response = $this->callSoapMethod(
             'PostalOrderEventsForMail',
             $this->assembleCashOnDeliveryRequestArguments($track, $language)
         );
+
+        if (\count($response->getEvents()) === 0) {
+            throw SingleAccessException::becauseEmptyCODResponse($track);
+        }
+
+        return $response;
     }
 
     protected function getClient(): \SoapClient
@@ -116,7 +130,7 @@ class SingleAccessClient implements LoggerAwareInterface
             return $this->getClient()->__soapCall($method, [$arguments]);
         } catch (\SoapFault $e) {
             if (\property_exists($e, 'detail')) {
-                $detail = \get_object_vars($e->{'detail'});
+                $detail = \get_object_vars($e->detail);
 
                 throw new SingleAccessException(\key($detail).': '.\current($detail), $e->getCode(), $e);
             }
