@@ -225,7 +225,7 @@ $dispatching = new DispatchingClient(
 
 ### Расчёт стоимости пересылки
 ```php
-$response = $client->services()->calculate(
+$response = $dispatching->services->calculate(
     CalculationRequest::create('123456', 200)
         ->ofMailType(MailType::PARCEL_POSTAL)
         ->ofMailCategory(MailCategory::ORDINARY)
@@ -234,14 +234,15 @@ $response = $client->services()->calculate(
         ->withSmsNotice();
 );
 
-echo $response->getTotal()->getCost();
+echo $response->getTotal()->getRate();
+echo $response->getTotal()->getVAT(); // НДС
 ```
 
 ### Нормализация и валидация данных
 
 #### Нормализация ФИО
 ```php
-$response = $client->services()->normalizeFio(
+$response = $dispatching->services->normalizeFio(
     NormalizeFioRequest::one('иванов иван иванович')
 );
 
@@ -252,19 +253,19 @@ if ($response[0]->isUseful()) {
 
 #### Нормализация адресов
 ```php
-$response = $client->services()->normalizeAddress(
+$response = $dispatching->services->normalizeAddress(
     NormalizeAddressRequest::one('Москва варшавское шоссе 37-45')
 );
 ```
 
 #### Нормализация телефонов
 ```php
-$response = $client->services()->normalizePhone(NormalizePhoneRequest::one('89001234567'));
+$response = $dispatching->services->normalizePhone(NormalizePhoneRequest::one('89001234567'));
 ```
 
 #### Проверка благонадёжности получателя
 ```php
-$response = $client->services()->checkRecipient(
+$response = $dispatching->services->checkRecipient(
     CheckRecipientRequest::one('Москва, Варшавское шоссе, 37-45')
 );
 
@@ -273,7 +274,7 @@ $response[0]->isReliable(); // надёжный
 ```
 
 ```php
-$response = $client->services()->checkRecipient(
+$response = $dispatching->services->checkRecipient(
     CheckRecipientRequest::create()
         ->addRecipient('123456 Москва, Варшавское шоссе, 37-45')
         ->addRecipient('654321 Владивосток, пер. Староконный, 12-98');
@@ -286,7 +287,7 @@ foreach ($response as $recipient) {
 
 ### Документы
 ```php
-$file = $client->documents()->orderF7Form('12345678');
+$file = $dispatching->documents->orderF7Form('12345678');
 
 echo $file->getClientFilename(); // f7p.pdf
 
@@ -301,41 +302,41 @@ return \response()->streamDownload(function () use ($file) {
 
 #### Форма Ф7п для заказа
 ```php
-$pdf = $client->documents()->orderF7Form(
+$pdf = $dispatching->documents->orderF7Form(
     '12345678', new \DateTime('2019-01-01'), Documents::PRINT_TYPE_THERMO
 );
 ```
 
 #### Форма Ф112ЭК для заказа
 ```php
-$pdf = $client->documents()->orderF112Form('12345678', new \DateTime('2019-01-01'));
+$pdf = $dispatching->documents->orderF112Form('12345678', new \DateTime('2019-01-01'));
 ```
 
 #### Пакет документов для заказа (до формирования партии)
 ```php
-$zip = $client->documents()->orderFormsBundleBacklog('12345678', new \DateTime('2019-01-01'));
+$zip = $dispatching->documents->orderFormsBundleBacklog('12345678', new \DateTime('2019-01-01'));
 ```
 
 #### Пакет документов для заказа (после формирования партии)
 ```php
-$zip = $client->documents()->orderFormBundle(
+$zip = $dispatching->documents->orderFormBundle(
     '12345678', new \DateTime('2019-01-01'), Documents::PRINT_TYPE_THERMO
 );
 ```
 
 #### Пакет документов для партии
 ```php
-$zip = $client->documents()->batchFormBundle('87654321');
+$zip = $dispatching->documents->batchFormBundle('87654321');
 ```
 
 #### Акт осмотра содержимого партии
 ```php
-$pdf = $client->documents()->batchCheckingForm('87654321');
+$pdf = $dispatching->documents->batchCheckingForm('87654321');
 ```
 
 #### Форма Ф103 для партии
 ```php
-$pdf = $client->documents()->batchF103Form('87654321');
+$pdf = $dispatching->documents->batchF103Form('87654321');
 ```
 
 ## Запуск тестов
