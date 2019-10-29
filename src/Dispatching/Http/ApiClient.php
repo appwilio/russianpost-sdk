@@ -101,7 +101,7 @@ final class ApiClient implements LoggerAwareInterface
             if (\preg_match('~^application/json~', $contenType)) {
                 $content = $this->getResponseContent($response);
 
-                $this->logger->info("pochta.ru Dispatching response: {$response->getBody()->getContents()}.");
+                $this->logger->info('pochta.ru Dispatching response:.', $content);
 
                 return $responseType === null
                     ? $content
@@ -130,21 +130,17 @@ final class ApiClient implements LoggerAwareInterface
 
         $data = \array_filter($payload->toArray());
 
+        $this->logger->info("pochta.ru Dispatching request: {$path}", $data);
+
         if ($method === 'GET') {
             $query = guzzle_build_query($data);
-
-            $this->logger->info('pochta.ru Dispatching request: '.self::API_URL.$path."?{$query}");
 
             return guzzle_modify_request($request, \compact('query'));
         }
 
-        $body = guzzle_json_encode($data);
-
-        $this->logger->info('pochta.ru Dispatching request: '.self::API_URL.$path, [$body]);
-
         return $request
             ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-            ->withBody(guzzle_stream_for($body));
+            ->withBody(guzzle_stream_for(guzzle_json_encode($data)));
     }
 
     private function buildFile(ResponseInterface $response, string $type): UploadedFile
