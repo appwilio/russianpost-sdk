@@ -29,18 +29,20 @@ use Appwilio\RussianPostSDK\Dispatching\Endpoints\PostOffices\PostOffices;
 /**
  * Class DispatchingClient.
  *
- * @property-read  Orders     $orders
- * @property-read  Documents  $documents
- * @property-read  Services   $services
- * @property-read  Settings   $settings
+ * @property-read  Orders       $orders
+ * @property-read  Documents    $documents
+ * @property-read  Services     $services
+ * @property-read  Settings     $settings
+ * @property-read  PostOffices  $postoffices
  */
 final class DispatchingClient implements LoggerAwareInterface
 {
     private const ENDPOINTS = [
-        'orders'    => Orders::class,
-        'services'  => Services::class,
-        'settings'  => Settings::class,
-        'documents' => Documents::class,
+        'orders'      => Orders::class,
+        'services'    => Services::class,
+        'settings'    => Settings::class,
+        'documents'   => Documents::class,
+        'postoffices' => PostOffices::class,
     ];
 
     /** @var ApiClient */
