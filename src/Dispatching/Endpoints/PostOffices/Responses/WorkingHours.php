@@ -25,7 +25,22 @@ final class WorkingHours implements Arrayable
 
     public function getDayNumber(): ?int
     {
-        return $this->get('weekday-id');
+        return $this->get('weekday-id', 'int');
+    }
+
+    public function getDayName(?string $locale = null): ?string
+    {
+        if (null === $this->getDayNumber()) {
+            return null;
+        }
+
+        if ($this->get('weekday-name')) {
+            return $this->get('weekday-name');
+        }
+
+        return (new \IntlDateFormatter(
+            $locale ?? 'ru_RU', \IntlDateFormatter::NONE, \IntlDateFormatter::NONE, null, null, 'EEEE'
+        ))->format(\strtotime("next Sunday + {$this->getDayNumber()} days"));
     }
 
     /**
@@ -36,12 +51,12 @@ final class WorkingHours implements Arrayable
         return Instantiator::instantiate(new ArrayOf(Lunch::class), $this->get('lunches'));
     }
 
-    private function getBeginValue()
+    protected function getBeginValue()
     {
         return $this->get('begin-worktime');
     }
 
-    private function getEndValue()
+    protected function getEndValue()
     {
         return $this->get('end-worktime');
     }

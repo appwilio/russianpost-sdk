@@ -26,7 +26,8 @@
         "ext-json": "*",
         "ext-soap": "*",
         "guzzlehttp/guzzle": "^6.3",
-        "psr/log": "^1.1"
+        "psr/log": "^1.1",
+        "ext-intl": "*"
     },
     "require-dev": {
         "illuminate/support": "5.1 - 5.8",

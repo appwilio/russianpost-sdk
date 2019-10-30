@@ -25,9 +25,9 @@ trait TimeIntervalAware
         return $this->humanizeTime($this->getEndValue());
     }
 
-    private function humanizeTime(string $time): ?string
+    private function humanizeTime(?string $time): ?string
     {
-        if ($this === null) {
+        if ($time === null) {
             return null;
         }
 

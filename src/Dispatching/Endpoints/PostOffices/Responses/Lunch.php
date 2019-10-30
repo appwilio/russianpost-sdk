@@ -19,15 +19,14 @@ use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 final class Lunch implements Arrayable
 {
     use DataAware;
-
     use TimeIntervalAware;
 
-    private function getBeginValue()
+    protected function getBeginValue()
     {
         return $this->get('begin-lunchtime');
     }
 
-    private function getEndValue()
+    protected function getEndValue()
     {
         return $this->get('end-lunchtime');
     }
