@@ -39,7 +39,7 @@ final class ItemsWrapper
     public function getPreparedAt(): \DateTimeImmutable
     {
         return \DateTimeImmutable::createFromFormat(
-            'd.m.Y h:i:s',
+            'd.m.Y H:i:s',
             $this->DatePreparation,
             new \DateTimeZone('Europe/Moscow')
         );
