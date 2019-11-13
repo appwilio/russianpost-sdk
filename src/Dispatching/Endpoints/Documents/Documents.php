@@ -36,6 +36,8 @@ final class Documents
     /**
      * Форма Ф7п для заказа.
      *
+     * @see https://otpravka.pochta.ru/specification#/documents-create_f7_f22
+     *
      * @param  string                   $orderId
      * @param  \DateTimeInterface|null  $sendingDate
      * @param  string|null              $printType
@@ -55,20 +57,29 @@ final class Documents
     /**
      * Форма Ф112ЭК для заказа.
      *
+     * @see https://otpravka.pochta.ru/specification#/documents-create_f112
+     *
+     * @param  string  $orderId
+     *
+     * @return UploadedFile
+     */
+    public function orderF112Form(string $orderId): UploadedFile
+    {
+        $request = $this->buildRequest();
+
+        return $this->client->get("/1.0/forms/{$orderId}/f112pdf", $request);
+    }
+
+    /**
+     * Формы для заказа (до формирования партии).
+     *
+     * https://otpravka.pochta.ru/specification#/documents-create_forms_backlog
+     *
      * @param  string                   $orderId
      * @param  \DateTimeInterface|null  $sendingDate
      *
      * @return UploadedFile
      */
-    public function orderF112Form(string $orderId, ?\DateTimeInterface $sendingDate = null): UploadedFile
-    {
-        $request = $this->buildRequest([
-            'sending-date' => $this->formatSendingDate($sendingDate),
-        ]);
-
-        return $this->client->get("/1.0/forms/{$orderId}/f112pdf", $request);
-    }
-
     public function orderFormsBundleBacklog(string $orderId, ?\DateTimeInterface $sendingDate = null): UploadedFile
     {
         $request = $this->buildRequest([
@@ -78,6 +89,17 @@ final class Documents
         return $this->client->get("/1.0/forms/backlog/{$orderId}/forms", $request);
     }
 
+    /**
+     * Формы для заказа (после формирования партии).
+     *
+     * @sse https://otpravka.pochta.ru/specification#/documents-create_forms
+     *
+     * @param  string                   $orderId
+     * @param  \DateTimeInterface|null  $sendingDate
+     * @param  string|null              $printType
+     *
+     * @return UploadedFile
+     */
     public function orderFormBundle(string $orderId, ?\DateTimeInterface $sendingDate = null, ?string $printType = null): UploadedFile
     {
         $request = $this->buildRequest([
@@ -90,6 +112,8 @@ final class Documents
 
     /**
      * Пакет документов для партии.
+     *
+     * @see https://otpravka.pochta.ru/specification#/documents-create_all_docs
      *
      * @param  string       $batchName
      * @param  string|null  $printType
@@ -110,6 +134,8 @@ final class Documents
     /**
      * Форма Ф103 для партии.
      *
+     * @see https://otpravka.pochta.ru/specification#/documents-create_f103
+     *
      * @param  string  $batchName
      *
      * @return UploadedFile
@@ -122,6 +148,10 @@ final class Documents
     /**
      * Форма акта осмотра содержимого партии.
      *
+     * Данный акт будет создан только в том случае, если подключена услуга проверки комплектности.
+     *
+     * @see https://otpravka.pochta.ru/specification#/documents-create_comp_check_form
+     *
      * @param  string  $batchName
      *
      * @return UploadedFile
@@ -133,6 +163,8 @@ final class Documents
 
     /**
      * Подготовка и отправка электронной формы Ф103 для партии.
+     *
+     * @see https://otpravka.pochta.ru/specification#/documents-checkin
      *
      * @param  string  $batchName
      *
@@ -148,7 +180,7 @@ final class Documents
         return $sendingDate ? $sendingDate->format('Y-m-d') : null;
     }
 
-    private function buildRequest(array $query): Arrayable
+    private function buildRequest(array $query = []): Arrayable
     {
         return new class($query) implements Arrayable {
             private $query;
