@@ -2,7 +2,7 @@ preset: laravel
 
 disabled:
     - unalign_equals
-    - length_ordered_imports
+    - alpha_ordered_imports
     - simplified_null_return
     - phpdoc_inline_tag
     - phpdoc_single_line_var_spacing

@@ -33,9 +33,6 @@ final class ItemsWrapper
         return $this->Item;
     }
 
-    /**
-     * @return \DateTimeImmutable
-     */
     public function getPreparedAt(): \DateTimeImmutable
     {
         return \DateTimeImmutable::createFromFormat(
