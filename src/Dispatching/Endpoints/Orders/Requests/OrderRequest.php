@@ -173,7 +173,7 @@ final class OrderRequest implements Arrayable
             }
         }
 
-        $this->data = \array_merge($this->data, $this->recipient);
+        $this->data = \array_merge($this->data, $this->recipient->toArray());
         $this->data = \array_merge($this->data, \iterator_to_array($this->convertAddress($this->address)));
 
         return [$this->data];
