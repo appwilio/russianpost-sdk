@@ -23,11 +23,11 @@
     },
     "require": {
         "php": ">=7.1",
+        "ext-intl": "*",
         "ext-json": "*",
         "ext-soap": "*",
         "guzzlehttp/guzzle": "^6.3",
-        "psr/log": "^1.1",
-        "ext-intl": "*"
+        "psr/log": "^1.1"
     },
     "require-dev": {
         "illuminate/support": "5.1 - 5.8",

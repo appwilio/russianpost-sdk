@@ -17,7 +17,7 @@ final class Address implements Arrayable
     public static function fromNormalizedAddress(NormalizedAddress $address): self
     {
         if ($address->isUnuseful()) {
-            throw new \InvalidArgumentException('Неприемлемый адрес.');
+            throw new \InvalidArgumentException('У нормализованного адреса неприемлемое качество.');
         }
 
         return Instantiator::instantiateFrom(self::class, $address, [

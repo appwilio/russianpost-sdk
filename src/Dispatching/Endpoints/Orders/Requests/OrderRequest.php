@@ -9,13 +9,14 @@ use Appwilio\RussianPostSDK\Dispatching\Entities\Address;
 use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites\Order;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites\OrderItem;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites\Recipient;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites\CustomsDeclaration;
 
 final class OrderRequest implements Arrayable
 {
     use DataAware;
 
-    private const RUSSIA_POSTAL_CODE = '~\d{6}~';
+    private const RUSSIAN_POSTAL_CODE = '~\d{6}~';
 
     /** @var Address */
     private $address;
@@ -26,8 +27,17 @@ final class OrderRequest implements Arrayable
     /** @var CustomsDeclaration|null */
     private $declaration;
 
-    public static function create(string $id, string $category, string $type, int $weight, Address $address)
-    {
+    /** @var Recipient */
+    private $recipient;
+
+    public static function create(
+        string $id,
+        string $category,
+        string $type,
+        int $weight,
+        Address $address,
+        Recipient $recipient
+    ) {
         return new self(...\func_get_args());
     }
 
@@ -36,14 +46,23 @@ final class OrderRequest implements Arrayable
         
     }
 
-    public function __construct(string $id, string $category, string $type, int $weight, Address $address)
-    {
-        $this->data['order-num'] = $id;
-        $this->data['mail-type'] = $type;
-        $this->data['mail-category'] = $category;
-        $this->data['mass'] = $weight;
+    public function __construct(
+        string $number,
+        string $mailType,
+        string $mailCategory,
+        int $weight,
+        Address $address,
+        Recipient $recipient
+    ) {
+        $this->data = [
+            'mass'          => $weight,
+            'order-num'     => $number,
+            'mail-type'     => $mailType,
+            'mail-category' => $mailCategory,
+        ];
 
         $this->address = $address;
+        $this->recipient = $recipient;
     }
 
     public function dimensions(int $height, int $width, int $length)
@@ -107,6 +126,41 @@ final class OrderRequest implements Arrayable
         return $this;
     }
 
+    public function withVsd(bool $value = true)
+    {
+        $this->data['vsd'] = $value;
+
+        return $this;
+    }
+
+    public function withElectronicNotice(bool $value = true)
+    {
+        $this->data['with-electronic-notice'] = $value;
+
+        return $this;
+    }
+
+    public function withSimpleNotice(bool $value = true)
+    {
+        $this->data['with-simple-notice'] = $value;
+
+        return $this;
+    }
+
+    public function withRegisteredNotice(bool $value = true)
+    {
+        $this->data['with-order-of-notice'] = $value;
+
+        return $this;
+    }
+
+    public function withoutMailRank(bool $value = true)
+    {
+        $this->data['wo-mail-rank'] = $value;
+
+        return $this;
+    }
+
     public function toArray(): array
     {
         $this->data['custom-declaration'] = $this->declaration ? $this->declaration->toArray() : null;
@@ -119,8 +173,7 @@ final class OrderRequest implements Arrayable
             }
         }
 
-        $this->data['recipient-name'] = 'avg';
-
+        $this->data = \array_merge($this->data, $this->recipient);
         $this->data = \array_merge($this->data, \iterator_to_array($this->convertAddress($this->address)));
 
         return [$this->data];
@@ -129,9 +182,9 @@ final class OrderRequest implements Arrayable
     private function convertAddress(Address $address): \Generator
     {
         foreach ($address->toArray() as $key => $value) {
-            if ($key === 'index' && !\preg_match(self::RUSSIA_POSTAL_CODE, $value)) {
+            if ($key === 'index' && !\preg_match(self::RUSSIAN_POSTAL_CODE, $value)) {
                 yield 'str-index-to' => $value;
-            } elseif ($key === 'mail-direct') {
+            } else if ($key === 'mail-direct') {
                 yield $key => $value;
             } else {
                 yield "{$key}-to" => $value;
