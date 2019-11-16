@@ -104,7 +104,7 @@ class Instantiator
 
     private function build(string $class, array $data)
     {
-        $object = new $class();
+        $object = (new \ReflectionClass($class))->newInstanceWithoutConstructor();
 
         $property = $this->reflector->getProperty('data');
 

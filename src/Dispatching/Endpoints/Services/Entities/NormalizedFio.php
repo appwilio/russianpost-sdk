@@ -34,17 +34,17 @@ final class NormalizedFio implements Arrayable
         return $this->get('id');
     }
 
-    public function getFirstName(): string
+    public function getFirstName(): ?string
     {
         return $this->get('name');
     }
 
-    public function getMiddleName(): string
+    public function getMiddleName(): ?string
     {
         return $this->get('middle-name');
     }
 
-    public function getLastName(): string
+    public function getLastName(): ?string
     {
         return $this->get('surname');
     }
@@ -57,10 +57,5 @@ final class NormalizedFio implements Arrayable
     public function getQualityCode(): string
     {
         return $this->get('quality-code');
-    }
-
-    public function isUseful(): bool
-    {
-        return $this->get('valid');
     }
 }
