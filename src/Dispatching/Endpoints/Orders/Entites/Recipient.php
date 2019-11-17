@@ -24,43 +24,59 @@ class Recipient implements Arrayable
 
     public static function fromNormalizedFio(NormalizedFio $normalizedFio)
     {
-        $data = [
-            'surname' => $normalizedFio->getLastName(),
-            'given-name' => $normalizedFio->getFirstName(),
+        return Instantiator::instantiate(self::class, [
+            'surname'     => $normalizedFio->getLastName(),
+            'given-name'  => $normalizedFio->getFirstName(),
             'middle-name' => $normalizedFio->getMiddleName(),
-        ];
-
-        $raw = \trim(\implode(' ', $data));
-
-        if ($raw) {
-            $data['recipient-name'] = $raw;
-        }
-
-        return Instantiator::instantiate(self::class, $data);
+        ]);
     }
 
-    public function __construct(string $rawName)
+    public static function create(?string $fullName = null): self
     {
-        $this->data['recipient-name'] = $rawName;
+        return new self($fullName);
     }
 
-    public function setFirstName(string $firstName)
+    public function __construct(?string $fullName = null)
+    {
+        if ($fullName) {
+            $this->data['recipient-name'] = $fullName;
+        }
+    }
+
+    public function firstName(string $firstName)
     {
         $this->data['given-name'] = $firstName;
     }
 
-    public function setMiddleName(string $middleName)
+    public function middleName(string $middleName)
     {
         $this->data['middle-name'] = $middleName;
     }
 
-    public function setLastName(string $lastName)
+    public function lastName(string $lastName)
     {
         $this->data['surname'] = $lastName;
     }
 
-    public function setPhoneNumber(string $phoneNumber)
+    public function phoneNumber(string $phoneNumber)
     {
         $this->data['tel-address'] = $phoneNumber;
+    }
+
+    public function toArray(): array
+    {
+        if (empty($this->data['recipient-name'])) {
+            $fullName = \trim(\implode(' ', [
+                $this->data['surname'],
+                $this->data['given-name'],
+                $this->data['middle-name'],
+            ]));
+
+            if ($fullName) {
+                $this->data['recipient-name'] = $fullName;
+            }
+        }
+
+        return $this->data;
     }
 }
