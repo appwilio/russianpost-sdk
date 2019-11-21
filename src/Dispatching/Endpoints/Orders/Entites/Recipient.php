@@ -46,21 +46,29 @@ class Recipient implements Arrayable
     public function firstName(string $firstName)
     {
         $this->data['given-name'] = $firstName;
+
+        return $this;
     }
 
     public function middleName(string $middleName)
     {
         $this->data['middle-name'] = $middleName;
+
+        return $this;
     }
 
     public function lastName(string $lastName)
     {
         $this->data['surname'] = $lastName;
+
+        return $this;
     }
 
     public function phoneNumber(string $phoneNumber)
     {
         $this->data['tel-address'] = $phoneNumber;
+
+        return $this;
     }
 
     public function toArray(): array

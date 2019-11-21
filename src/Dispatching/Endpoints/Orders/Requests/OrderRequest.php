@@ -32,6 +32,7 @@ final class OrderRequest implements Arrayable
 
     public static function create(
         string $id,
+        string $type,
         string $category,
         string $type,
         int $weight,
