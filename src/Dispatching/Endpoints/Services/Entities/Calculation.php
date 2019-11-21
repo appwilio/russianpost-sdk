@@ -93,7 +93,7 @@ final class Calculation implements Arrayable
         return Instantiator::instantiate(Tariff::class, $this->get('vsd-rate'));
     }
 
-    public function getTotal(): Tariff
+    public function getTotalRate(): Tariff
     {
         return Instantiator::instantiate(Tariff::class, [
             'rate' => $this->get('total-rate'),
