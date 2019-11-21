@@ -6,6 +6,7 @@ namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders;
 
 use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
 use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites\Order;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Requests\OrderRequest;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Exceptions\OrderException;
 
@@ -38,7 +39,60 @@ final class Orders
             return (string) $response['result-ids'][0];
         }
 
-        return $response['errors'] ?? $response;
+        if (isset($response['errors'])) {
+            throw new OrderException($response['errors'][0]['error-codes']);
+        }
+
+        return $response;
+    }
+
+    public function getByPostalId(string $id): Order
+    {
+        return $this->client->get("/1.0/backlog/{$id}", null, Order::class);
+    }
+
+    public function findByShopId(string $id)
+    {
+        return $this->client->get('backlog/search', new class($id) implements Arrayable {
+            private $query;
+
+            public function __construct(string $query)
+            {
+                $this->query = $query;
+            }
+
+            public function toArray(): array
+            {
+                return ['query' => $this->query];
+            }
+        }, Order::class);
+    }
+
+    public function findByTrackingNumber(string $number)
+    {
+        return $this->client->get('/1.0/shipment/search', new class($number) implements Arrayable {
+            private $query;
+
+            public function __construct(string $query)
+            {
+                $this->query = $query;
+            }
+
+            public function toArray(): array
+            {
+                return ['query' => $this->query];
+            }
+        }, Order::class);
+    }
+
+    public function read(string $id)
+    {
+        return $this->client->get("/1.0/user/backlog/{$id}");
+    }
+
+    public function update(string $id, OrderRequest $request)
+    {
+        return $this->client->put("/1.0/user/backlog/{$id}", $request);
     }
 
     public function delete(array $ids)
@@ -57,6 +111,25 @@ final class Orders
             }
         });
 
-        return $response['result-ids'] ?? $response['errors'] ?? $response;
+        if (isset($response['errors'])) {
+            throw new OrderException($response['errors'][0]);
+        }
+    }
+
+    public function renew(array $ids)
+    {
+        return $this->client->post('/1.0/user/backlog', new class($ids) implements Arrayable {
+            private $ids;
+
+            public function __construct(array $ids)
+            {
+                $this->ids = $ids;
+            }
+
+            public function toArray(): array
+            {
+                return $this->ids;
+            }
+        });
     }
 }
