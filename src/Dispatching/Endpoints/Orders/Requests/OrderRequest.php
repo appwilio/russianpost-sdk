@@ -34,7 +34,6 @@ final class OrderRequest implements Arrayable
         string $id,
         string $type,
         string $category,
-        string $type,
         int $weight,
         Address $address,
         Recipient $recipient
