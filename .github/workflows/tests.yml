@@ -43,8 +43,10 @@ jobs:
       - name: Execute tests
         run: vendor/bin/phpunit --verbose --coverage-text --coverage-clover=coverage.clover
 
-      - name: Code coverage
+      - name: Prepare code coverage
         uses: wei/wget@v1.1.1
         with:
           args: -qO- https://scrutinizer-ci.com/ocular.phar
+
+      - name: Code coverage
         run: php ocular.phar code-coverage:upload --format=php-clover coverage.clover
