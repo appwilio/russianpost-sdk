@@ -1,14 +1,14 @@
-# SDK для [бизнес-сервисов](https://www.pochta.ru/support/business/api) Почты России
+<h1 align="center">SDK для <a href="https://www.pochta.ru/support/business/api">бизнес-сервисов</a> Почты России</h1>
 
-
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/appwilio/russianpost-sdk.svg?style=flat)](https://packagist.org/packages/appwilio/russianpost-sdk)
-[![Testing](https://github.com/appwilio/russianpost-sdk/workflows/tests/badge.svg)](https://github.com/appwilio/russianpost-sdk/actions?workflow=tests)
-[![Quality Score](https://img.shields.io/scrutinizer/g/appwilio/russianpost-sdk.svg?style=flat)](https://scrutinizer-ci.com/g/appwilio/russianpost-sdk)
-[![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/appwilio/russianpost-sdk/master.svg?style=flat)](https://scrutinizer-ci.com/g/appwilio/russianpost-sdk/?branch=master)
-[![StyleCI](https://github.styleci.io/repos/101485954/shield?style=flat)](https://styleci.io/repos/101485954)
-[![Total Downloads](https://poser.pugx.org/appwilio/russianpost-sdk/downloads?format=flat)](https://packagist.org/packages/appwilio/russianpost-sdk)
-[![License MIT](https://poser.pugx.org/appwilio/russianpost-sdk/license?format=flat)](https://raw.githubusercontent.com/appwilio/russianpost-sdk/master/LICENSE.md)
-
+<p align="center">
+    <a href="https://packagist.org/packages/appwilio/russianpost-sdk"><img src="https://img.shields.io/packagist/v/appwilio/russianpost-sdk.svg?style=flat" alt="Latest Version on Packagist" /></a>
+    <a href="https://github.com/appwilio/russianpost-sdk/actions?workflow=tests"><img src="https://github.com/appwilio/russianpost-sdk/workflows/tests/badge.svg" alt="Testing" /></a>
+    <a href="https://scrutinizer-ci.com/g/appwilio/russianpost-sdk"><img src="https://img.shields.io/scrutinizer/g/appwilio/russianpost-sdk.svg?style=flat" alt="Quality Score" /></a>
+    <a href="https://scrutinizer-ci.com/g/appwilio/russianpost-sdk/?branch=master"><img src="https://img.shields.io/scrutinizer/coverage/g/appwilio/russianpost-sdk/master.svg?style=flat" alt="Code Coverage" /></a>
+    <a href="https://styleci.io/repos/101485954"><img src="https://github.styleci.io/repos/101485954/shield?style=flat" alt="StyleCI" /></a>
+    <a href="https://packagist.org/packages/appwilio/russianpost-sdk"><img src="https://poser.pugx.org/appwilio/russianpost-sdk/downloads?format=flat" alt="Total Downloads"></a>
+    <a href="https://raw.githubusercontent.com/appwilio/russianpost-sdk/master/LICENSE.md"><img src="https://poser.pugx.org/appwilio/russianpost-sdk/license?format=flat" alt="License MIT"></a>
+</p>
 
 ## Содержание
 - [Установка](#установка)
