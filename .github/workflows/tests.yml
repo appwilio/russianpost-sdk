@@ -32,7 +32,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: intl, json, libxml, soap
-          coverage: none
+          coverage: xdebug
 
       - name: Validate composer.json and composer.lock
         run: composer validate
