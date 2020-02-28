@@ -92,6 +92,38 @@ class SingleAccessClientTest extends TestCase
         }
     }
 
+    public function test_exception_thrown_on_empty_tracking_respons(): void
+    {
+        $this->expectException(SingleAccessException::class);
+
+        $response = $this->buildClass(TrackingEventsResponse::class, [
+            'OperationHistoryData' => $this->buildClass(TrackingEventsWrapper::class, [
+                'historyRecord' => [],
+            ]),
+        ]);
+
+        $this->soapMock
+            ->with('getOperationHistory', $this->isType('array'))
+            ->willReturn($response);
+
+        $this->createClient()->getTrackingEvents('RA644000001RU');
+    }
+
+    public function test_exception_thrown_on_empty_cod_response(): void
+    {
+        $this->expectException(SingleAccessException::class);
+
+        $this->soapMock
+            ->with('PostalOrderEventsForMail', $this->isType('array'))
+            ->willReturn($this->buildClass(CashOnDeliveryEventsResponse::class, [
+                'PostalOrderEventsForMaiOutput' => $this->buildClass(CashOnDeliveryEventsWrapper::class, [
+                    'PostalOrderEvent' => [],
+                ]),
+            ]));
+
+        $this->createClient()->getCashOnDeliveryEvents('RA644000001RU');
+    }
+
     public function test_exception_thrown_on_soap_fault(): void
     {
         $this->expectExceptionMessage('error');

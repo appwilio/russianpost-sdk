@@ -50,7 +50,7 @@ class DispatchingClientTest extends TestCase
         $this->createClient()->{'foobar'};
     }
 
-    private function createClient()
+    private function createClient(): DispatchingClient
     {
         /** @var HttpClient|MockObject $httpClient */
         $httpClient = $this->getMockBuilder(HttpClient::class)
