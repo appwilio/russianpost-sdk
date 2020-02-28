@@ -15,7 +15,7 @@ jobs:
         php: [7.1, 7.2, 7.3, 7.4]
         stability: [prefer-lowest, prefer-stable]
     
-    name: P${{ matrix.php }} - ${{ matrix.stability }}
+    name: PHP ${{ matrix.php }} / ${{ matrix.stability }}
     
     steps:
       - name: Checkout code
@@ -44,9 +44,11 @@ jobs:
         run: vendor/bin/phpunit --verbose --coverage-text --coverage-clover=coverage.clover
 
       - name: Prepare code coverage
+        if: matrix.php == 7.4
         uses: wei/wget@v1.1.1
         with:
           args: -q https://scrutinizer-ci.com/ocular.phar
 
       - name: Code coverage
+        if: matrix.php == 7.4
         run: php ocular.phar code-coverage:upload --format=php-clover coverage.clover
