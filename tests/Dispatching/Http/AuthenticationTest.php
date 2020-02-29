@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Appwilio\RussianPostSDK\Tests\Dispatching;
+namespace Appwilio\RussianPostSDK\Tests\Dispatching\Http;
 
 use GuzzleHttp\Psr7\Request;
 use Appwilio\RussianPostSDK\Tests\TestCase;
