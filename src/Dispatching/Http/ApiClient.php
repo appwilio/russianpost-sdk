@@ -133,9 +133,7 @@ final class ApiClient implements LoggerAwareInterface
         $this->logger->info("pochta.ru Dispatching request: {$path}", $data);
 
         if ($method === 'GET') {
-            $query = guzzle_build_query($data);
-
-            return guzzle_modify_request($request, \compact('query'));
+            return guzzle_modify_request($request, ['query' => guzzle_build_query($data)]);
         }
 
         return $request
