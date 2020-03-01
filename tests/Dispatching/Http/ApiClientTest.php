@@ -15,44 +15,51 @@ namespace Appwilio\RussianPostSDK\Tests\Dispatching\Http;
 
 use Psr\Log\NullLogger;
 use GuzzleHttp\Psr7\Stream;
+use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\UploadedFile;
 use GuzzleHttp\Client as HttpClient;
-use Psr\Http\Message\StreamInterface;
-use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\RequestInterface;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Appwilio\RussianPostSDK\Tests\TestCase;
 use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
 use Appwilio\RussianPostSDK\Dispatching\Http\Authentication;
 use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 use Appwilio\RussianPostSDK\Dispatching\Exceptions\BadRequest;
+use function GuzzleHttp\json_encode as guzzle_json_encode;
 use function GuzzleHttp\Psr7\stream_for as guzzle_stream_for;
 
 class ApiClientTest extends TestCase
 {
     public function test_client_can_get(): void
     {
-        $response = $this->buildClient()->get('foo');
+        $response = $this->createClient()->get('foo');
+        $this->assertIsArray($response);
+        $this->assertEmpty($response);
+
+        $response = $this->createClient()->get('foo', new FooRequest());
         $this->assertIsArray($response);
         $this->assertEmpty($response);
     }
 
     public function test_client_can_post(): void
     {
-        $response = $this->buildClient()->post('foo', new FooRequest());
+        $response = $this->createClient()->post('foo', new FooRequest());
         $this->assertIsArray($response);
         $this->assertEmpty($response);
     }
 
     public function test_client_can_put(): void
     {
-        $response = $this->buildClient()->put('foo', new FooRequest());
+        $response = $this->createClient()->put('foo', new FooRequest());
         $this->assertIsArray($response);
         $this->assertEmpty($response);
     }
 
     public function test_client_can_delete(): void
     {
-        $response = $this->buildClient()->delete('foo', new FooRequest());
+        $response = $this->createClient()->delete('foo', new FooRequest());
         $this->assertIsArray($response);
         $this->assertEmpty($response);
     }
@@ -65,7 +72,7 @@ class ApiClientTest extends TestCase
         $file = new Stream($tmp);
 
         /** @var UploadedFile $response */
-        $response = $this->buildClient(
+        $response = $this->createClient(
             $contentType = 'application/pdf',
             guzzle_stream_for($tmp),
             ['Content-Disposition' => 'attachment; filename=foo']
@@ -81,10 +88,68 @@ class ApiClientTest extends TestCase
     {
         $this->expectException(BadRequest::class);
 
-        $this->buildClient('baz/bar')->get('foo');
+        $this->createClient('application/foobar')->get('foo');
     }
 
-    private function buildClient($contentType = 'application/json', $body = null, array $headers = []): ApiClient
+    /**
+     * @param int $code
+     * @param array $data
+     * @dataProvider error4xxProvider
+     */
+    public function test_exception_thrown_on_4xx(int $code, array $data): void
+    {
+        $this->expectExceptionCode($code);
+        $this->expectException(BadRequest::class);
+
+        $client = new ApiClient(
+            new Authentication('foo', 'bar', 'baz'),
+            $http = $this->createHttpClient(null),
+            new NullLogger()
+        );
+
+        $http->method('send')->willReturnCallback(function () use ($code, $data) {
+            $response = new Response($code, [], guzzle_json_encode($data));
+
+            /** @noinspection PhpParamsInspection */
+            throw new ClientException('', $this->createMock(RequestInterface::class), $response);
+        });
+
+        $client->get('foo');
+    }
+
+    public function test_exception_thrown_on_5xx(): void
+    {
+        $this->expectExceptionCode(500);
+        $this->expectException(ServerException::class);
+
+        $client = new ApiClient(
+            new Authentication('foo', 'bar', 'baz'),
+            $http = $this->createHttpClient(null),
+            new NullLogger()
+        );
+
+        $http->method('send')->willReturnCallback(function () {
+            /** @noinspection PhpParamsInspection */
+            throw new ServerException('', $this->createMock(RequestInterface::class), new Response(500));
+        });
+
+        $client->get('foo');
+    }
+
+    public function error4xxProvider()
+    {
+        foreach ([401, 403, 422] as $code) {
+            yield [$code, ['desc' => 'foo', 'code' => $code]];
+            yield [$code, ['error' => 'foo', 'code' => $code]];
+            yield [$code, ['message' => 'foo', 'code' => $code]];
+
+            yield [$code, ['desc' => 'foo', 'status' => $code]];
+            yield [$code, ['error' => 'foo', 'status' => $code]];
+            yield [$code, ['message' => 'foo', 'status' => $code]];
+        }
+    }
+
+    private function createClient($contentType = 'application/json', $body = null, array $headers = []): ApiClient
     {
         return new ApiClient(
             new Authentication('foo', 'bar', 'baz'),
@@ -100,33 +165,11 @@ class ApiClientTest extends TestCase
      */
     private function createHttpClient($body, array $headers = [])
     {
-        $response = $this->createMock(ResponseInterface::class);
-
-        $response->method('getHeaderLine')->willReturnCallback(
-            static function ($name) use ($headers) {
-                return $headers[$name];
-            }
-        );
-
-        $stream = $this->createMock(StreamInterface::class);
-        $stream->method('__toString')->willReturn($body);
-        $stream->method('getSize')->willReturnCallback(
-            static function () use ($body) {
-            if ($body instanceof StreamInterface) {
-                return $body->getSize();
-            }
-
-            return \strlen($body);
-        });
-        $response->method('getBody')->willReturn($stream);
-
         $httpClient = $this->createMock(HttpClient::class);
 
-        $httpClient->method('send')->willReturnCallback(
-            static function () use ($response) {
-                return $response;
-            }
-        );
+        $httpClient->method('send')->willReturnCallback(static function () use ($headers, $body) {
+            return new Response(200, $headers, $body);
+        });
 
         return $httpClient;
     }

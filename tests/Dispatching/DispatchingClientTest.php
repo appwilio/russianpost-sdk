@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tests\Dispatching;
 
+use Psr\Log\NullLogger;
 use GuzzleHttp\Client as HttpClient;
 use PHPUnit\Framework\MockObject\MockObject;
 use Appwilio\RussianPostSDK\Tests\TestCase;
@@ -28,10 +29,10 @@ class DispatchingClientTest extends TestCase
 {
     public function test_client_is_instantiable(): void
     {
-        $this->assertInstanceOf(
-            DispatchingClient::class,
-            $this->createClient()
-        );
+        $this->assertInstanceOf(DispatchingClient::class, $this->createClient());
+
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
+        $this->assertNull($this->createClient()->setLogger(new NullLogger()));
     }
 
     public function test_can_get_endpoint(): void
@@ -55,13 +56,7 @@ class DispatchingClientTest extends TestCase
     private function createClient(): DispatchingClient
     {
         /** @var HttpClient|MockObject $httpClient */
-        $httpClient = $this->getMockBuilder(HttpClient::class)
-            ->setMethods(['send'])
-            ->getMock();
-
-        $httpClient
-            ->expects($this->any())
-            ->method('send');
+        $httpClient = $this->createMock(HttpClient::class);
 
         return new DispatchingClient('foo', 'bar', '123', $httpClient);
     }
