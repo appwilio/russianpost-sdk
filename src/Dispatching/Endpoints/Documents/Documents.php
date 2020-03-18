@@ -175,6 +175,25 @@ final class Documents
         return (bool) $this->client->get("/1.0/batch/{$batchName}/checkin");
     }
 
+    /**
+     * Возвратный ярлык на одной странице.
+     *
+     * @see https://otpravka.pochta.ru/specification#/documents-easy_return_pdf
+     *
+     * @param  string       $barcode
+     * @param  string|null  $printType
+     *
+     * @return UploadedFile
+     */
+    public function easyReturnForm(string $barcode, ?string $printType = null): UploadedFile
+    {
+        $request = $this->buildRequest([
+            'print-type' => $printType,
+        ]);
+
+        return $this->client->get("/1.0/forms/{$barcode}/easy-return-pdf", $request);
+    }
+
     private function formatSendingDate(?\DateTimeInterface $sendingDate): ?string
     {
         return $sendingDate ? $sendingDate->format('Y-m-d') : null;
