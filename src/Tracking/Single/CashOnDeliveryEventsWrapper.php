@@ -23,6 +23,6 @@ final class CashOnDeliveryEventsWrapper
      */
     public function getEvents(): array
     {
-        return $this->PostalOrderEvent;
+        return $this->PostalOrderEvent instanceof CashOnDeliveryEvent ? [$this->PostalOrderEvent] : $this->PostalOrderEvent;
     }
 }
