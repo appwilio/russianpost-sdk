@@ -92,7 +92,30 @@ class SingleAccessClientTest extends TestCase
         }
     }
 
-    public function test_exception_thrown_on_empty_tracking_respons(): void
+    public function test_can_get_cod_events_as_array_if_one_event_provided(): void
+    {
+        $this->soapMock
+            ->with('PostalOrderEventsForMail', $this->isType('array'))
+            ->willReturn($this->buildClass(CashOnDeliveryEventsResponse::class, [
+                'PostalOrderEventsForMaiOutput' => $this->buildClass(CashOnDeliveryEventsWrapper::class, [
+                    'PostalOrderEvent' => $this->buildClass(CashOnDeliveryEvent::class),
+                ]),
+            ]));
+
+        $response = $this->createClient()->getCashOnDeliveryEvents('RA644000001RU');
+
+        $this->assertInstanceOf(CashOnDeliveryEventsResponse::class, $response);
+
+        $this->assertInstanceOf(\Traversable::class, $response->getIterator());
+
+        $this->assertCount(1, $response->getEvents());
+
+        foreach ($response as $event) {
+            $this->assertInstanceOf(CashOnDeliveryEvent::class, $event);
+        }
+    }
+
+    public function test_exception_thrown_on_empty_tracking_response(): void
     {
         $this->expectException(SingleAccessException::class);
 
