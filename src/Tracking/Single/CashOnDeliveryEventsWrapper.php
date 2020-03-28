@@ -15,7 +15,7 @@ namespace Appwilio\RussianPostSDK\Tracking\Single;
 
 final class CashOnDeliveryEventsWrapper
 {
-    /** @var CashOnDeliveryEvent[] */
+    /** @var CashOnDeliveryEvent|CashOnDeliveryEvent[] */
     private $PostalOrderEvent = [];
 
     /**
