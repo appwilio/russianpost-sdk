@@ -23,6 +23,7 @@ final class MailType
     public const EMS         = 'EMS';
     public const EMS_RT      = 'EMS_RT';
     public const EMS_OPTIMAL = 'EMS_OPTIMAL';
+    public const EMS_TENDER  = 'EMS_TENDER';
 
     public const BANDEROL             = 'BANDEROL';
     public const BANDEROL_FIRST_CLASS = 'BANDEROL_CLASS_1';
@@ -37,7 +38,10 @@ final class MailType
     public const BUSINESS_COURIER    = 'BUSINESS_COURIER';
     public const BUSINESS_COURIER_ES = 'BUSINESS_COURIER_ES';
 
+    public const VSD            = 'VSD';
+    public const ECOM           = 'ECOM';
     public const COMBINED       = 'COMBINED';
+    public const EASY_RETURN    = 'EASY_RETURN';
     public const VGPO_CLASS_1   = 'VGPO_CLASS_1';
     public const SMALL_PACKET   = 'SMALL_PACKET';
     public const ONLINE_COURIER = 'ONLINE_COURIER';

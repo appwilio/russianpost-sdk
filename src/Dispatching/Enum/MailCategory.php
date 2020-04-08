@@ -24,6 +24,7 @@ final class MailCategory
     public const ORDERED       = 'ORDERED';
     public const ORDINARY      = 'ORDINARY';
     public const COMBINED      = 'COMBINED';
+    public const COMPULSORY    = 'WITH_COMPULSORY_PAYMENT';
     public const DECLARED      = 'WITH_DECLARED_VALUE';
     public const DECLARED_CASH = 'WITH_DECLARED_VALUE_AND_CASH_ON_DELIVERY';
 }
