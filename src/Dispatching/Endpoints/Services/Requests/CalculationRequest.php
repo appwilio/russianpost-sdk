@@ -45,6 +45,13 @@ final class CalculationRequest implements Arrayable
         return $this;
     }
 
+    public function transport(string $value)
+    {
+        $this->data['transport-type'] = $value;
+
+        return $this;
+    }
+
     public function dimensions(int $height, int $width, int $length)
     {
         $this->data['dimension'] = \compact('height', 'width', 'length');
