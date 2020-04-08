@@ -82,7 +82,7 @@ final class CalculationRequest implements Arrayable
 
     public function withContentChecking(bool $value = true)
     {
-        $this->data['conntent-checking'] = $value;
+        $this->data['contents-checking'] = $value;
 
         return $this;
     }

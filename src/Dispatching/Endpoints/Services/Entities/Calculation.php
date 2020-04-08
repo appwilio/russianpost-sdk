@@ -55,7 +55,7 @@ final class Calculation implements Arrayable
 
     public function getContentCheckingRate(): ?Tariff
     {
-        return Instantiator::instantiate(Tariff::class, $this->get('content-checking-rate'));
+        return Instantiator::instantiate(Tariff::class, $this->get('contents-checking-rate'));
     }
 
     public function getOversizeRate(): ?Tariff

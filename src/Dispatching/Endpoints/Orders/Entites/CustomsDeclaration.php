@@ -14,7 +14,7 @@ final class CustomsDeclaration implements Arrayable
     /** @var CustomsDeclarationItem[] */
     private $items;
 
-    public function __construct($entriesType, $currency)
+    public function __construct($entriesType, string $currency)
     {
         $this->data['entries-type'] = $entriesType;
         $this->data['currency'] = $currency;
