@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests;
 
 use Appwilio\RussianPostSDK\Dispatching\DataAware;
+use Appwilio\RussianPostSDK\Dispatching\Enum\MailType;
 use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 
 final class CalculationRequest implements Arrayable
@@ -135,4 +136,16 @@ final class CalculationRequest implements Arrayable
 
         return $this;
     }
+
+    public function toArray(): array
+    {
+        if ($this->data['mail-type'] === MailType::ECOM) {
+            $this->data['delivery-point-index'] = $this->data['index-to'];
+
+            unset($this->data['index-to']);
+        }
+
+        return $this->data;
+    }
+
 }
