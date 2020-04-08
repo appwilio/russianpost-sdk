@@ -101,6 +101,13 @@ final class CalculationRequest implements Arrayable
         return $this;
     }
 
+    public function withFitting(bool $value = true)
+    {
+        $this->data['with-fitting'] = $value;
+
+        return $this;
+    }
+
     public function withSimpleNotice(bool $value = true)
     {
         $this->data['with-simple-notice'] = $value;

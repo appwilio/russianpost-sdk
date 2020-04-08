@@ -38,6 +38,11 @@ final class Calculation implements Arrayable
         return Instantiator::instantiate(DeliveryTime::class, $this->get('delivery-time'));
     }
 
+    public function getFittingRate(): ?Tariff
+    {
+        return Instantiator::instantiate(Tariff::class, $this->get('with-fitting-rate'));
+    }
+
     public function getSmsNoticeRate(): ?Tariff
     {
         return Instantiator::instantiate(Tariff::class, $this->get('sms-notice-recipient-rate'));
