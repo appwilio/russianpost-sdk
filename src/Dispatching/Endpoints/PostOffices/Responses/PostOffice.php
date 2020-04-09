@@ -82,7 +82,7 @@ final class PostOffice implements Arrayable
         return isset($this->data['nearest-post-office']);
     }
 
-    public function getNearestPostOffice(): ?PostOffice
+    public function getNearestPostOffice(): ?self
     {
         return Instantiator::instantiate(self::class, $this->get('nearest-post-office'));
     }

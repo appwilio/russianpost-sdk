@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of RussianPost SDK package.
+ *
+ * © Appwilio (http://appwilio.com), JhaoDa (https://github.com/jhaoda)
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities;
@@ -29,6 +38,11 @@ final class Calculation implements Arrayable
         return Instantiator::instantiate(DeliveryTime::class, $this->get('delivery-time'));
     }
 
+    public function getFittingRate(): ?Tariff
+    {
+        return Instantiator::instantiate(Tariff::class, $this->get('with-fitting-rate'));
+    }
+
     public function getSmsNoticeRate(): ?Tariff
     {
         return Instantiator::instantiate(Tariff::class, $this->get('sms-notice-recipient-rate'));
@@ -46,7 +60,7 @@ final class Calculation implements Arrayable
 
     public function getContentCheckingRate(): ?Tariff
     {
-        return Instantiator::instantiate(Tariff::class, $this->get('content-checking-rate'));
+        return Instantiator::instantiate(Tariff::class, $this->get('contents-checking-rate'));
     }
 
     public function getOversizeRate(): ?Tariff
@@ -84,7 +98,7 @@ final class Calculation implements Arrayable
         return Instantiator::instantiate(Tariff::class, $this->get('vsd-rate'));
     }
 
-    public function getTotal(): Tariff
+    public function getTotalRate(): Tariff
     {
         return Instantiator::instantiate(Tariff::class, [
             'rate' => $this->get('total-rate'),

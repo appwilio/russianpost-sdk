@@ -42,8 +42,6 @@ class Instantiator
      * @param  ArrayOf|string  $class
      * @param  mixed           $data
      *
-     * @throws \ReflectionException
-     *
      * @return mixed
      */
     public static function instantiate($class, $data)
@@ -53,6 +51,36 @@ class Instantiator
         }
 
         return (new self($class))->fill($data);
+    }
+
+    /**
+     * @param  string  $class
+     * @param  object  $source
+     * @param  array   $unset
+     *
+     * @throws \ReflectionException
+     *
+     * @return mixed
+     */
+    public static function instantiateFrom(string $class, $source, array $unset = [])
+    {
+        $sourceReflector = (new \ReflectionClass($source))->getProperty('data');
+        $sourceReflector->setAccessible(true);
+
+        $destination = (new \ReflectionClass($class))->newInstanceWithoutConstructor();
+
+        $destinationReflector = (new \ReflectionClass($destination))->getProperty('data');
+        $destinationReflector->setAccessible(true);
+
+        $data = $sourceReflector->getValue($source);
+
+        foreach ($unset as $item) {
+            unset($data[$item]);
+        }
+
+        $destinationReflector->setValue($destination, $data);
+
+        return $destination;
     }
 
     public function fill($data)
@@ -76,7 +104,7 @@ class Instantiator
 
     private function build(string $class, array $data)
     {
-        $object = new $class();
+        $object = (new \ReflectionClass($class))->newInstanceWithoutConstructor();
 
         $property = $this->reflector->getProperty('data');
 

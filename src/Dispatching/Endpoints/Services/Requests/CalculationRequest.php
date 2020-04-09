@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests;
 
 use Appwilio\RussianPostSDK\Dispatching\DataAware;
+use Appwilio\RussianPostSDK\Dispatching\Enum\MailType;
 use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 
 final class CalculationRequest implements Arrayable
@@ -41,6 +42,13 @@ final class CalculationRequest implements Arrayable
     public function ofMailType(string $mailType)
     {
         $this->data['mail-type'] = $mailType;
+
+        return $this;
+    }
+
+    public function transport(string $value)
+    {
+        $this->data['transport-type'] = $value;
 
         return $this;
     }
@@ -82,7 +90,7 @@ final class CalculationRequest implements Arrayable
 
     public function withContentChecking(bool $value = true)
     {
-        $this->data['conntent-checking'] = $value;
+        $this->data['contents-checking'] = $value;
 
         return $this;
     }
@@ -97,6 +105,13 @@ final class CalculationRequest implements Arrayable
     public function withElectronicNotice(bool $value = true)
     {
         $this->data['with-electronic-notice'] = $value;
+
+        return $this;
+    }
+
+    public function withFitting(bool $value = true)
+    {
+        $this->data['with-fitting'] = $value;
 
         return $this;
     }
@@ -121,4 +136,16 @@ final class CalculationRequest implements Arrayable
 
         return $this;
     }
+
+    public function toArray(): array
+    {
+        if ($this->data['mail-type'] === MailType::ECOM) {
+            $this->data['delivery-point-index'] = $this->data['index-to'];
+
+            unset($this->data['index-to']);
+        }
+
+        return $this->data;
+    }
+
 }

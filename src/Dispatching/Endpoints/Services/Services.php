@@ -94,7 +94,7 @@ final class Services
         /** @var Calculation $calculation */
         $calculation = $this->client->post('/1.0/tariff', $request, Calculation::class);
 
-        if ($calculation->getTotal()->getRate() === 0) {
+        if ($calculation->getTotalRate()->getAmountWithVAT() === 0) {
             throw CalculationException::becauseZeroTotalRate();
         }
 

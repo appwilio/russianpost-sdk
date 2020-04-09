@@ -9,32 +9,32 @@ final class Tariff
     private $data;
 
     /**
-     * Стоимость услуги без НДС в копейках. (rate).
+     * Стоимость без НДС в копейках. (rate).
      *
      * @return int
      */
-    public function getRate(): int
+    public function getAmountWithoutVAT(): int
     {
         return $this->data['rate'];
     }
 
     /**
-     * Сумма НДС в копейках (vat).
+     * Стоимость с НДС в копейках.
+     *
+     * @return int
+     */
+    public function getAmountWithVAT(): int
+    {
+        return $this->getAmountWithoutVAT() + $this->getVAT();
+    }
+
+    /**
+     * НДС в копейках (vat).
      *
      * @return int
      */
     public function getVAT(): int
     {
         return $this->data['vat'];
-    }
-
-    /**
-     * Стоимость услуги с НДС в копейках.
-     *
-     * @return int
-     */
-    public function getRateWithVAT(): int
-    {
-        return $this->getRate() + $this->getVAT();
     }
 }

@@ -64,11 +64,6 @@ final class DispatchingClient implements LoggerAwareInterface
         throw new UnknownEndpoint($property);
     }
 
-    /**
-     * Sets a logger.
-     *
-     * @param LoggerInterface $logger
-     */
     public function setLogger(LoggerInterface $logger)
     {
         $this->client->setLogger($logger);

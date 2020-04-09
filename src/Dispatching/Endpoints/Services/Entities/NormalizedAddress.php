@@ -152,4 +152,9 @@ final class NormalizedAddress implements Arrayable
 
         return $quality && $validity;
     }
+
+    public function isUnuseful(): bool
+    {
+        return ! $this->isUseful();
+    }
 }

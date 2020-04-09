@@ -11,7 +11,7 @@ final class DeliveryTime implements Arrayable
 {
     use DataAware;
 
-    public function getMin(): int
+    public function getMin(): ?int
     {
         return $this->get('min-days');
     }

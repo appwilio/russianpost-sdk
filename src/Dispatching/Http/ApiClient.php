@@ -16,9 +16,9 @@ namespace Appwilio\RussianPostSDK\Dispatching\Http;
 use GuzzleHttp\Psr7\Request;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerAwareInterface;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7\UploadedFile;
-use Psr\Log\LoggerAwareInterface;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use Psr\Http\Message\RequestInterface;
@@ -133,9 +133,7 @@ final class ApiClient implements LoggerAwareInterface
         $this->logger->info("pochta.ru Dispatching request: {$path}", $data);
 
         if ($method === 'GET') {
-            $query = guzzle_build_query($data);
-
-            return guzzle_modify_request($request, \compact('query'));
+            return guzzle_modify_request($request, ['query' => guzzle_build_query($data)]);
         }
 
         return $request
@@ -178,7 +176,7 @@ final class ApiClient implements LoggerAwareInterface
 
         return new BadRequest(
             $content['message'] ?? $content['desc'] ?? '',
-            $content['code'] ? (int) $content['code'] : $exception->getCode()
+            isset($content['code']) ? (int) $content['code'] : $exception->getCode()
         );
     }
 
