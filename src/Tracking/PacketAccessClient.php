@@ -118,8 +118,9 @@ class PacketAccessClient implements LoggerAwareInterface
     private function assembleTicketRequestArguments(iterable $tracks, string $language): \SoapVar
     {
         $items = [];
+        
         foreach ($tracks as $track) {
-            $items[] = (new \SoapVar("<Item Barcode=\"{$track}\" />", \XSD_ANYXML));
+            $items[] = new \SoapVar("<Item Barcode=\"{$track}\" />", \XSD_ANYXML);
         }
 
         return new \SoapVar([
