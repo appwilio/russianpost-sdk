@@ -50,13 +50,13 @@ class PacketAccessClientTest extends TestCase
     {
         $this->expectException(PacketAccessException::class);
 
-        $source = (static function () {
+        $source = static function () {
             foreach (\range(1, 3001) as $item) {
                 yield \sprintf('2950009876%04d', $item);
             }
-        })();
+        };
 
-        $this->createClient()->getTicket($source);
+        $this->createClient()->getTicket($source());
     }
 
     public function test_can_get_tracking_events(): void
