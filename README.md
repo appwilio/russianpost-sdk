@@ -216,9 +216,9 @@ $dispatching = new DispatchingClient(
 // ...
 'russianpost' => [
     'dispatching' => [
-        'token' => \env('RUSSIAN_POST_TRACKING_TOKEN'),
-        'login' => \env('RUSSIAN_POST_TRACKING_LOGIN'),
-        'password' => \env('RUSSIAN_POST_TRACKING_PASSWORD'),
+        'token' => \env('RUSSIAN_POST_DISPATCHING_TOKEN'),
+        'login' => \env('RUSSIAN_POST_TDISPATCHING_LOGIN'),
+        'password' => \env('RUSSIAN_POST_DISPATCHING_PASSWORD'),
     ],
 ]
 // ...
