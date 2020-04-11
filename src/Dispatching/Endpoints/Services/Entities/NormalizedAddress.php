@@ -45,6 +45,14 @@ final class NormalizedAddress implements Arrayable
     public const VALIDATION_OVERRIDDEN = 'OVERRIDDEN';
     public const VALIDATION_CONFIRMED_MANUALLY = 'CONFIRMED_MANUALLY';
 
+    public const ACCEPTABLE_QUALITY = [
+        self::QUALITY_GOOD, self::QUALITY_POSTAL_BOX, self::QUALITY_ON_DEMAND, self::QUALITY_UNDEF_05,
+    ];
+
+    public const ACCEPTABLE_VALIDITY = [
+        self::VALIDATION_VALIDATED, self::VALIDATION_OVERRIDDEN, self::VALIDATION_CONFIRMED_MANUALLY,
+    ];
+
     public function getId(): string
     {
         return $this->get('id');
@@ -142,13 +150,8 @@ final class NormalizedAddress implements Arrayable
 
     public function isUseful(): bool
     {
-        $quality = \in_array($this->getQualityCode(), [
-            self::QUALITY_GOOD, self::QUALITY_POSTAL_BOX, self::QUALITY_ON_DEMAND, self::QUALITY_UNDEF_05,
-        ]);
-
-        $validity = \in_array($this->getValidationCode(), [
-            self::VALIDATION_VALIDATED, self::VALIDATION_OVERRIDDEN, self::VALIDATION_CONFIRMED_MANUALLY,
-        ]);
+        $quality = \in_array($this->getQualityCode(), self::ACCEPTABLE_QUALITY);
+        $validity = \in_array($this->getValidationCode(), self::ACCEPTABLE_VALIDITY);
 
         return $quality && $validity;
     }

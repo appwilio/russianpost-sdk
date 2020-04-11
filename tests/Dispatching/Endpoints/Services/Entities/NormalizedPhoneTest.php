@@ -23,7 +23,7 @@ class NormalizedPhoneTest extends TestCase
     {
         /** @var NormalizedPhone $instance */
         $instance = Instantiator::instantiate(NormalizedPhone::class, [
-            'id'                 => ($hash = \md5('123')),
+            'id'                 => ($id = \md5('123')),
             'phone-country-code' => ($countryCode = '7'),
             'phone-city-code'    => ($cityCode = '901'),
             'phone-number'       => ($number = '2345678'),
@@ -32,7 +32,7 @@ class NormalizedPhoneTest extends TestCase
             'quality-code'       => ($quality = NormalizedPhone::QUALITY_GOOD),
         ]);
 
-        $this->assertEquals($hash, $instance->getId());
+        $this->assertEquals($id, $instance->getId());
         $this->assertEquals($countryCode, $instance->getCountryCode());
         $this->assertEquals($number, $instance->getNumber());
         $this->assertEquals($extension, $instance->getExtension());

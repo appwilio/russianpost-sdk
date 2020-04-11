@@ -136,7 +136,7 @@ class ApiClientTest extends TestCase
         $client->get('foo');
     }
 
-    public function error4xxProvider()
+    public function error4xxProvider(): \Generator
     {
         foreach ([401, 403, 422] as $code) {
             yield [$code, ['desc' => 'foo', 'code' => $code]];

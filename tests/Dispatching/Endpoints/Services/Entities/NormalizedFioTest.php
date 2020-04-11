@@ -23,7 +23,7 @@ class NormalizedFioTest extends TestCase
     {
         /** @var NormalizedFio $instance */
         $instance = Instantiator::instantiate(NormalizedFio::class, [
-            'id'           => ($hash = \md5('123')),
+            'id'           => ($id = \md5('123')),
             'name'         => ($firstName = 'Иван'),
             'middle-name'  => ($middleName = 'Иванович'),
             'surname'      => ($lastName = 'Иванов'),
@@ -31,7 +31,7 @@ class NormalizedFioTest extends TestCase
             'quality-code' => ($quality = NormalizedFio::QUALITY_EDITED),
         ]);
 
-        $this->assertEquals($hash, $instance->getId());
+        $this->assertEquals($id, $instance->getId());
         $this->assertEquals($firstName, $instance->getFirstName());
         $this->assertEquals($lastName, $instance->getLastName());
         $this->assertEquals($middleName, $instance->getMiddleName());
