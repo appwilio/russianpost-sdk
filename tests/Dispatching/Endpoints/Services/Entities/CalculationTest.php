@@ -40,8 +40,8 @@ class CalculationTest extends TestCase
             'ground-rate'                => ($groundRate = $this->buildTariffData()),
             'fragile-rate'               => ($fragileRate = $this->buildTariffData()),
             'vsd-rate'                   => ($vsdRate = $this->buildTariffData()),
-            'total-rate'                 => ($totalRate = $this->buildTariffData()),
-            'total-vat'                  => ($totalVat = $this->buildTariffData()),
+            'total-rate'                 => ($totalRate = \random_int(100, 1000)),
+            'total-vat'                  => ($totalVat = \random_int(100, 1000)),
         ]);
 
         $this->assertEquals($method, $instance->getPaymentMethod());
@@ -64,8 +64,13 @@ class CalculationTest extends TestCase
             'rate' => $totalRate,
             'vat'  => $totalVat,
         ]), $instance->getTotalRate());
+        $this->assertEquals($totalRate, $instance->getTotalRate()->getAmountWithoutVAT());
+        $this->assertEquals($totalVat, $instance->getTotalRate()->getVAT());
+        $this->assertEquals($totalRate + $totalVat, $instance->getTotalRate()->getAmountWithVAT());
 
         $this->assertEquals(Instantiator::instantiate(DeliveryTime::class, $delivery), $instance->getDeliveryTime());
+        $this->assertEquals($delivery['min-days'], $instance->getDeliveryTime()->getMin());
+        $this->assertEquals($delivery['max-days'], $instance->getDeliveryTime()->getMax());
     }
 
     private function buildTariffData(): array
