@@ -38,7 +38,7 @@ final class CheckedRecipient implements Arrayable
         return $this->get('raw-full-name');
     }
 
-    public function getResult(): bool
+    public function getResult(): string
     {
         return $this->get('unreliability');
     }
