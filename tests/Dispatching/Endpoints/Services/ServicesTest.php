@@ -18,17 +18,21 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Client as HttpClient;
 use PHPUnit\Framework\MockObject\MockObject;
 use Appwilio\RussianPostSDK\Tests\TestCase;
+use Appwilio\RussianPostSDK\Dispatching\Enum\MailType;
 use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
 use Appwilio\RussianPostSDK\Dispatching\Http\Authentication;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Services;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities\Balance;
-use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities\CheckedRecipient;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities\Calculation;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities\NormalizedFio;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities\NormalizedPhone;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities\CheckedRecipient;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities\NormalizedAddress;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\CalculationRequest;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\NormalizeFioRequest;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\CheckRecipientRequest;
-use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities\NormalizedPhone;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\NormalizePhoneRequest;
-use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities\NormalizedAddress;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Exceptions\CalculationException;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\NormalizeAddressRequest;
 
 use function GuzzleHttp\json_encode as guzzle_json_encode;
@@ -56,6 +60,45 @@ class ServicesTest extends TestCase
 
         $this->assertIsArray($result);
         $this->assertInstanceOf(CheckedRecipient::class, $result[0]);
+    }
+
+    public function test_calculate(): void
+    {
+        $response = [
+            'payment-method' => 'cash',
+            'total-rate'     => 800,
+            'total-vat'      => 200,
+        ];
+
+        $endpoint = new Services($this->createClient($response));
+
+        $request = CalculationRequest::create($index = '123456', 1000)
+            ->dimensions(100, 100, 100)
+            ->fragile()
+            ->viaCourier()
+            ->withFitting()
+            ->withInventory()
+            ->withSmsNotice()
+            ->withSimpleNotice()
+            ->withRegisteredNotice()
+            ->withElectronicNotice()
+            ->withContentChecking()
+            ->withCompletenessChecking()
+            ->ofMailType(MailType::EMS);
+
+        $this->assertEquals($index, $request->toArray()['index-to']);
+        $this->assertEquals($index, (clone $request)->ofMailType(MailType::ECOM)->toArray()['delivery-point-index']);
+
+        $this->assertInstanceOf(Calculation::class, $endpoint->calculate($request));
+
+        $this->expectException(CalculationException::class);
+
+        $endpoint = new Services($this->createClient(\array_merge($response, [
+            'total-rate' => 0,
+            'total-vat' => 0
+        ])));
+
+        $endpoint->calculate($request)->getTotalRate();
     }
 
     public function test_can_normalize_fio(): void

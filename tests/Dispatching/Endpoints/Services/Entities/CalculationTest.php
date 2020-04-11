@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tests\Dispatching\Endpoints\Services\Entities;
 
-use Appwilio\RussianPostSDK\Dispatching\Entities\DeliveryTime;
-use Appwilio\RussianPostSDK\Dispatching\Entities\Tariff;
 use Appwilio\RussianPostSDK\Tests\TestCase;
 use Appwilio\RussianPostSDK\Dispatching\Instantiator;
+use Appwilio\RussianPostSDK\Dispatching\Entities\Tariff;
+use Appwilio\RussianPostSDK\Dispatching\Entities\DeliveryTime;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities\Calculation;
 
 class CalculationTest extends TestCase
