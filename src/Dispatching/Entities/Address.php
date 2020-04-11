@@ -4,16 +4,13 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Entities;
 
-use Appwilio\RussianPostSDK\Dispatching\DataAware;
 use Appwilio\RussianPostSDK\Dispatching\Instantiator;
 use Appwilio\RussianPostSDK\Dispatching\Enum\AddressType;
 use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities\NormalizedAddress;
 
-final class Address implements Arrayable
+final class Address extends AbstractAddress implements Arrayable
 {
-    use DataAware;
-
     public static function fromNormalizedAddress(NormalizedAddress $address): self
     {
         if ($address->isUnuseful()) {
@@ -54,21 +51,11 @@ final class Address implements Arrayable
         return $this;
     }
 
-    public function getIndex(): ?string
-    {
-        return $this->get('index');
-    }
-
     public function setIndex(string $index)
     {
         $this->data['index'] = $index;
 
         return $this;
-    }
-
-    public function getArea(): ?string
-    {
-        return $this->get('area');
     }
 
     public function setArea(string $area)
@@ -78,21 +65,11 @@ final class Address implements Arrayable
         return $this;
     }
 
-    public function getPlace(): ?string
-    {
-        return $this->get('place');
-    }
-
     public function setPlace(string $place)
     {
         $this->data['place'] = $place;
 
         return $this;
-    }
-
-    public function getRegion(): ?string
-    {
-        return $this->get('region');
     }
 
     public function setRegion(string $region)
@@ -102,21 +79,11 @@ final class Address implements Arrayable
         return $this;
     }
 
-    public function getLocation(): ?string
-    {
-        return $this->get('location');
-    }
-
     public function setLocation(string $location)
     {
         $this->data['location'] = $location;
 
         return $this;
-    }
-
-    public function getStreet(): ?string
-    {
-        return $this->get('street');
     }
 
     public function setStreet(string $street)
@@ -126,21 +93,11 @@ final class Address implements Arrayable
         return $this;
     }
 
-    public function getHouse(): ?string
-    {
-        return $this->get('house');
-    }
-
     public function setHouse(string $house)
     {
         $this->data['house'] = $house;
 
         return $this;
-    }
-
-    public function getRoom(): ?string
-    {
-        return $this->get('room');
     }
 
     public function setRoom(string $room)
@@ -150,21 +107,11 @@ final class Address implements Arrayable
         return $this;
     }
 
-    public function getSlash(): ?string
-    {
-        return $this->get('slash');
-    }
-
     public function setSlash(string $slash)
     {
         $this->data['slash'] = $slash;
 
         return $this;
-    }
-
-    public function getBuilding(): ?string
-    {
-        return $this->get('building');
     }
 
     public function setBuilding(string $building)
@@ -174,11 +121,6 @@ final class Address implements Arrayable
         return $this;
     }
 
-    public function getCorpus(): ?string
-    {
-        return $this->get('corpus');
-    }
-
     public function setCorpus(string $corpus)
     {
         $this->data['corpus'] = $corpus;
@@ -186,21 +128,11 @@ final class Address implements Arrayable
         return $this;
     }
 
-    public function getLetter(): ?string
-    {
-        return $this->get('letter');
-    }
-
     public function setLetter(string $letter)
     {
         $this->data['letter'] = $letter;
 
         return $this;
-    }
-
-    public function getHotel(): ?string
-    {
-        return $this->get('hotel');
     }
 
     public function setHotel(string $hotel)
@@ -220,11 +152,6 @@ final class Address implements Arrayable
         $this->data['vladenie'] = $vladenie;
 
         return $this;
-    }
-
-    public function getNumAddressType(): ?string
-    {
-        return $this->get('num-address-type');
     }
 
     public function toArray(): array

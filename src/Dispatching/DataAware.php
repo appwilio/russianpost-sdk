@@ -16,7 +16,7 @@ namespace Appwilio\RussianPostSDK\Dispatching;
 trait DataAware
 {
     /** @var array */
-    private $data = [];
+    protected $data = [];
 
     /**
      * @param  string       $key
@@ -24,7 +24,7 @@ trait DataAware
      *
      * @return mixed
      */
-    private function get(string $key, ?string $type = null)
+    protected function get(string $key, ?string $type = null)
     {
         $value = $this->data[$key] ?? null;
 

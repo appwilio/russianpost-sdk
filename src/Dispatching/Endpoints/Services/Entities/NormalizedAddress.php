@@ -13,12 +13,10 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities;
 
-use Appwilio\RussianPostSDK\Dispatching\DataAware;
+use Appwilio\RussianPostSDK\Dispatching\Entities\AbstractAddress;
 
-final class NormalizedAddress
+final class NormalizedAddress extends AbstractAddress
 {
-    use DataAware;
-
     /**
      * Коды качества нормализации адреса.
      *
@@ -55,76 +53,6 @@ final class NormalizedAddress
     public function getId(): string
     {
         return $this->get('id');
-    }
-
-    public function getIndex(): ?string
-    {
-        return $this->get('index');
-    }
-
-    public function getArea(): ?string
-    {
-        return $this->get('area');
-    }
-
-    public function getPlace(): ?string
-    {
-        return $this->get('place');
-    }
-
-    public function getRegion(): ?string
-    {
-        return $this->get('region');
-    }
-
-    public function getLocation(): ?string
-    {
-        return $this->get('location');
-    }
-
-    public function getStreet(): ?string
-    {
-        return $this->get('street');
-    }
-
-    public function getHouse(): ?string
-    {
-        return $this->get('house');
-    }
-
-    public function getRoom(): ?string
-    {
-        return $this->get('room');
-    }
-
-    public function getSlash(): ?string
-    {
-        return $this->get('slash');
-    }
-
-    public function getBuilding(): ?string
-    {
-        return $this->get('building');
-    }
-
-    public function getCorpus(): ?string
-    {
-        return $this->get('corpus');
-    }
-
-    public function getLetter(): ?string
-    {
-        return $this->get('letter');
-    }
-
-    public function getHotel(): ?string
-    {
-        return $this->get('hotel');
-    }
-
-    public function getNumAddressType(): ?string
-    {
-        return $this->get('num-address-type');
     }
 
     public function getOriginalAddress(): string
