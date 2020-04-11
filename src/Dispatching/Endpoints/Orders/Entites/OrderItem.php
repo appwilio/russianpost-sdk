@@ -39,7 +39,7 @@ final class OrderItem implements Arrayable
     {
         $this->data['description'] = $title;
         $this->data['quantity'] = $quantity;
-        $this->data['price'] = $price;
+        $this->data['value'] = $price;
         $this->data['code'] = $code;
         $this->data['item-number'] = $article;
     }

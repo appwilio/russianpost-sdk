@@ -48,7 +48,7 @@ final class FindByCoordinatesRequest implements Arrayable
 
         if ($coordinates instanceof Coordinates && \count($args) === 1) {
             $this->data = $coordinates->toArray();
-        } else if ($coordinates === null && \is_string($yAddress) && \is_string($yGeo)) {
+        } elseif ($coordinates === null && \is_string($yAddress) && \is_string($yGeo)) {
             $this->data = [
                 'geo-object'     => $yGeo,
                 'yandex-address' => $yAddress,

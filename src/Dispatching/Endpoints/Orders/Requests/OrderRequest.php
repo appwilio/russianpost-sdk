@@ -13,8 +13,6 @@ use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites\CustomsDeclarat
 
 final class OrderRequest implements Arrayable
 {
-    use DataAware;
-
     private const RUSSIAN_POSTAL_CODE = '~\d{6}~';
 
     private $data;
@@ -174,8 +172,11 @@ final class OrderRequest implements Arrayable
             }
         }
 
-        $this->data = \array_merge($this->data, $this->recipient->toArray());
-        $this->data = \array_merge($this->data, \iterator_to_array($this->convertAddress($this->address)));
+        $this->data = \array_merge(
+            $this->data,
+            $this->recipient->toArray(),
+            \iterator_to_array($this->convertAddress($this->address))
+        );
 
         return [$this->data];
     }
@@ -185,7 +186,7 @@ final class OrderRequest implements Arrayable
         foreach ($address->toArray() as $key => $value) {
             if ($key === 'index' && !\preg_match(self::RUSSIAN_POSTAL_CODE, $value)) {
                 yield 'str-index-to' => $value;
-            } else if ($key === 'mail-direct') {
+            } elseif ($key === 'mail-direct') {
                 yield $key => $value;
             } else {
                 yield "{$key}-to" => $value;

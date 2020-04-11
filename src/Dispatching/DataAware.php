@@ -34,9 +34,4 @@ trait DataAware
 
         return $value;
     }
-
-    public function toArray(): array
-    {
-        return $this->data;
-    }
 }
