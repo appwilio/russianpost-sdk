@@ -23,9 +23,9 @@ class CheckedRecipientTest extends TestCase
     {
         /** @var CheckedRecipient $instance */
         $instance = Instantiator::instantiate(CheckedRecipient::class, [
-            'raw-address'   => ($rawAddress = '7'),
-            'raw-telephone' => ($rawPhone = '901'),
-            'raw-full-name' => ($rawName = '2345678'),
+            'raw-address'   => ($rawAddress = 'Москва'),
+            'raw-telephone' => ($rawPhone = '8 901 234-56-78'),
+            'raw-full-name' => ($rawName = 'Иванов Иван Иванович'),
             'unreliability' => ($result = CheckedRecipient::RELIABLE),
         ]);
 
