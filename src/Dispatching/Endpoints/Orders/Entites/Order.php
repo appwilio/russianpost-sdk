@@ -9,10 +9,9 @@ use Appwilio\RussianPostSDK\Dispatching\Instantiator;
 use Appwilio\RussianPostSDK\Dispatching\Http\ArrayOf;
 use Appwilio\RussianPostSDK\Dispatching\Entities\Tariff;
 use Appwilio\RussianPostSDK\Dispatching\Entities\Address;
-use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 use Appwilio\RussianPostSDK\Dispatching\Entities\DeliveryTime;
 
-final class Order implements Arrayable
+final class Order
 {
     use DataAware;
 

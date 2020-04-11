@@ -226,4 +226,9 @@ final class Address implements Arrayable
     {
         return $this->get('num-address-type');
     }
+
+    public function toArray(): array
+    {
+        return $this->data;
+    }
 }

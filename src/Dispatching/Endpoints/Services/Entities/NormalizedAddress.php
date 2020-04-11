@@ -14,9 +14,8 @@ declare(strict_types=1);
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities;
 
 use Appwilio\RussianPostSDK\Dispatching\DataAware;
-use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 
-final class NormalizedAddress implements Arrayable
+final class NormalizedAddress
 {
     use DataAware;
 

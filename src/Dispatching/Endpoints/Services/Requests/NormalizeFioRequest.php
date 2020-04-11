@@ -27,4 +27,9 @@ final class NormalizeFioRequest implements Arrayable
             'original-fio' => $fio,
         ];
     }
+
+    public function toArray(): array
+    {
+        return $this->data;
+    }
 }

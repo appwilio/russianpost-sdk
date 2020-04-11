@@ -27,4 +27,9 @@ final class NormalizeAddressRequest implements Arrayable
             'original-address' => $address,
         ];
     }
+
+    public function toArray(): array
+    {
+        return $this->data;
+    }
 }

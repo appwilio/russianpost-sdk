@@ -16,9 +16,8 @@ namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\PostOffices\Responses;
 use Appwilio\RussianPostSDK\Dispatching\DataAware;
 use Appwilio\RussianPostSDK\Dispatching\Instantiator;
 use Appwilio\RussianPostSDK\Dispatching\Http\ArrayOf;
-use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 
-final class PostOffice implements Arrayable
+final class PostOffice
 {
     use DataAware;
 

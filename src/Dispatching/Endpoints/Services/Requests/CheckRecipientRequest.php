@@ -33,4 +33,9 @@ final class CheckRecipientRequest implements Arrayable
             'raw-full-name' => $fullName,
         ];
     }
+
+    public function toArray(): array
+    {
+        return $this->data;
+    }
 }

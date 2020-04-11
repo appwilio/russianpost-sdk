@@ -79,6 +79,11 @@ class RecipientClass
     {
         return $this->get($key, $type);
     }
+
+    public function toArray(): array
+    {
+        return $this->data;
+    }
 }
 
 class SenderClass

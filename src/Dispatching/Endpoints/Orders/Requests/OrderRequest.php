@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Requests;
 
-use Appwilio\RussianPostSDK\Dispatching\DataAware;
 use Appwilio\RussianPostSDK\Dispatching\Entities\Address;
 use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites\Order;
@@ -17,6 +16,8 @@ final class OrderRequest implements Arrayable
     use DataAware;
 
     private const RUSSIAN_POSTAL_CODE = '~\d{6}~';
+
+    private $data;
 
     /** @var Address */
     private $address;

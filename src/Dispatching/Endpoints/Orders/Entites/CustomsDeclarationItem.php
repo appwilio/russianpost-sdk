@@ -56,4 +56,9 @@ final class CustomsDeclarationItem implements Arrayable
     {
         return $this->get('tnved-code');
     }
+
+    public function toArray(): array
+    {
+        return $this->data;
+    }
 }

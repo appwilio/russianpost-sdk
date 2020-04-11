@@ -30,4 +30,9 @@ final class NormalizePhoneRequest implements Arrayable
             \array_filter(\compact('area', 'place', 'region'))
         );
     }
+
+    public function toArray(): array
+    {
+        return $this->data;
+    }
 }

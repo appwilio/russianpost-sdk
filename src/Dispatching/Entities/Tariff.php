@@ -6,7 +6,7 @@ namespace Appwilio\RussianPostSDK\Dispatching\Entities;
 
 final class Tariff
 {
-    private $data;
+    private $data = [];
 
     /**
      * Стоимость без НДС в копейках. (rate).

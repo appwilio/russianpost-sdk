@@ -14,9 +14,8 @@ declare(strict_types=1);
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\PostOffices\Responses;
 
 use Appwilio\RussianPostSDK\Dispatching\DataAware;
-use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 
-final class Service implements Arrayable
+final class Service
 {
     use DataAware;
 

@@ -16,10 +16,9 @@ namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities;
 use Appwilio\RussianPostSDK\Dispatching\DataAware;
 use Appwilio\RussianPostSDK\Dispatching\Instantiator;
 use Appwilio\RussianPostSDK\Dispatching\Entities\Tariff;
-use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 use Appwilio\RussianPostSDK\Dispatching\Entities\DeliveryTime;
 
-final class Calculation implements Arrayable
+final class Calculation
 {
     use DataAware;
 

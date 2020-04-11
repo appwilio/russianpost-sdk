@@ -13,14 +13,13 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites;
 
-use Appwilio\RussianPostSDK\Dispatching\DataAware;
 use Appwilio\RussianPostSDK\Dispatching\Instantiator;
 use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities\NormalizedFio;
 
 class Recipient implements Arrayable
 {
-    use DataAware;
+    private $data = [];
 
     public static function fromNormalizedFio(NormalizedFio $normalizedFio)
     {
