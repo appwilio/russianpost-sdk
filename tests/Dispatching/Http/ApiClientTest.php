@@ -159,8 +159,9 @@ class ApiClientTest extends TestCase
     }
 
     /**
-     * @param mixed $body
-     * @param array $headers
+     * @param  mixed  $body
+     * @param  array  $headers
+     *
      * @return HttpClient|MockObject
      */
     private function createHttpClient($body, array $headers = [])

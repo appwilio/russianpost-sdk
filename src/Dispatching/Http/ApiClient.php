@@ -92,13 +92,13 @@ final class ApiClient implements LoggerAwareInterface
         try {
             $response = $this->httpClient->send($this->buildHttpRequest($method, $path, $request));
 
-            $contenType = $response->getHeaderLine('Content-Type');
+            $contentType = $response->getHeaderLine('Content-Type');
 
-            if (\preg_match('~^application/(pdf|zip)$~', $contenType, $matches)) {
+            if (\preg_match('~^application/(pdf|zip)$~', $contentType, $matches)) {
                 return $this->buildFile($response, $matches[1]);
             }
 
-            if (\preg_match('~^application/json~', $contenType)) {
+            if (\preg_match('~^application/json~', $contentType)) {
                 $content = $this->getResponseContent($response);
 
                 $this->logger->info('pochta.ru Dispatching response:.', $content);

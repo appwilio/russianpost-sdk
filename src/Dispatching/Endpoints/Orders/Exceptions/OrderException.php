@@ -38,7 +38,7 @@ class OrderException extends \InvalidArgumentException implements \IteratorAggre
         return $this->errors;
     }
 
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->errors);
     }
