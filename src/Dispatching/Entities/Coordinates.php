@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\PostOffices\Responses;
+namespace Appwilio\RussianPostSDK\Dispatching\Entities;
 
 use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 

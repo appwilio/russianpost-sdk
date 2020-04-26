@@ -15,9 +15,9 @@ namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\PostOffices;
 
 use Appwilio\RussianPostSDK\Dispatching\Http\ArrayOf;
 use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
+use Appwilio\RussianPostSDK\Dispatching\Entities\Coordinates;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\PostOffices\Responses\Service;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\PostOffices\Responses\PostOffice;
-use Appwilio\RussianPostSDK\Dispatching\Endpoints\PostOffices\Responses\Coordinates;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\PostOffices\Requests\FindByAddressRequest;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\PostOffices\Requests\FindByCoordinatesRequest;
 

@@ -22,7 +22,7 @@ final class FindByAddressRequest implements Arrayable
 
     public static function create(string $address, int $take = 3): self
     {
-        return new self($address, $take);
+        return new self(...\func_get_args());
     }
 
     public function __construct(string $address, int $take = 3)
