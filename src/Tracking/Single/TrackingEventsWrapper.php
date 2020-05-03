@@ -15,7 +15,7 @@ namespace Appwilio\RussianPostSDK\Tracking\Single;
 
 final class TrackingEventsWrapper
 {
-    /** @var TrackingEvent[]|TrackingEvent */
+    /** @var TrackingEvent[]|TrackingEvent|null */
     private $historyRecord;
 
     /**
@@ -23,6 +23,10 @@ final class TrackingEventsWrapper
      */
     public function getEvents()
     {
+        if ($this->historyRecord === null) {
+            $this->historyRecord = [];
+        }
+
         if ($this->historyRecord instanceof TrackingEvent) {
             $this->historyRecord = [$this->historyRecord];
         }
