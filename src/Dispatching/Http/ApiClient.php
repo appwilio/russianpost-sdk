@@ -128,7 +128,7 @@ final class ApiClient implements LoggerAwareInterface
             return $request;
         }
 
-        $data = \array_filter($payload->toArray());
+        $data = $this->serializeRequestData(\array_filter($payload->toArray()));
 
         $this->logger->info("pochta.ru Dispatching request: {$path}", $data);
 
@@ -139,6 +139,21 @@ final class ApiClient implements LoggerAwareInterface
         return $request
             ->withHeader('Content-Type', 'application/json;charset=UTF-8')
             ->withBody(guzzle_stream_for(guzzle_json_encode($data)));
+    }
+
+    private function serializeRequestData(array $data): array
+    {
+        return \array_map(function ($value) {
+            if (\is_object($value) && \method_exists($value, '__toString')) {
+                return (string) $value;
+            }
+
+            if (\is_array($value)) {
+                return $this->serializeRequestData($value);
+            }
+
+            return $value;
+        }, $data);
     }
 
     private function buildFile(ResponseInterface $response, string $type): UploadedFile
