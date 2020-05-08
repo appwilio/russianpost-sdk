@@ -13,8 +13,11 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\PostOffices;
 
+use GuzzleHttp\Psr7\UploadedFile;
 use Appwilio\RussianPostSDK\Core\ArrayOf;
+use Appwilio\RussianPostSDK\Dispatching\Enum\OpsType;
 use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
+use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 use Appwilio\RussianPostSDK\Dispatching\Entities\Coordinates;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\PostOffices\Responses\Service;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\PostOffices\Responses\PostOffice;
@@ -45,11 +48,7 @@ final class PostOffices
      */
     public function get(string $postalCode, ?Coordinates $coordinates = null): PostOffice
     {
-        $query = null;
-
-        if ($coordinates) {
-            $query = \http_build_query($coordinates->toArray());
-        }
+        $query = $coordinates ? \http_build_query($coordinates->toArray()) : null;
 
         return $this->client->get("/postoffice/1.0/{$postalCode}".($query ? "?{$query}" : null), null, PostOffice::class);
     }
@@ -116,5 +115,38 @@ final class PostOffices
         $path = "/postoffice/1.0/{$postalCode}/services".($group ? "/{$group}" : null);
 
         return $this->client->get($path, null, new ArrayOf(Service::class));
+    }
+
+    /**
+     * Выгрузка информации об объектах почтовой связи в zip-архиве.
+     *
+     * @param  OpsType  $type
+     *
+     * @return UploadedFile
+     */
+    public function all(OpsType $type): UploadedFile
+    {
+        $request = $this->buildRequest([
+            'type' => $type->getValue(),
+        ]);
+
+        return $this->client->get('/1.0/unloading-passport/zip', $request);
+    }
+
+    private function buildRequest(array $query = []): Arrayable
+    {
+        return new class($query) implements Arrayable {
+            private $query;
+
+            public function __construct(array $query)
+            {
+                $this->query = $query;
+            }
+
+            public function toArray(): array
+            {
+                return $this->query;
+            }
+        };
     }
 }
