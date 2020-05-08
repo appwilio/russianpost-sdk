@@ -13,8 +13,12 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Entities;
 
+use Appwilio\RussianPostSDK\Dispatching\DataAware;
+
 trait CommonOrder
 {
+    use DataAware;
+
     public function dimensions(int $height, int $width, int $length)
     {
         $this->data['dimension'] = \compact('height', 'width', 'length');

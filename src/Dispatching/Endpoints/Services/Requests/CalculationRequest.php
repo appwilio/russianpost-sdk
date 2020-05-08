@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests;
 
-use Appwilio\RussianPostSDK\Dispatching\DataAware;
 use Appwilio\RussianPostSDK\Dispatching\Enum\MailType;
 use Appwilio\RussianPostSDK\Dispatching\Enum\MailCategory;
 use Appwilio\RussianPostSDK\Dispatching\Enum\MailEntryType;
@@ -13,7 +12,6 @@ use Appwilio\RussianPostSDK\Dispatching\Entities\CommonOrder;
 
 final class CalculationRequest implements Arrayable
 {
-    use DataAware;
     use CommonOrder;
 
     public static function create(string $to, int $weight): self

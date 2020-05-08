@@ -17,7 +17,7 @@ use Appwilio\RussianPostSDK\Core\ArrayOf;
 
 class Instantiator
 {
-    /** @var ArrayOf|string $class */
+    /** @var string $class */
     private $class;
 
     /** @var bool */
