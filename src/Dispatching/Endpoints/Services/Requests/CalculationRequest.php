@@ -9,10 +9,12 @@ use Appwilio\RussianPostSDK\Dispatching\Enum\MailType;
 use Appwilio\RussianPostSDK\Dispatching\Enum\MailCategory;
 use Appwilio\RussianPostSDK\Dispatching\Enum\MailEntryType;
 use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
+use Appwilio\RussianPostSDK\Dispatching\Entities\CommonOrder;
 
 final class CalculationRequest implements Arrayable
 {
     use DataAware;
+    use CommonOrder;
 
     public static function create(string $to, int $weight): self
     {
@@ -48,44 +50,9 @@ final class CalculationRequest implements Arrayable
         return $this;
     }
 
-    public function transport(string $value)
-    {
-        $this->data['transport-type'] = $value;
-
-        return $this;
-    }
-
-    public function dimensions(int $height, int $width, int $length)
-    {
-        $this->data['dimension'] = \compact('height', 'width', 'length');
-
-        return $this;
-    }
-
-    public function fragile(bool $value = true)
-    {
-        $this->data['fragile'] = $value;
-
-        return $this;
-    }
-
-    public function viaCourier(bool $value = true)
-    {
-        $this->data['courier'] = $value;
-
-        return $this;
-    }
-
     public function withDeclaredValue(int $value)
     {
         $this->data['declared-value'] = $value;
-
-        return $this;
-    }
-
-    public function withCompletenessChecking(bool $value = true)
-    {
-        $this->data['completeness-checking'] = $value;
 
         return $this;
     }
@@ -97,44 +64,9 @@ final class CalculationRequest implements Arrayable
         return $this;
     }
 
-    public function withInventory(bool $value = true)
-    {
-        $this->data['inventory'] = $value;
-
-        return $this;
-    }
-
-    public function withElectronicNotice(bool $value = true)
-    {
-        $this->data['with-electronic-notice'] = $value;
-
-        return $this;
-    }
-
     public function withFitting(bool $value = true)
     {
         $this->data['with-fitting'] = $value;
-
-        return $this;
-    }
-
-    public function withSimpleNotice(bool $value = true)
-    {
-        $this->data['with-simple-notice'] = $value;
-
-        return $this;
-    }
-
-    public function withRegisteredNotice(bool $value = true)
-    {
-        $this->data['with-order-of-notice'] = $value;
-
-        return $this;
-    }
-
-    public function withSmsNotice(bool $value = true)
-    {
-        $this->data['sms-notice-recipient'] = $value;
 
         return $this;
     }

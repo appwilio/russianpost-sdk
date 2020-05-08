@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Requests;
 
+use Appwilio\RussianPostSDK\Dispatching\Enum\MailType;
 use Appwilio\RussianPostSDK\Dispatching\Entities\Address;
+use Appwilio\RussianPostSDK\Dispatching\Enum\MailCategory;
 use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
+use Appwilio\RussianPostSDK\Dispatching\Entities\CommonOrder;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites\Order;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites\EcomData;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites\OrderItem;
@@ -15,6 +18,8 @@ use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites\CustomsDeclarat
 
 final class OrderRequest implements Arrayable
 {
+    use CommonOrder;
+
     private const RUSSIAN_POSTAL_CODE = '~\d{6}~';
 
     private $data;
@@ -55,8 +60,8 @@ final class OrderRequest implements Arrayable
 
     public function __construct(
         string $number,
-        string $mailType,
-        string $mailCategory,
+        MailType $mailType,
+        MailCategory $mailCategory,
         int $weight,
         Address $address,
         Recipient $recipient
@@ -70,27 +75,6 @@ final class OrderRequest implements Arrayable
 
         $this->address = $address;
         $this->recipient = $recipient;
-    }
-
-    public function dimensions(int $height, int $width, int $length)
-    {
-        $this->data['dimension'] = \compact('height', 'width', 'length');
-
-        return $this;
-    }
-
-    public function fragile(bool $value = true)
-    {
-        $this->data['fragile'] = $value;
-
-        return $this;
-    }
-
-    public function viaCourier(bool $value = true)
-    {
-        $this->data['courier'] = $value;
-
-        return $this;
     }
 
     public function addItem(OrderItem $item): void
@@ -126,51 +110,9 @@ final class OrderRequest implements Arrayable
         return $this;
     }
 
-    public function withInventory(bool $value)
-    {
-        $this->data['inventory'] = $value;
-
-        return $this;
-    }
-
     public function withDeclaredValue(int $value)
     {
         $this->data['payment'] = $value;
-
-        return $this;
-    }
-
-    public function withCompletenessChecking(bool $value = true)
-    {
-        $this->data['completeness-checking'] = $value;
-
-        return $this;
-    }
-
-    public function withVsd(bool $value = true)
-    {
-        $this->data['vsd'] = $value;
-
-        return $this;
-    }
-
-    public function withElectronicNotice(bool $value = true)
-    {
-        $this->data['with-electronic-notice'] = $value;
-
-        return $this;
-    }
-
-    public function withSimpleNotice(bool $value = true)
-    {
-        $this->data['with-simple-notice'] = $value;
-
-        return $this;
-    }
-
-    public function withRegisteredNotice(bool $value = true)
-    {
-        $this->data['with-order-of-notice'] = $value;
 
         return $this;
     }
