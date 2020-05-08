@@ -43,9 +43,9 @@ final class OrderRequest implements Arrayable
     private $recipient;
 
     public static function create(
-        string $id,
-        string $type,
-        string $category,
+        string $number,
+        MailType $type,
+        MailCategory $category,
         int $weight,
         Address $address,
         Recipient $recipient
@@ -53,23 +53,29 @@ final class OrderRequest implements Arrayable
         return new self(...\func_get_args());
     }
 
-    public static function fromOrder(Order $order): self
-    {
-        $request = new self(
-            $order->getNumber(), MailType::BANDEROL(), MailCategory::ORDINARY(),
-            $order->getWeight(), $order->getAddress(), $order->getRecipient()
-        );
-
-        if ($order->hasCustomsDeclaration()) {
-            $request->withCustomsDeclaration($order->getCustomsDeclaration());
-        }
-
-        foreach ($order->getItems() as $item) {
-            $request->addItem($item);
-        }
-
-        return $request;
-    }
+//    public static function fromOrder(Order $order): self
+//    {
+//        [
+//            'completeness-checking', 'compulsory-payment', 'comment', 'courier', 'delivery-with-cod', 'dimension',
+//            'envelope-type', 'fragile', 'insr-value', 'inventory', 'mail-category', 'mail-type',
+//            'no-return', 'easy-return', 'notice-payment-method', 'payment-method', 'sms-notice-recipient',
+//        ];
+//
+//        $request = new self(
+//            $order->getNumber(), MailType::BANDEROL(), MailCategory::ORDINARY(),
+//            $order->getWeight(), $order->getAddress(), $order->getRecipient()
+//        );
+//
+//        if ($order->hasCustomsDeclaration()) {
+//            $request->withCustomsDeclaration($order->getCustomsDeclaration());
+//        }
+//
+//        foreach ($order->getItems() as $item) {
+//            $request->addItem($item);
+//        }
+//
+//        return $request;
+//    }
 
     public function __construct(
         string $number,
