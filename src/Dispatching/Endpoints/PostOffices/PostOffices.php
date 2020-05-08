@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\PostOffices;
 
-use Appwilio\RussianPostSDK\Dispatching\Http\ArrayOf;
+use Appwilio\RussianPostSDK\Core\ArrayOf;
 use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
 use Appwilio\RussianPostSDK\Dispatching\Entities\Coordinates;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\PostOffices\Responses\Service;

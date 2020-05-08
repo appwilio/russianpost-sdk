@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites;
 
+use Appwilio\RussianPostSDK\Core\ArrayOf;
 use Appwilio\RussianPostSDK\Dispatching\DataAware;
 use Appwilio\RussianPostSDK\Dispatching\Instantiator;
-use Appwilio\RussianPostSDK\Dispatching\Http\ArrayOf;
 use Appwilio\RussianPostSDK\Dispatching\Entities\Tariff;
 use Appwilio\RussianPostSDK\Dispatching\Entities\Address;
 use Appwilio\RussianPostSDK\Dispatching\Entities\DeliveryTime;

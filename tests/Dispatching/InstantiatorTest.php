@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tests\Dispatching;
 
+use Appwilio\RussianPostSDK\Core\ArrayOf;
 use Appwilio\RussianPostSDK\Tests\TestCase;
 use Appwilio\RussianPostSDK\Dispatching\DataAware;
-use Appwilio\RussianPostSDK\Dispatching\Http\ArrayOf;
 use Appwilio\RussianPostSDK\Dispatching\Instantiator;
 
 class InstantiatorTest extends TestCase

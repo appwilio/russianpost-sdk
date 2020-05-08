@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\PostOffices\Responses;
 
+use Appwilio\RussianPostSDK\Core\ArrayOf;
 use Appwilio\RussianPostSDK\Dispatching\DataAware;
 use Appwilio\RussianPostSDK\Dispatching\Instantiator;
-use Appwilio\RussianPostSDK\Dispatching\Http\ArrayOf;
 
 final class WorkingHours
 {

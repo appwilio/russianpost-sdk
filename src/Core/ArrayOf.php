@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Appwilio\RussianPostSDK\Dispatching\Http;
+namespace Appwilio\RussianPostSDK\Core;
 
 final class ArrayOf
 {

@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Tests\Dispatching;
 
+use Appwilio\RussianPostSDK\Core\ArrayOf;
 use Appwilio\RussianPostSDK\Tests\TestCase;
-use Appwilio\RussianPostSDK\Dispatching\Http\ArrayOf;
 
 class ArrayOfTest extends TestCase
 {

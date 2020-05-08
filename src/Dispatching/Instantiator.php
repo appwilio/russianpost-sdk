@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching;
 
-use Appwilio\RussianPostSDK\Dispatching\Http\ArrayOf;
+use Appwilio\RussianPostSDK\Core\ArrayOf;
 
 class Instantiator
 {

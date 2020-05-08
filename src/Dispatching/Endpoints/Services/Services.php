@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Services;
 
-use Appwilio\RussianPostSDK\Dispatching\Http\ArrayOf;
+use Appwilio\RussianPostSDK\Core\ArrayOf;
 use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities\Balance;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities\Calculation;
