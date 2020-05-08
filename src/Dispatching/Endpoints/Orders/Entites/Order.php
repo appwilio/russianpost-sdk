@@ -115,4 +115,14 @@ final class Order
             'vat' => $this->get('total-vat'),
         ]);
     }
+
+    public function getEcomData(): ?EcomData
+    {
+        return Instantiator::instantiate(EcomData::class, $this->get('ecom-data'));
+    }
+
+    public function getFiscalData(): ?FiscalData
+    {
+        return Instantiator::instantiate(FiscalData::class, $this->get('fiscal-data'));
+    }
 }

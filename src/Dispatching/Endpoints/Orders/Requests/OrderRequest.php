@@ -7,8 +7,10 @@ namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Requests;
 use Appwilio\RussianPostSDK\Dispatching\Entities\Address;
 use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites\Order;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites\EcomData;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites\OrderItem;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites\Recipient;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites\FiscalData;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites\CustomsDeclaration;
 
 final class OrderRequest implements Arrayable
@@ -25,6 +27,12 @@ final class OrderRequest implements Arrayable
 
     /** @var CustomsDeclaration|null */
     private $declaration;
+
+    /** @var EcomData */
+    private $ecomData;
+
+    /** @var FiscalData */
+    private $fiscalData;
 
     /** @var Recipient */
     private $recipient;
@@ -97,6 +105,20 @@ final class OrderRequest implements Arrayable
         return $this;
     }
 
+    public function withEcomData(EcomData $data)
+    {
+        $this->ecomData = $data;
+
+        return $this;
+    }
+
+    public function withFiscalData(FiscalData $data)
+    {
+        $this->fiscalData = $data;
+
+        return $this;
+    }
+
     public function withInshurance(int $value)
     {
         $this->data['insr-value'] = $value;
@@ -162,6 +184,8 @@ final class OrderRequest implements Arrayable
 
     public function toArray(): array
     {
+        $this->data['ecom-data'] = $this->ecomData ? $this->ecomData->toArray() : null;
+        $this->data['fiscal-data'] = $this->fiscalData ? $this->fiscalData->toArray() : null;
         $this->data['custom-declaration'] = $this->declaration ? $this->declaration->toArray() : null;
 
         if (\count($this->items) > 0) {
