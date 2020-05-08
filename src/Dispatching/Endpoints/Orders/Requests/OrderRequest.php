@@ -53,9 +53,22 @@ final class OrderRequest implements Arrayable
         return new self(...\func_get_args());
     }
 
-    public static function fromOrder(Order $order)
+    public static function fromOrder(Order $order): self
     {
-        
+        $request = new self(
+            $order->getNumber(), MailType::BANDEROL(), MailCategory::ORDINARY(),
+            $order->getWeight(), $order->getAddress(), $order->getRecipient()
+        );
+
+        if ($order->hasCustomsDeclaration()) {
+            $request->withCustomsDeclaration($order->getCustomsDeclaration());
+        }
+
+        foreach ($order->getItems() as $item) {
+            $request->addItem($item);
+        }
+
+        return $request;
     }
 
     public function __construct(

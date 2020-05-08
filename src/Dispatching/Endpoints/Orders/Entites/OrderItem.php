@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites;
 
+use Appwilio\RussianPostSDK\Dispatching\Enum\Country;
 use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
+use Appwilio\RussianPostSDK\Dispatching\Enum\PaymentMode54FZ;
+use Appwilio\RussianPostSDK\Dispatching\Enum\PaymentSubject54FZ;
 
 final class OrderItem implements Arrayable
 {
@@ -21,6 +24,10 @@ final class OrderItem implements Arrayable
     public const VAT_0 = 0;
     public const VAT_10 = 10;
     public const VAT_20 = 20;
+
+    // TODO: вынести в enum? https://otpravka.pochta.ru/specification#/enums-goods-type
+    public const TYPE_GOODS = 'GOODS';
+    public const TYPE_SERVICE = 'SERVICE';
 
     /** @var array */
     private $data;
@@ -42,6 +49,20 @@ final class OrderItem implements Arrayable
         $this->data['value'] = $price;
         $this->data['code'] = $code;
         $this->data['item-number'] = $article;
+    }
+
+    public function ofType(string $type)
+    {
+        $this->data['goods-type'] = $type;
+
+        return $this;
+    }
+
+    public function ofCountry(Country $code)
+    {
+        $this->data['country-code'] = $code;
+
+        return $this;
     }
 
     public function bySupplier(string $inn, string $name, string $phone)
