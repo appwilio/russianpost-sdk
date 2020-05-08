@@ -50,7 +50,7 @@ class ServicesTest extends TestCase
     {
         $endpoint = new Services($this->createClient([
             [
-                'raw-address' => $address = 'Москва',
+                'raw-address'   => $address = 'Москва',
                 'raw-telephone' => ($phone = '8 901 234-56-78'),
                 'raw-full-name' => ($name = 'Иванов Иван Иванович'),
             ]

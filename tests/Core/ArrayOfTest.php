@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Appwilio\RussianPostSDK\Tests\Dispatching;
+namespace Appwilio\RussianPostSDK\Tests\Core;
 
 use Appwilio\RussianPostSDK\Core\ArrayOf;
 use Appwilio\RussianPostSDK\Tests\TestCase;

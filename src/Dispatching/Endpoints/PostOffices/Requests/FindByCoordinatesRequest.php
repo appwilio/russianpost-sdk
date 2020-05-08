@@ -18,6 +18,7 @@ use Appwilio\RussianPostSDK\Dispatching\Entities\Coordinates;
 
 final class FindByCoordinatesRequest implements Arrayable
 {
+    // TODO: вынести в enum
     public const ALL               = 'ALL';
     public const ROUND_THE_CLOCK   = 'ROUND_THE_CLOCK';
     public const WORK_ON_WEEKENDS  = 'WORK_ON_WEEKENDS';

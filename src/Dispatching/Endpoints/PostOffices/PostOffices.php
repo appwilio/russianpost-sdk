@@ -103,8 +103,8 @@ final class PostOffices
     /**
      * Получение почтовых сервисов ОПС c опциональной фильтрацией по группе сервисов.
      *
-     * https://otpravka.pochta.ru/specification#/services-postoffice-service
-     * https://otpravka.pochta.ru/specification#/services-postoffice-service-group
+     * @see https://otpravka.pochta.ru/specification#/services-postoffice-service
+     * @see https://otpravka.pochta.ru/specification#/services-postoffice-service-group
      *
      * @param  string    $postalCode
      * @param  int|null  $group
