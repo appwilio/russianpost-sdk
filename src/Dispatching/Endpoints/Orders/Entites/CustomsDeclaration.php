@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites;
 
 use Appwilio\RussianPostSDK\Dispatching\DataAware;
+use Appwilio\RussianPostSDK\Dispatching\Enum\MailEntryType;
 use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 
 final class CustomsDeclaration implements Arrayable
@@ -14,7 +15,7 @@ final class CustomsDeclaration implements Arrayable
     /** @var CustomsDeclarationItem[] */
     private $items;
 
-    public function __construct($entriesType, string $currency)
+    public function __construct(MailEntryType $entriesType, string $currency)
     {
         $this->data['entries-type'] = $entriesType;
         $this->data['currency'] = $currency;
@@ -56,9 +57,9 @@ final class CustomsDeclaration implements Arrayable
         return $this->get('currency');
     }
 
-    public function getEntriesType(): string
+    public function getEntriesType(): MailEntryType
     {
-        return $this->get('invoice-number');
+        return new MailEntryType($this->get('entries-type'));
     }
 
     public function getInvoice(): ?string

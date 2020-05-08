@@ -9,20 +9,35 @@
  * file that was distributed with this source code.
  */
 
+/** @noinspection PhpUnusedPrivateFieldInspection */
+
 declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Enum;
 
-final class PaymentType
+use Appwilio\RussianPostSDK\Core\Enum;
+
+/**
+ * Способ оплаты.
+ *
+ * @see https://otpravka.pochta.ru/specification#/enums-payment-methods
+ *
+ * @method static PaymentType STAMP() Оплата марками
+ * @method static PaymentType CASHLESS() Безналичный расчет
+ * @method static PaymentType FRANKING() Франкирование
+ * @method static PaymentType TO_FRANKING() На франкировку
+ * @method static PaymentType ONLINE_PAYMENT_MARK() Знак онлайн оплаты
+ */
+final class PaymentType extends Enum
 {
-    /**
-     * Способы оплаты.
-     *
-     * @see https://otpravka.pochta.ru/specification#/enums-payment-methods
-     */
-    public const STAMP               = 'STAMP';
-    public const CASHLESS            = 'CASHLESS';
-    public const FRANKING            = 'FRANKING';
-    public const TO_FRANKING         = 'TO_FRANKING';
-    public const ONLINE_PAYMENT_MARK = 'ONLINE_PAYMENT_MARK';
+    /** Оплата марками */
+    private const STAMP = 'STAMP';
+    /** Безналичный расчет */
+    private const CASHLESS = 'CASHLESS';
+    /** Франкирование */
+    private const FRANKING = 'FRANKING';
+    /** На франкировку */
+    private const TO_FRANKING = 'TO_FRANKING';
+    /** Знак онлайн оплаты */
+    private const ONLINE_PAYMENT_MARK = 'ONLINE_PAYMENT_MARK';
 }

@@ -22,14 +22,14 @@ final class Address extends AbstractAddress implements Arrayable
         ]);
     }
 
-    public function __construct(?string $addressType = null)
+    public function __construct(?AddressType $type = null)
     {
-        $this->setType($addressType ?? AddressType::DEFAULT);
+        $this->setType($type ?? AddressType::DEFAULT());
     }
 
-    public function setType(string $addressType)
+    public function setType(AddressType $type)
     {
-        $this->data['address-type'] = $addressType;
+        $this->data['address-type'] = $type;
 
         return $this;
     }

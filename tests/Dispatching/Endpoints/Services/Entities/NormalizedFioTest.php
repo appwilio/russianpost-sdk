@@ -15,6 +15,7 @@ namespace Appwilio\RussianPostSDK\Tests\Dispatching\Endpoints\Services\Entities;
 
 use Appwilio\RussianPostSDK\Tests\TestCase;
 use Appwilio\RussianPostSDK\Dispatching\Instantiator;
+use Appwilio\RussianPostSDK\Dispatching\Enum\FioQuality;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities\NormalizedFio;
 
 class NormalizedFioTest extends TestCase
@@ -28,7 +29,7 @@ class NormalizedFioTest extends TestCase
             'middle-name'  => ($middleName = 'Иванович'),
             'surname'      => ($lastName = 'Иванов'),
             'original-fio' => ($original = 'Иванов Иван Иванович'),
-            'quality-code' => ($quality = NormalizedFio::QUALITY_EDITED),
+            'quality-code' => ($quality = FioQuality::EDITED()->getValue()),
         ]);
 
         $this->assertEquals($id, $instance->getId());

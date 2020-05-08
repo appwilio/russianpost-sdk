@@ -9,20 +9,35 @@
  * file that was distributed with this source code.
  */
 
+/** @noinspection PhpUnusedPrivateFieldInspection */
+
 declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Enum;
 
-final class MailEntryType
+use Appwilio\RussianPostSDK\Core\Enum;
+
+/**
+ * Категория вложения.
+ *
+ * @see https://otpravka.pochta.ru/specification#/enums-base-entries-type
+ *
+ * @method static MailEntryType GIFT() Подарок
+ * @method static MailEntryType OTHER() Прочее
+ * @method static MailEntryType DOCUMENT() Документы
+ * @method static MailEntryType GOODS() Товары
+ * @method static MailEntryType COMMERCIAL_SAMPLE() Коммерческий образец
+ */
+final class MailEntryType extends Enum
 {
-    /**
-     * Категории вложения.
-     *
-     * @see https://otpravka.pochta.ru/specification#/enums-base-entries-type
-     */
-    public const GIFT              = 'GIFT';
-    public const OTHER             = 'OTHER';
-    public const DOCUMENT          = 'DOCUMENT';
-    public const SALE_OF_GOODS     = 'SALE_OF_GOODS';
-    public const COMMERCIAL_SAMPLE = 'COMMERCIAL_SAMPLE';
+    /** Подарок */
+    private const GIFT = 'GIFT';
+    /** Прочее */
+    private const OTHER = 'OTHER';
+    /** Документы */
+    private const DOCUMENT = 'DOCUMENT';
+    /** Товары */
+    private const GOODS = 'SALE_OF_GOODS';
+    /** Коммерческий образец */
+    private const COMMERCIAL_SAMPLE = 'COMMERCIAL_SAMPLE';
 }

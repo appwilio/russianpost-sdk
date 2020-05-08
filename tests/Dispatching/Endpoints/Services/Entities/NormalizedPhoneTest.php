@@ -15,6 +15,7 @@ namespace Appwilio\RussianPostSDK\Tests\Dispatching\Endpoints\Services\Entities;
 
 use Appwilio\RussianPostSDK\Tests\TestCase;
 use Appwilio\RussianPostSDK\Dispatching\Instantiator;
+use Appwilio\RussianPostSDK\Dispatching\Enum\PhoneQuality;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities\NormalizedPhone;
 
 class NormalizedPhoneTest extends TestCase
@@ -29,7 +30,7 @@ class NormalizedPhoneTest extends TestCase
             'phone-number'       => ($number = '2345678'),
             'phone-extension'    => ($extension = ''),
             'original-phone'     => ($original = '79012345678'),
-            'quality-code'       => ($quality = NormalizedPhone::QUALITY_GOOD),
+            'quality-code'       => ($quality = PhoneQuality::GOOD()->getValue()),
         ]);
 
         $this->assertEquals($id, $instance->getId());

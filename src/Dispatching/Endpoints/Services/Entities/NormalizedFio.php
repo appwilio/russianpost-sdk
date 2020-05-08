@@ -14,19 +14,11 @@ declare(strict_types=1);
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities;
 
 use Appwilio\RussianPostSDK\Dispatching\DataAware;
+use Appwilio\RussianPostSDK\Dispatching\Enum\FioQuality;
 
 final class NormalizedFio
 {
     use DataAware;
-
-    /**
-     * Коды качества нормализации ФИО.
-     *
-     * @see https://otpravka.pochta.ru/specification#/enums-clean-fio-quality
-     */
-    public const QUALITY_EDITED = 'EDITED';
-    public const QUALITY_NOT_SURE = 'NOT_SURE';
-    public const QUALITY_CONFIRMED_MANUALLY = 'CONFIRMED_MANUALLY';
 
     public function getId(): string
     {
@@ -53,8 +45,8 @@ final class NormalizedFio
         return $this->get('original-fio');
     }
 
-    public function getQualityCode(): string
+    public function getQualityCode(): FioQuality
     {
-        return $this->get('quality-code');
+        return new FioQuality($this->get('quality-code'));
     }
 }

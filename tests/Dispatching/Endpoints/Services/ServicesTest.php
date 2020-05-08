@@ -84,10 +84,10 @@ class ServicesTest extends TestCase
             ->withElectronicNotice()
             ->withContentChecking()
             ->withCompletenessChecking()
-            ->ofMailType(MailType::EMS);
+            ->ofMailType(MailType::EMS());
 
         $this->assertEquals($index, $request->toArray()['index-to']);
-        $this->assertEquals($index, (clone $request)->ofMailType(MailType::ECOM)->toArray()['delivery-point-index']);
+        $this->assertEquals($index, (clone $request)->ofMailType(MailType::ECOM())->toArray()['delivery-point-index']);
 
         $this->assertInstanceOf(Calculation::class, $endpoint->calculate($request));
 

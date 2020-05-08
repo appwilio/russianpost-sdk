@@ -9,19 +9,32 @@
  * file that was distributed with this source code.
  */
 
+/** @noinspection PhpUnusedPrivateFieldInspection */
+
 declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Enum;
 
-final class AddressType
+use Appwilio\RussianPostSDK\Core\Enum;
+
+/**
+ * Тип адреса.
+ *
+ * @see https://otpravka.pochta.ru/specification#/enums-base-address-type
+ *
+ * @method static AddressType UNIT() Военная часть
+ * @method static AddressType PO_BOX() Абонентский ящик
+ * @method static AddressType DEMAND() До востребования
+ * @method static AddressType DEFAULT() Стандартный — улица, дом, квартира
+ */
+final class AddressType extends Enum
 {
-    /**
-     * Типы адресов.
-     *
-     * @see https://otpravka.pochta.ru/specification#/enums-base-address-type
-     */
-    public const UNIT    = 'UNIT';
-    public const PO_BOX  = 'PO_BOX';
-    public const DEMAND  = 'DEMAND';
-    public const DEFAULT = 'DEFAULT';
+    /** Военная часть */
+    private const UNIT = 'UNIT';
+    /** Абонентский ящик */
+    private const PO_BOX = 'PO_BOX';
+    /** До востребования */
+    private const DEMAND = 'DEMAND';
+    /** Стандартный — улица, дом, квартира */
+    private const DEFAULT = 'DEFAULT';
 }

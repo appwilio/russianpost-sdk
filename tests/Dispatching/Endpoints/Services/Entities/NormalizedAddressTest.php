@@ -16,6 +16,8 @@ namespace Appwilio\RussianPostSDK\Tests\Dispatching\Endpoints\Services\Entities;
 use Appwilio\RussianPostSDK\Tests\TestCase;
 use Appwilio\RussianPostSDK\Dispatching\Instantiator;
 use Appwilio\RussianPostSDK\Dispatching\Enum\AddressType;
+use Appwilio\RussianPostSDK\Dispatching\Enum\AddressQuality;
+use Appwilio\RussianPostSDK\Dispatching\Enum\AddressValidity;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities\NormalizedAddress;
 
 class NormalizedAddressTest extends TestCase
@@ -39,10 +41,10 @@ class NormalizedAddressTest extends TestCase
             'letter'           => ($letter = 'А'),
             'hotel'            => ($hotel = ''),
             'num-address-type' => ($numAddressType = ''),
-            'address-type'     => ($addressType = AddressType::DEFAULT),
+            'address-type'     => ($addressType = AddressType::DEFAULT()),
             'original-address' => ($original = 'Россия, 123456, Московская обл Симпсоновский р-н, Футурама, Бендера, 100а с1 к2, кв.500'),
-            'quality-code'     => ($quality = NormalizedAddress::QUALITY_GOOD),
-            'validation-code'  => ($validation = NormalizedAddress::VALIDATION_VALIDATED),
+            'quality-code'     => ($quality = AddressQuality::GOOD()),
+            'validation-code'  => ($validation = AddressValidity::VALIDATED()),
         ]);
 
         $this->assertEquals($id, $instance->getId());
@@ -68,16 +70,17 @@ class NormalizedAddressTest extends TestCase
     }
 
     /**
-     * @param  string  $qualityCode
-     * @param  string  $validationCode
+     * @param  AddressQuality   $qualityCode
+     * @param  AddressValidity  $validationCode
      *
      * @dataProvider addressCodeProvider
      */
-    public function test_usefulness(string $qualityCode, string $validationCode): void
+    public function test_usefulness(AddressQuality $qualityCode, AddressValidity $validationCode): void
     {
+        /** @var NormalizedAddress $instance */
         $instance = Instantiator::instantiate(NormalizedAddress::class, [
-            'quality-code'    => $qualityCode,
-            'validation-code' => $validationCode,
+            'quality-code'    => $qualityCode->getValue(),
+            'validation-code' => $validationCode->getValue(),
         ]);
 
         $this->assertEquals(true, $instance->isUseful());
@@ -86,8 +89,8 @@ class NormalizedAddressTest extends TestCase
 
     public function addressCodeProvider(): \Generator
     {
-        foreach (NormalizedAddress::ACCEPTABLE_QUALITY as $qCode) {
-            foreach (NormalizedAddress::ACCEPTABLE_VALIDITY as $vCode) {
+        foreach (AddressQuality::ACCEPTABLE_OPTIONS() as $qCode) {
+            foreach (AddressValidity::ACCEPTABLE_OPTIONS() as $vCode) {
                 yield [$qCode, $vCode];
             }
         }

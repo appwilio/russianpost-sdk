@@ -6,6 +6,8 @@ namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests;
 
 use Appwilio\RussianPostSDK\Dispatching\DataAware;
 use Appwilio\RussianPostSDK\Dispatching\Enum\MailType;
+use Appwilio\RussianPostSDK\Dispatching\Enum\MailCategory;
+use Appwilio\RussianPostSDK\Dispatching\Enum\MailEntryType;
 use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 
 final class CalculationRequest implements Arrayable
@@ -25,21 +27,21 @@ final class CalculationRequest implements Arrayable
         ];
     }
 
-    public function ofEntriesType(string $entriesType)
+    public function ofEntriesType(MailEntryType $entriesType)
     {
         $this->data['entries-type'] = $entriesType;
 
         return $this;
     }
 
-    public function ofMailCategory(string $mailCategory)
+    public function ofMailCategory(MailCategory $mailCategory)
     {
         $this->data['mail-category'] = $mailCategory;
 
         return $this;
     }
 
-    public function ofMailType(string $mailType)
+    public function ofMailType(MailType $mailType)
     {
         $this->data['mail-type'] = $mailType;
 
@@ -139,7 +141,7 @@ final class CalculationRequest implements Arrayable
 
     public function toArray(): array
     {
-        if ($this->data['mail-type'] === MailType::ECOM) {
+        if ($this->data['mail-type']->equals(MailType::ECOM())) {
             $this->data['delivery-point-index'] = $this->data['index-to'];
 
             unset($this->data['index-to']);
