@@ -64,6 +64,7 @@
     - [x] Поиск индексов в населённом пункте
     - [x] Почтовые сервисы ОПС
     - [x] Почтовые сервисы ОПС по идентификатору группы сервисов
+    - [x] Выгрузка из паспорта ОПС
   - [ ] Долгосрочное хранение
     - [ ] Запрос данных о заказах
 
@@ -86,6 +87,9 @@ composer require appwilio/russianpost-sdk
 
 Для логирования запросов и ответов можно подключить любой логгер, реализующий стандарт [PSR-3](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md), например, [Monolog](https://github.com/Seldaek/monolog):
 ```php
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
 $log = (new Logger('pochta.ru'))
     ->pushHandler(new StreamHandler('path/to/your.log', Logger::INFO));
 
@@ -95,7 +99,10 @@ $client->setLogger($log);
 
 В случае использования фреймворка [Laravel](https://laravel.com/) следует добавить логгер в контейнер под именем `appwilio.russianpost.logger`: 
 ```php
-$this->app->singleton('appwilio.russianpost.logger', function () {
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
+$this->app->singleton('appwilio.russianpost.logger', static function () {
     return (new Logger('pochta.ru'))
         ->pushHandler(new StreamHandler('path/to/your.log', Logger::INFO));
 });
@@ -125,7 +132,9 @@ $this->app->singleton('appwilio.russianpost.logger', function () {
 ### Единичный доступ
 
 ```php
-$tracker = new SingleAccessClient($login, $password);
+use Appwilio\RussianPostSDK\Tracking\SingleAccessClient;
+
+$tracker = new SingleAccessClient($login = 'login', $password = 'secret');
 ```
 
 > Если инфрмации по ШПИ (трек-комеру) не найдено, то выбрасывается исключение
@@ -166,7 +175,9 @@ foreach ($response as $event) {
 ### Пакетный доступ
 
 ```php
-$tracker = new PacketAccessClient($login, $password);
+use Appwilio\RussianPostSDK\Tracking\PacketAccessClient;
+
+$tracker = new PacketAccessClient($login = 'login', $password = 'secret');
 ```
 
 #### Получение данных по ШПИ (трек-комеру)
@@ -202,10 +213,10 @@ foreach ($response as $item) {
 ### Конфигурация
 ```php
 use GuzzleHttp\Client as GuzzleClient;
+use Appwilio\RussianPostSDK\Dispatching\DispatchingClient;
 
 $dispatching = new DispatchingClient(
-    new Authentication($login, $password, $token),
-    new GuzzleClient()
+    $login = 'login', $password = 'secret', $token = 'QWERTY', new GuzzleClient()
 );
 ```
 
@@ -228,13 +239,18 @@ $dispatching = new DispatchingClient(
 
 ### Расчёт стоимости пересылки
 ```php
+use Appwilio\RussianPostSDK\Dispatching\Enum\MailType;
+use Appwilio\RussianPostSDK\Dispatching\Enum\MailCategory;
+use Appwilio\RussianPostSDK\Dispatching\Enum\MailEntryType;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\CalculationRequest;
+
 $response = $dispatching->services->calculate(
     CalculationRequest::create('123456', 200)
-        ->ofMailType(MailType::PARCEL_POSTAL)
-        ->ofMailCategory(MailCategory::ORDINARY)
-        ->ofEntriesType(MailEntryType::SALE_OF_GOODS)
+        ->ofMailType(MailType::PARCEL_POSTAL())
+        ->ofMailCategory(MailCategory::ORDINARY())
+        ->ofEntriesType(MailEntryType::GOODS())
         ->fragile()
-        ->withSmsNotice();
+        ->withSmsNotice()
 );
 
 echo $response->getTotal()->getRate();
@@ -245,6 +261,8 @@ echo $response->getTotal()->getVAT(); // НДС
 
 #### Нормализация ФИО
 ```php
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\NormalizeFioRequest;
+
 $response = $dispatching->services->normalizeFio(
     NormalizeFioRequest::one('иванов иван иванович')
 );
@@ -256,6 +274,8 @@ if ($response[0]->isUseful()) {
 
 #### Нормализация адресов
 ```php
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\NormalizeAddressRequest;
+
 $response = $dispatching->services->normalizeAddress(
     NormalizeAddressRequest::one('Москва варшавское шоссе 37-45')
 );
@@ -263,13 +283,17 @@ $response = $dispatching->services->normalizeAddress(
 
 #### Нормализация телефонов
 ```php
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\NormalizePhoneRequest;
+
 $response = $dispatching->services->normalizePhone(NormalizePhoneRequest::one('89001234567'));
 ```
 
 #### Проверка благонадёжности получателя
 ```php
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\CheckRecipientRequest;
+
 $response = $dispatching->services->checkRecipient(
-    CheckRecipientRequest::one('Москва, Варшавское шоссе, 37-45')
+    CheckRecipientRequest::one('Москва, Варшавское шоссе, 37-45', 'Иванов Иван Иванович', '+7 123 456-78-90')
 );
 
 $response[0]->isFraud(); // ненадёжный
@@ -277,14 +301,15 @@ $response[0]->isReliable(); // надёжный
 ```
 
 ```php
-$response = $dispatching->services->checkRecipient(
-    CheckRecipientRequest::create()
-        ->addRecipient('123456 Москва, Варшавское шоссе, 37-45')
-        ->addRecipient('654321 Владивосток, пер. Староконный, 12-98');
-);
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\CheckRecipientRequest;
+
+$request = CheckRecipientRequest::create();
+$request->addRecipient('123456 Москва, Варшавское шоссе, 37-45', 'Иванов Иван Иванович', '+7 123 456-78-90');
+
+$response = $dispatching->services->checkRecipient($request);
 
 foreach ($response as $recipient) {
-    echo $recipient->getAddress.': '.$recipiend->isReliable();
+    echo $recipient->getAddress.': '.$recipient->isReliable();
 }
 ```
 
@@ -298,15 +323,17 @@ echo $file->getClientFilename(); // f7p.pdf
 $file->moveTo("storage/printforms/12345678-{$file->getClientFilename()}");
 
 // Перенаправление в браузер (Laravel)
-return \response()->streamDownload(function () use ($file) {
+return \response()->streamDownload(staticfunction () use ($file) {
     (string) $file->getStream();
 }, $file->getClientName(), ['Content-Type' => $file->getClientMediaType()]);
 ```
 
 #### Форма Ф7п для заказа
 ```php
+use Appwilio\RussianPostSDK\Dispatching\Enum\PrintType;
+
 $pdf = $dispatching->documents->orderF7Form(
-    '12345678', new \DateTime('2019-01-01'), Documents::PRINT_TYPE_THERMO
+    '12345678', new \DateTime('2019-01-01'), PrintType::PAPER()
 );
 ```
 
@@ -322,8 +349,10 @@ $zip = $dispatching->documents->orderFormsBundleBacklog('12345678', new \DateTim
 
 #### Пакет документов для заказа (после формирования партии)
 ```php
+use Appwilio\RussianPostSDK\Dispatching\Enum\PrintType;
+
 $zip = $dispatching->documents->orderFormBundle(
-    '12345678', new \DateTime('2019-01-01'), Documents::PRINT_TYPE_THERMO
+    '12345678', new \DateTime('2019-01-01'), PrintType::THERMO()
 );
 ```
 
@@ -344,7 +373,9 @@ $pdf = $dispatching->documents->batchF103Form('87654321');
 
 #### Возвратный ярлык
 ```php
-$pdf = $dispatching->documents->easyReturnForm('29014562148754', Documents::PRINT_TYPE_THERMO);
+use Appwilio\RussianPostSDK\Dispatching\Enum\PrintType;
+
+$pdf = $dispatching->documents->easyReturnForm('29014562148754', PrintType::THERMO());
 ```
 
 ## Запуск тестов
