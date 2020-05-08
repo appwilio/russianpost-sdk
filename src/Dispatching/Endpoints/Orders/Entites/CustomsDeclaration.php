@@ -20,12 +20,14 @@ final class CustomsDeclaration implements Arrayable
         $this->data['currency'] = $currency;
     }
 
-    public function addItem(CustomsDeclarationItem $item): void
+    public function addItem(CustomsDeclarationItem $item)
     {
         $this->items[] = $item;
+
+        return $this;
     }
 
-    public function addInvoice(string $number)
+    public function withInvoice(string $number)
     {
         $this->data['with-invoice'] = true;
         $this->data['invoice-number'] = $number;
@@ -33,7 +35,7 @@ final class CustomsDeclaration implements Arrayable
         return $this;
     }
 
-    public function addCertificate(string $number)
+    public function withCertificate(string $number)
     {
         $this->data['with-certificate'] = true;
         $this->data['certificate-number'] = $number;
@@ -41,7 +43,7 @@ final class CustomsDeclaration implements Arrayable
         return $this;
     }
 
-    public function addLicense(string $number)
+    public function withLicense(string $number)
     {
         $this->data['with-license'] = true;
         $this->data['license-number'] = $number;
@@ -51,7 +53,7 @@ final class CustomsDeclaration implements Arrayable
 
     public function getCurrency(): string
     {
-        return $this->get('entries-type');
+        return $this->get('currency');
     }
 
     public function getEntriesType(): string

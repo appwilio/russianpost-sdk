@@ -35,9 +35,9 @@ final class OrderItem implements Arrayable
         return new self(...\func_get_args());
     }
 
-    public function __construct(string $title, int $quantity, int $price, ?string $code = null, ?string $article = null)
+    public function __construct(string $description, int $quantity, ?int $price = null, ?string $code = null, ?string $article = null)
     {
-        $this->data['description'] = $title;
+        $this->data['description'] = $description;
         $this->data['quantity'] = $quantity;
         $this->data['value'] = $price;
         $this->data['code'] = $code;
@@ -53,6 +53,27 @@ final class OrderItem implements Arrayable
         return $this;
     }
 
+    public function paymentMode(PaymentMode54FZ $mode)
+    {
+        $this->data['payattr'] = $mode;
+
+        return $this;
+    }
+
+    public function paymentSubject(PaymentSubject54FZ $subject)
+    {
+        $this->data['lineattr'] = $subject;
+
+        return $this;
+    }
+
+    public function withCustomsDeclarationNumber(string $number)
+    {
+        $this->data['customs-declaration-number'] = $number;
+
+        return $this;
+    }
+
     public function withVAT(int $vat)
     {
         $this->data['vat-rate'] = $vat;
@@ -63,6 +84,13 @@ final class OrderItem implements Arrayable
     public function withInshurance(int $value)
     {
         $this->data['insr-value'] = $value;
+
+        return $this;
+    }
+
+    public function withExcise(int $value)
+    {
+        $this->data['excise'] = $value;
 
         return $this;
     }
