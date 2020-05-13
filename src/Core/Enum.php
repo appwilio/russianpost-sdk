@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Core;
 
-abstract class Enum
+abstract class Enum implements \JsonSerializable
 {
     protected static $cache = [];
 
@@ -54,6 +54,11 @@ abstract class Enum
         throw new \BadMethodCallException("No static method or enum constant '$name' in class ".static::class);
     }
 
+    public function jsonSerialize()
+    {
+        return $this->getValue();
+    }
+
     final public function equals(Enum $other): bool
     {
         return $this === $other || (\get_class($other) === static::class && $this->value === $other->value);
@@ -62,11 +67,6 @@ abstract class Enum
     final public function getValue()
     {
         return $this->value;
-    }
-
-    final public function __toString(): string
-    {
-        return $this->getValue();
     }
 
     final private function __clone()

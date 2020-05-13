@@ -144,8 +144,8 @@ final class ApiClient implements LoggerAwareInterface
     private function serializeRequestData(array $data): array
     {
         return \array_map(function ($value) {
-            if (\is_object($value) && \method_exists($value, '__toString')) {
-                return (string) $value;
+            if (\is_object($value) && $value instanceof \JsonSerializable) {
+                return $value->jsonSerialize();
             }
 
             if (\is_array($value)) {

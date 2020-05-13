@@ -39,7 +39,7 @@ class NormalizedPhoneTest extends TestCase
         $this->assertEquals($extension, $instance->getExtension());
         $this->assertEquals($cityCode, $instance->getCityCode());
         $this->assertEquals($original, $instance->getOriginalPhone());
-        $this->assertEquals($quality, $instance->getQualityCode());
+        $this->assertEquals(new PhoneQuality($quality), $instance->getQualityCode());
         $this->assertEquals(true, $instance->isUseful());
     }
 }

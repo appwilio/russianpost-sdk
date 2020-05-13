@@ -37,6 +37,6 @@ class NormalizedFioTest extends TestCase
         $this->assertEquals($lastName, $instance->getLastName());
         $this->assertEquals($middleName, $instance->getMiddleName());
         $this->assertEquals($original, $instance->getOriginalFio());
-        $this->assertEquals($quality, $instance->getQualityCode());
+        $this->assertEquals(new FioQuality($quality), $instance->getQualityCode());
     }
 }
