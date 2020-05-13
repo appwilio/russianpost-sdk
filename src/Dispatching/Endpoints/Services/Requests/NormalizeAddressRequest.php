@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests;
 
+use Appwilio\RussianPostSDK\Core\Arrayable;
 use Appwilio\RussianPostSDK\Dispatching\DataAware;
-use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 
 final class NormalizeAddressRequest implements Arrayable
 {

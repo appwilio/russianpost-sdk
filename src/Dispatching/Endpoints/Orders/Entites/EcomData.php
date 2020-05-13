@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites;
 
+use Appwilio\RussianPostSDK\Core\Arrayable;
 use Appwilio\RussianPostSDK\Dispatching\DataAware;
 use Appwilio\RussianPostSDK\Dispatching\Enum\EcomService;
-use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 use Appwilio\RussianPostSDK\Dispatching\Enum\EcomIdentityMethod;
 
 final class EcomData implements Arrayable

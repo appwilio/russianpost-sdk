@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\PostOffices\Requests;
 
-use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
+use Appwilio\RussianPostSDK\Core\Arrayable;
 use Appwilio\RussianPostSDK\Dispatching\Entities\Coordinates;
 
 final class FindByCoordinatesRequest implements Arrayable

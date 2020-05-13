@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders;
 
+use Appwilio\RussianPostSDK\Core\Arrayable;
 use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
-use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites\Order;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Requests\OrderRequest;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Exceptions\OrderException;

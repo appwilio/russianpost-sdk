@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Entities;
 
+use Appwilio\RussianPostSDK\Core\Arrayable;
 use Appwilio\RussianPostSDK\Dispatching\Instantiator;
 use Appwilio\RussianPostSDK\Dispatching\Enum\Country;
 use Appwilio\RussianPostSDK\Dispatching\Enum\AddressType;
-use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities\NormalizedAddress;
 
 final class Address extends AbstractAddress implements Arrayable

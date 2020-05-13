@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites;
 
+use Appwilio\RussianPostSDK\Core\Arrayable;
 use Appwilio\RussianPostSDK\Dispatching\Enum\Country;
-use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 use Appwilio\RussianPostSDK\Dispatching\Enum\PaymentMode54FZ;
 use Appwilio\RussianPostSDK\Dispatching\Enum\PaymentSubject54FZ;
 

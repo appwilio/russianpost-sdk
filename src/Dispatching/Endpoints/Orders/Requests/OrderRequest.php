@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Requests;
 
+use Appwilio\RussianPostSDK\Core\Arrayable;
 use Appwilio\RussianPostSDK\Dispatching\Enum\MailType;
 use Appwilio\RussianPostSDK\Dispatching\Entities\Address;
 use Appwilio\RussianPostSDK\Dispatching\Enum\MailCategory;
-use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 use Appwilio\RussianPostSDK\Dispatching\Entities\CommonOrder;
-use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites\Order;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites\EcomData;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites\OrderItem;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites\Recipient;

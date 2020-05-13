@@ -15,9 +15,9 @@ namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\PostOffices;
 
 use GuzzleHttp\Psr7\UploadedFile;
 use Appwilio\RussianPostSDK\Core\ArrayOf;
+use Appwilio\RussianPostSDK\Core\GenericRequest;
 use Appwilio\RussianPostSDK\Dispatching\Enum\OpsType;
 use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
-use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 use Appwilio\RussianPostSDK\Dispatching\Entities\Coordinates;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\PostOffices\Responses\Service;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\PostOffices\Responses\PostOffice;
@@ -126,27 +126,10 @@ final class PostOffices
      */
     public function all(OpsType $type): UploadedFile
     {
-        $request = $this->buildRequest([
+        $request = GenericRequest::create([
             'type' => $type->getValue(),
         ]);
 
         return $this->client->get('/1.0/unloading-passport/zip', $request);
-    }
-
-    private function buildRequest(array $query = []): Arrayable
-    {
-        return new class($query) implements Arrayable {
-            private $query;
-
-            public function __construct(array $query)
-            {
-                $this->query = $query;
-            }
-
-            public function toArray(): array
-            {
-                return $this->query;
-            }
-        };
     }
 }

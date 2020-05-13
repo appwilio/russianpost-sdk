@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites;
 
+use Appwilio\RussianPostSDK\Core\Arrayable;
 use Appwilio\RussianPostSDK\Dispatching\DataAware;
-use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 
 final class FiscalData implements Arrayable
 {

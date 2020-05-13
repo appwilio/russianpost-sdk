@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Documents;
 
 use GuzzleHttp\Psr7\UploadedFile;
+use Appwilio\RussianPostSDK\Core\GenericRequest;
 use Appwilio\RussianPostSDK\Dispatching\Enum\PrintType;
 use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
 use Appwilio\RussianPostSDK\Dispatching\Enum\PrintFormType;
@@ -42,7 +43,7 @@ final class Documents
      */
     public function orderF7Form(string $orderId, ?\DateTimeInterface $sendingDate = null, ?PrintType $printType = null): UploadedFile
     {
-        $request = $this->buildRequest([
+        $request = GenericRequest::create([
             'print-type'   => $printType,
             'sending-date' => $this->formatSendingDate($sendingDate),
         ]);
@@ -55,13 +56,17 @@ final class Documents
      *
      * @see https://otpravka.pochta.ru/specification#/documents-create_f112
      *
-     * @param  string  $orderId
+     * @param  string                   $orderId
+     * @param  \DateTimeInterface|null  $sendingDate
      *
      * @return UploadedFile
      */
-    public function orderF112Form(string $orderId): UploadedFile
+    public function orderF112Form(string $orderId, ?\DateTimeInterface $sendingDate = null): UploadedFile
     {
-        $request = $this->buildRequest();
+        $request = GenericRequest::create([
+            'id'           => $orderId,
+            'sending-date' => $this->formatSendingDate($sendingDate),
+        ]);
 
         return $this->client->get("/1.0/forms/{$orderId}/f112pdf", $request);
     }
@@ -78,7 +83,7 @@ final class Documents
      */
     public function orderFormsBundleBacklog(string $orderId, ?\DateTimeInterface $sendingDate = null): UploadedFile
     {
-        $request = $this->buildRequest([
+        $request = GenericRequest::create([
             'sending-date' => $this->formatSendingDate($sendingDate),
         ]);
 
@@ -98,7 +103,7 @@ final class Documents
      */
     public function orderFormBundle(string $orderId, ?\DateTimeInterface $sendingDate = null, ?PrintType $printType = null): UploadedFile
     {
-        $request = $this->buildRequest([
+        $request = GenericRequest::create([
             'print-type'   => $printType,
             'sending-date' => $this->formatSendingDate($sendingDate),
         ]);
@@ -119,7 +124,7 @@ final class Documents
      */
     public function batchFormBundle(string $batchName, ?PrintType $printType = null, ?PrintFormType $printTypeForm = null): UploadedFile
     {
-        $request = $this->buildRequest([
+        $request = GenericRequest::create([
             'print-type'      => $printType,
             'print-type-form' => $printTypeForm,
         ]);
@@ -183,7 +188,7 @@ final class Documents
      */
     public function easyReturnForm(string $barcode, ?PrintType $printType = null): UploadedFile
     {
-        $request = $this->buildRequest([
+        $request = GenericRequest::create([
             'print-type' => $printType,
         ]);
 
@@ -193,22 +198,5 @@ final class Documents
     private function formatSendingDate(?\DateTimeInterface $sendingDate): ?string
     {
         return $sendingDate ? $sendingDate->format('Y-m-d') : null;
-    }
-
-    private function buildRequest(array $query = []): Arrayable
-    {
-        return new class($query) implements Arrayable {
-            private $query;
-
-            public function __construct(array $query)
-            {
-                $this->query = $query;
-            }
-
-            public function toArray(): array
-            {
-                return $this->query;
-            }
-        };
     }
 }

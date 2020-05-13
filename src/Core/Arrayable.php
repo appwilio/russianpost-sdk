@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Appwilio\RussianPostSDK\Dispatching\Contracts;
+namespace Appwilio\RussianPostSDK\Core;
 
 interface Arrayable
 {
