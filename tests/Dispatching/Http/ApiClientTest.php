@@ -23,10 +23,11 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Appwilio\RussianPostSDK\Tests\TestCase;
-use Appwilio\RussianPostSDK\Core\Arrayable;
+use Appwilio\RussianPostSDK\Core\GenericRequest;
 use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
 use Appwilio\RussianPostSDK\Dispatching\Http\Authentication;
 use Appwilio\RussianPostSDK\Dispatching\Exceptions\BadRequest;
+use Appwilio\RussianPostSDK\Dispatching\Exceptions\ServerFault;
 use function GuzzleHttp\json_encode as guzzle_json_encode;
 use function GuzzleHttp\Psr7\stream_for as guzzle_stream_for;
 
@@ -38,28 +39,28 @@ class ApiClientTest extends TestCase
         $this->assertIsArray($response);
         $this->assertEmpty($response);
 
-        $response = $this->createClient()->get('foo', new FooRequest());
+        $response = $this->createClient()->get('foo', GenericRequest::create(['foo' => 'bar']));
         $this->assertIsArray($response);
         $this->assertEmpty($response);
     }
 
     public function test_client_can_post(): void
     {
-        $response = $this->createClient()->post('foo', new FooRequest());
+        $response = $this->createClient()->post('foo', GenericRequest::create(['foo' => 'bar']));
         $this->assertIsArray($response);
         $this->assertEmpty($response);
     }
 
     public function test_client_can_put(): void
     {
-        $response = $this->createClient()->put('foo', new FooRequest());
+        $response = $this->createClient()->put('foo', GenericRequest::create(['foo' => 'bar']));
         $this->assertIsArray($response);
         $this->assertEmpty($response);
     }
 
     public function test_client_can_delete(): void
     {
-        $response = $this->createClient()->delete('foo', new FooRequest());
+        $response = $this->createClient()->delete('foo', GenericRequest::create(['foo' => 'bar']));
         $this->assertIsArray($response);
         $this->assertEmpty($response);
     }
@@ -110,7 +111,6 @@ class ApiClientTest extends TestCase
         $http->method('send')->willReturnCallback(function () use ($code, $data) {
             $response = new Response($code, [], guzzle_json_encode($data));
 
-            /** @noinspection PhpParamsInspection */
             throw new ClientException('', $this->createMock(RequestInterface::class), $response);
         });
 
@@ -120,7 +120,7 @@ class ApiClientTest extends TestCase
     public function test_exception_thrown_on_5xx(): void
     {
         $this->expectExceptionCode(500);
-        $this->expectException(ServerException::class);
+        $this->expectException(ServerFault::class);
 
         $client = new ApiClient(
             new Authentication('foo', 'bar', 'baz'),
@@ -129,7 +129,6 @@ class ApiClientTest extends TestCase
         );
 
         $http->method('send')->willReturnCallback(function () {
-            /** @noinspection PhpParamsInspection */
             throw new ServerException('', $this->createMock(RequestInterface::class), new Response(500));
         });
 
@@ -173,15 +172,5 @@ class ApiClientTest extends TestCase
         });
 
         return $httpClient;
-    }
-}
-
-class FooRequest implements Arrayable
-{
-    public function toArray(): array
-    {
-        return [
-            'foo' => 'bar',
-        ];
     }
 }

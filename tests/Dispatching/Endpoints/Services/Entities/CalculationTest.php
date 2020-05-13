@@ -17,6 +17,7 @@ use Appwilio\RussianPostSDK\Tests\TestCase;
 use Appwilio\RussianPostSDK\Dispatching\Instantiator;
 use Appwilio\RussianPostSDK\Dispatching\Entities\Tariff;
 use Appwilio\RussianPostSDK\Dispatching\Entities\DeliveryTime;
+use Appwilio\RussianPostSDK\Dispatching\Enum\PaymentMethodType;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Entities\Calculation;
 
 class CalculationTest extends TestCase
@@ -25,8 +26,8 @@ class CalculationTest extends TestCase
     {
         /** @var Calculation $instance */
         $instance = Instantiator::instantiate(Calculation::class, [
-            'payment-method'             => ($method = 'cash'),
-            'notice-payment-method'      => ($noticeMethod = 'cash'),
+            'payment-method'             => ($method = PaymentMethodType::CASHLESS()),
+            'notice-payment-method'      => ($noticeMethod = PaymentMethodType::CASHLESS()),
             'delivery-time'              => ($delivery = ['min-days' => 2, 'max-days' => 10]),
             'with-fitting-rate'          => ($fittingRate = $this->buildTariffData()),
             'sms-notice-recipient-rate'  => ($smsRate = $this->buildTariffData()),

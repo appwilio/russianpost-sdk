@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Http;
 
-use GuzzleHttp\Psr7\Request;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
@@ -27,6 +26,7 @@ use Psr\Http\Message\ResponseInterface;
 use Appwilio\RussianPostSDK\Core\Arrayable;
 use Appwilio\RussianPostSDK\Dispatching\Instantiator;
 use Appwilio\RussianPostSDK\Dispatching\Exceptions\BadRequest;
+use Appwilio\RussianPostSDK\Dispatching\Exceptions\ServerFault;
 use Appwilio\RussianPostSDK\Dispatching\Contracts\DispatchingException;
 use function GuzzleHttp\json_encode as guzzle_json_encode;
 use function GuzzleHttp\json_decode as guzzle_json_decode;
@@ -82,7 +82,6 @@ final class ApiClient implements LoggerAwareInterface
      * @param  mixed           $responseType
      *
      * @throws DispatchingException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      *
      * @return mixed
      */
@@ -116,6 +115,7 @@ final class ApiClient implements LoggerAwareInterface
             throw $this->handleServerException($e);
         } catch (\Exception $e) {
             $this->logException($e->getCode(), $e->getMessage());
+
             throw $e;
         }
     }
@@ -178,7 +178,7 @@ final class ApiClient implements LoggerAwareInterface
         );
     }
 
-    private function handleClientException(ClientException $exception): DispatchingException
+    private function handleClientException(ClientException $exception): BadRequest
     {
         if (\in_array($exception->getCode(), [401, 403])) {
             throw $this->handleAuthenticationException($exception);
@@ -194,7 +194,7 @@ final class ApiClient implements LoggerAwareInterface
         );
     }
 
-    private function handleAuthenticationException(ClientException $exception)
+    private function handleAuthenticationException(ClientException $exception): BadRequest
     {
         $content = $this->getResponseContent($exception->getResponse());
 
@@ -202,13 +202,14 @@ final class ApiClient implements LoggerAwareInterface
 
         return new BadRequest(
             $content['message'] ?? $content['desc'] ?? '',
-            isset($content['code']) ? (int) $content['code'] : $exception->getCode()
+            isset($content['code']) ? (int) $content['code'] : $exception->getCode(),
+            $exception
         );
     }
 
-    private function handleServerException(ServerException $e): DispatchingException
+    private function handleServerException(ServerException $exception): ServerFault
     {
-        throw $e;
+        return new ServerFault($exception->getMessage(), $exception->getCode(), $exception);
     }
 
     private function getResponseContent(ResponseInterface $response): array
