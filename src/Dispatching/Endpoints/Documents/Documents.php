@@ -16,13 +16,11 @@ namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Documents;
 use GuzzleHttp\Psr7\UploadedFile;
 use Appwilio\RussianPostSDK\Dispatching\Enum\PrintType;
 use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
+use Appwilio\RussianPostSDK\Dispatching\Enum\PrintFormType;
 use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 
 final class Documents
 {
-    public const PRINT_FORM_ONE_SIDE = 'ONE_SIDED';
-    public const PRINT_FORM_TWO_SIDE = 'TWO_SIDED';
-
     /** @var ApiClient */
     private $client;
 
@@ -113,13 +111,13 @@ final class Documents
      *
      * @see https://otpravka.pochta.ru/specification#/documents-create_all_docs
      *
-     * @param  string          $batchName
-     * @param  PrintType|null  $printType
-     * @param  string|null     $printTypeForm
+     * @param  string              $batchName
+     * @param  PrintType|null      $printType
+     * @param  PrintFormType|null  $printTypeForm
      *
      * @return UploadedFile
      */
-    public function batchFormBundle(string $batchName, ?PrintType $printType = null, ?string $printTypeForm = null): UploadedFile
+    public function batchFormBundle(string $batchName, ?PrintType $printType = null, ?PrintFormType $printTypeForm = null): UploadedFile
     {
         $request = $this->buildRequest([
             'print-type'      => $printType,
