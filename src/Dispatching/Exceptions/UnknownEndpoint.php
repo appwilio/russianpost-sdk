@@ -15,7 +15,7 @@ namespace Appwilio\RussianPostSDK\Dispatching\Exceptions;
 
 use Appwilio\RussianPostSDK\Dispatching\Contracts\DispatchingException;
 
-class UnknownEndpoint extends \InvalidArgumentException implements DispatchingException
+final class UnknownEndpoint extends \InvalidArgumentException implements DispatchingException
 {
     public function __construct(string $value)
     {

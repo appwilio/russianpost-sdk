@@ -16,7 +16,7 @@ namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Exceptions;
 use Appwilio\RussianPostSDK\Dispatching\Entities\Error;
 use Appwilio\RussianPostSDK\Dispatching\Contracts\DispatchingException;
 
-class OrderException extends \InvalidArgumentException implements \IteratorAggregate, DispatchingException
+final class OrderException extends \InvalidArgumentException implements \IteratorAggregate, DispatchingException
 {
     /** @var Error[] */
     private $errors;

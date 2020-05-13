@@ -6,6 +6,10 @@ namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites;
 
 use Appwilio\RussianPostSDK\Core\ArrayOf;
 use Appwilio\RussianPostSDK\Dispatching\DataAware;
+use Appwilio\RussianPostSDK\Dispatching\Enum\MailRank;
+use Appwilio\RussianPostSDK\Dispatching\Enum\MailType;
+use Appwilio\RussianPostSDK\Dispatching\Enum\MailCategory;
+use Appwilio\RussianPostSDK\Dispatching\Enum\PaymentMethodType;
 use Appwilio\RussianPostSDK\Dispatching\Instantiator;
 use Appwilio\RussianPostSDK\Dispatching\Entities\Tariff;
 use Appwilio\RussianPostSDK\Dispatching\Entities\Address;
@@ -33,6 +37,31 @@ final class Order
     public function getTrackingNumber(): string
     {
         return $this->get('barcode');
+    }
+
+    public function getPaymentMethod(): PaymentMethodType
+    {
+        return new PaymentMethodType($this->get('payment-method'));
+    }
+
+    public function getVersion(): int
+    {
+        return (int) $this->get('version');
+    }
+
+    public function getMailType(): MailType
+    {
+        return new MailType($this->get('mail-type'));
+    }
+
+    public function getMailCategory(): MailCategory
+    {
+        return new MailCategory($this->get('mail-category'));
+    }
+
+    public function getMailRank(): MailRank
+    {
+        return new MailRank($this->get('mail-rank'));
     }
 
     public function hasCustomsDeclaration(): bool

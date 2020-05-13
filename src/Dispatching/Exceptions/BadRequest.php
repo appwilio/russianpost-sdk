@@ -15,7 +15,7 @@ namespace Appwilio\RussianPostSDK\Dispatching\Exceptions;
 
 use Appwilio\RussianPostSDK\Dispatching\Contracts\DispatchingException;
 
-class BadRequest extends \RuntimeException implements DispatchingException
+final class BadRequest extends \RuntimeException implements DispatchingException
 {
     //
 }

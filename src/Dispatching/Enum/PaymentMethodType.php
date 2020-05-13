@@ -22,13 +22,13 @@ use Appwilio\RussianPostSDK\Core\Enum;
  *
  * @see https://otpravka.pochta.ru/specification#/enums-payment-methods
  *
- * @method static PaymentType STAMP() Оплата марками
- * @method static PaymentType CASHLESS() Безналичный расчет
- * @method static PaymentType FRANKING() Франкирование
- * @method static PaymentType TO_FRANKING() На франкировку
- * @method static PaymentType ONLINE_PAYMENT_MARK() Знак онлайн оплаты
+ * @method static PaymentMethodType STAMP() Оплата марками
+ * @method static PaymentMethodType CASHLESS() Безналичный расчет
+ * @method static PaymentMethodType FRANKING() Франкирование
+ * @method static PaymentMethodType TO_FRANKING() На франкировку
+ * @method static PaymentMethodType ONLINE_PAYMENT_MARK() Знак онлайн оплаты
  */
-final class PaymentType extends Enum
+final class PaymentMethodType extends Enum
 {
     /** Оплата марками */
     private const STAMP = 'STAMP';

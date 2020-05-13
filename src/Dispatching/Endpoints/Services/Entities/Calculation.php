@@ -17,19 +17,20 @@ use Appwilio\RussianPostSDK\Dispatching\DataAware;
 use Appwilio\RussianPostSDK\Dispatching\Instantiator;
 use Appwilio\RussianPostSDK\Dispatching\Entities\Tariff;
 use Appwilio\RussianPostSDK\Dispatching\Entities\DeliveryTime;
+use Appwilio\RussianPostSDK\Dispatching\Enum\PaymentMethodType;
 
 final class Calculation
 {
     use DataAware;
 
-    public function getPaymentMethod(): string
+    public function getPaymentMethod(): PaymentMethodType
     {
-        return $this->get('payment-method');
+        return new PaymentMethodType($this->get('payment-method'));
     }
 
-    public function getNoticePaymentMethod(): string
+    public function getNoticePaymentMethod(): PaymentMethodType
     {
-        return $this->get('notice-payment-method');
+        return new PaymentMethodType($this->get('notice-payment-method'));
     }
 
     public function getDeliveryTime(): ?DeliveryTime

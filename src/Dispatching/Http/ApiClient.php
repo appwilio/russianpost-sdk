@@ -102,7 +102,7 @@ final class ApiClient implements LoggerAwareInterface
             if (\preg_match('~^application/json~', $contentType)) {
                 $content = $this->getResponseContent($response);
 
-                $this->logger->info('pochta.ru Dispatching response:.', $content);
+                $this->logger->info("Dispatching response: status={$response->getStatusCode()}", $content);
 
                 return $responseType === null
                     ? $content
@@ -115,6 +115,7 @@ final class ApiClient implements LoggerAwareInterface
         } catch (ServerException $e) {
             throw $this->handleServerException($e);
         } catch (\Exception $e) {
+            $this->logException($e->getCode(), $e->getMessage());
             throw $e;
         }
     }
@@ -126,12 +127,14 @@ final class ApiClient implements LoggerAwareInterface
         );
 
         if ($payload === null) {
+            $this->logger->info("Dispatching request: {$path}");
+
             return $request;
         }
 
         $data = $this->serializeRequestData(\array_filter($payload->toArray()));
 
-        $this->logger->info("pochta.ru Dispatching request: {$path}", $data);
+        $this->logger->info("Dispatching request: {$path}", $data);
 
         if ($method === 'GET') {
             return guzzle_modify_request($request, ['query' => guzzle_build_query($data)]);
@@ -161,14 +164,17 @@ final class ApiClient implements LoggerAwareInterface
     {
         \preg_match('~=(.+)$~', $response->getHeaderLine('Content-Disposition'), $matches);
 
-        $this->logger->info("pochta.ru Dispatching response: file {$matches[1]}.{$type} ({$response->getBody()->getSize()} butes).");
+        $fileName = "{$matches[1]}.{$type}";
+        $fileSize = $response->getBody()->getSize();
+
+        $this->logger->info(\vsprintf('Dispatching response: status=%s, file=%s, size=%s bytes', [
+            $response->getStatusCode(),
+            $fileName,
+            $fileSize,
+        ]));
 
         return new UploadedFile(
-            $response->getBody(),
-            $response->getBody()->getSize(),
-            \UPLOAD_ERR_OK,
-            "{$matches[1]}.{$type}",
-            $response->getHeaderLine('Content-Type')
+            $response->getBody(), $fileSize, \UPLOAD_ERR_OK, $fileName, $response->getHeaderLine('Content-Type')
         );
     }
 
@@ -180,6 +186,8 @@ final class ApiClient implements LoggerAwareInterface
 
         $content = $this->getResponseContent($exception->getResponse());
 
+        $this->logException($exception->getCode(), $exception->getMessage(), $content);
+
         return new BadRequest(
             $content['message'] ?? $content['error'] ?? $content['desc'],
             (int) ($content['status'] ?? $content['code'] ?? $exception->getCode())
@@ -189,6 +197,8 @@ final class ApiClient implements LoggerAwareInterface
     private function handleAuthenticationException(ClientException $exception)
     {
         $content = $this->getResponseContent($exception->getResponse());
+
+        $this->logException($exception->getCode(), $exception->getMessage(), $content);
 
         return new BadRequest(
             $content['message'] ?? $content['desc'] ?? '',
@@ -204,5 +214,10 @@ final class ApiClient implements LoggerAwareInterface
     private function getResponseContent(ResponseInterface $response): array
     {
         return guzzle_json_decode((string) $response->getBody(), true);
+    }
+
+    private function logException(int $status, string $message, array $data = []): void
+    {
+        $this->logger->error("code={$status}, {$message}", $data);
     }
 }

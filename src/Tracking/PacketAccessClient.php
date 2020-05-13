@@ -75,7 +75,7 @@ class PacketAccessClient implements LoggerAwareInterface
         }
 
         if (\iterator_count($tracks) > 3000) {
-            throw PacketAccessException::trackNumberLimitExceeded();
+            throw PacketAccessException::becauseTrackNumberLimitExceeded();
         }
 
         return $this->callSoapMethod(
@@ -110,8 +110,8 @@ class PacketAccessClient implements LoggerAwareInterface
         } catch (\SoapFault $e) {
             throw new PacketAccessException($e->getMessage(), $e->getCode(), $e);
         } finally {
-            $this->logger->info("pochta.ru Packet Tracking request: {$this->getClient()->__getLastRequest()}");
-            $this->logger->info("pochta.ru Packet Tracking response: {$this->getClient()->__getLastResponse()}");
+            $this->logger->info("Packet Tracking request: {$this->getClient()->__getLastRequest()}");
+            $this->logger->info("Packet Tracking response: {$this->getClient()->__getLastResponse()}");
         }
     }
 

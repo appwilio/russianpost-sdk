@@ -137,8 +137,8 @@ class SingleAccessClient implements LoggerAwareInterface
 
             throw new SingleAccessException($e->getMessage(), $e->getCode(), $e);
         } finally {
-            $this->logger->info("pochta.ru Single Tracking request: {$this->getClient()->__getLastRequest()}");
-            $this->logger->info("pochta.ru Single Tracking response: {$this->getClient()->__getLastResponse()}");
+            $this->logger->info("Single Tracking request: {$this->getClient()->__getLastRequest()}");
+            $this->logger->info("Single Tracking response: {$this->getClient()->__getLastResponse()}");
         }
     }
 
