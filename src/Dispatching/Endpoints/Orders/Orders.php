@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders;
 
-use Appwilio\RussianPostSDK\Core\Arrayable;
+use Appwilio\RussianPostSDK\Core\ArrayOf;
 use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
+use Appwilio\RussianPostSDK\Dispatching\Exceptions\BadRequest;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites\Order;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Exceptions\NotFound;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Requests\OrderRequest;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Exceptions\OrderException;
 
@@ -23,7 +25,7 @@ final class Orders
     /**
      * Создание заказа.
      *
-     * @link https://otpravka.pochta.ru/specification#/orders-creating_order
+     * @see https://otpravka.pochta.ru/specification#/orders-creating_order
      *
      * @param  OrderRequest  $request
      *
@@ -46,53 +48,63 @@ final class Orders
         return $response;
     }
 
-    public function getByPostalId(string $id): Order
+    /**
+     * Получение заказа по внутрипочтовому идентификатору.
+     *
+     * @see https://otpravka.pochta.ru/specification#/orders-search_order_byid
+     *
+     * @param  string  $id  внутрипочтовый идентификатор
+     *
+     * @throws NotFound
+     *
+     * @return Order
+     */
+    public function getById(string $id)
     {
-        return $this->client->get("/1.0/backlog/{$id}", null, Order::class);
+        try {
+            return $this->client->get("/1.0/backlog/{$id}", null, Order::class);
+        } catch (BadRequest $e) {
+            throw new NotFound($id);
+        }
     }
 
-    public function findByShopId(string $id)
+    /**
+     * Поиск заказов по идентификатору в системе отправителя.
+     *
+     * @see https://otpravka.pochta.ru/specification#/orders-search_order
+     *
+     * @param  string  $number  идентификатор в системе отправителя
+     *
+     * @return iterable|Order[]|null
+     */
+    public function findByShopNumber(string $number): ?iterable
     {
-        return $this->client->get('backlog/search', new class($id) implements Arrayable {
-            private $query;
+        $response = $this->client->get(
+            '/1.0/backlog/search?'.\http_build_query(['query' => $number]), null, new ArrayOf(Order::class)
+        );
 
-            public function __construct(string $query)
-            {
-                $this->query = $query;
-            }
-
-            public function toArray(): array
-            {
-                return ['query' => $this->query];
-            }
-        }, Order::class);
+        return empty($response) ? null : $response;
     }
 
-    public function findByTrackingNumber(string $number)
-    {
-        return $this->client->get('/1.0/shipment/search', new class($number) implements Arrayable {
-            private $query;
-
-            public function __construct(string $query)
-            {
-                $this->query = $query;
-            }
-
-            public function toArray(): array
-            {
-                return ['query' => $this->query];
-            }
-        }, Order::class);
-    }
-
-    public function read(string $id)
-    {
-        return $this->client->get("/1.0/user/backlog/{$id}");
-    }
-
+    /**
+     * Редактирование заказа.
+     *
+     * @see https://otpravka.pochta.ru/specification#/orders-editing_order
+     *
+     * @param  string        $id       внутрипочтовый идентификатор
+     * @param  OrderRequest  $request
+     *
+     * @throws NotFound
+     *
+     * @return Order
+     */
     public function update(string $id, OrderRequest $request)
     {
-        return $this->client->put("/1.0/user/backlog/{$id}", $request);
+        try {
+            return $this->client->put("/1.0/backlog/{$id}", $request);
+        } catch (BadRequest $e) {
+            throw new NotFound($id);
+        }
     }
 
     public function delete(array $ids)
