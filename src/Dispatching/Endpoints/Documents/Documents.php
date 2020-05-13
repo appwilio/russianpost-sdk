@@ -18,7 +18,6 @@ use Appwilio\RussianPostSDK\Core\GenericRequest;
 use Appwilio\RussianPostSDK\Dispatching\Enum\PrintType;
 use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
 use Appwilio\RussianPostSDK\Dispatching\Enum\PrintFormType;
-use Appwilio\RussianPostSDK\Dispatching\Contracts\Arrayable;
 
 final class Documents
 {

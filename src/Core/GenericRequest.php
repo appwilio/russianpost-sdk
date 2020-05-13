@@ -15,7 +15,6 @@ namespace Appwilio\RussianPostSDK\Core;
 
 final class GenericRequest implements Arrayable
 {
-    /** @var array */
     private $data;
 
     public static function create(iterable $data): self
