@@ -22,8 +22,6 @@ final class OrderRequest implements Arrayable
 
     private const RUSSIAN_POSTAL_CODE = '~\d{6}~';
 
-    private $data;
-
     /** @var Address */
     private $address;
 
