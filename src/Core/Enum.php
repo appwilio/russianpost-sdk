@@ -59,6 +59,11 @@ abstract class Enum implements \JsonSerializable
         return $this->getValue();
     }
 
+    public function __toString(): string
+    {
+        return (string) $this->getValue();
+    }
+
     final public function equals(Enum $other): bool
     {
         return $this === $other || (\get_class($other) === static::class && $this->value === $other->value);
@@ -69,18 +74,8 @@ abstract class Enum implements \JsonSerializable
         return $this->value;
     }
 
-    final private function __clone()
+    final public function __clone()
     {
         throw new \LogicException('Enums are not cloneable');
-    }
-
-    final public function __sleep()
-    {
-        throw new \LogicException('Enums are not serializable');
-    }
-
-    final public function __wakeup()
-    {
-        throw new \LogicException('Enums are not serializable');
     }
 }
