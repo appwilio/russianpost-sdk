@@ -49,7 +49,7 @@ final class Recipient implements Arrayable
         return $this;
     }
 
-    public function middleName(string $middleName)
+    public function middleName(?string $middleName)
     {
         $this->data['middle-name'] = $middleName;
 
