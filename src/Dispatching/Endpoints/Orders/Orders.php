@@ -9,8 +9,8 @@ use Appwilio\RussianPostSDK\Core\ArrayOf;
 use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
 use Appwilio\RussianPostSDK\Dispatching\Exceptions\BadRequest;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Entites\Order;
-use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Exceptions\NotFound;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Requests\OrderRequest;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Exceptions\OrderNotFound;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Exceptions\OrderException;
 
 final class Orders
