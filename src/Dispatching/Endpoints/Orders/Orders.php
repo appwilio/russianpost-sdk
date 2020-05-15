@@ -56,7 +56,7 @@ final class Orders
      *
      * @param  string  $id  внутрипочтовый идентификатор
      *
-     * @throws NotFound
+     * @throws OrderNotFound
      *
      * @return Order
      */
@@ -65,7 +65,7 @@ final class Orders
         try {
             return $this->client->get("/1.0/backlog/{$id}", null, Order::class);
         } catch (BadRequest $e) {
-            throw new NotFound($id);
+            throw new OrderNotFound($id, $e);
         }
     }
 
@@ -95,7 +95,7 @@ final class Orders
      * @param  string        $id       внутрипочтовый идентификатор
      * @param  OrderRequest  $request
      *
-     * @throws NotFound
+     * @throws OrderNotFound
      *
      * @return Order
      */
@@ -104,7 +104,7 @@ final class Orders
         try {
             return $this->client->put("/1.0/backlog/{$id}", $request);
         } catch (BadRequest $e) {
-            throw new NotFound($id);
+            throw new OrderNotFound($id, $e);
         }
     }
 

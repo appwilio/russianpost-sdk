@@ -15,10 +15,10 @@ namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Exceptions;
 
 use Appwilio\RussianPostSDK\Dispatching\Contracts\DispatchingException;
 
-final class NotFound extends \InvalidArgumentException implements DispatchingException
+final class OrderNotFound extends \InvalidArgumentException implements DispatchingException
 {
-    public function __construct(string $id)
+    public function __construct(string $id, \Throwable $previous)
     {
-        parent::__construct("Заказ #{$id} не найден.");
+        parent::__construct("Заказ #{$id} не найден.", 0, $previous);
     }
 }

@@ -20,6 +20,7 @@ use Appwilio\RussianPostSDK\Tests\TestCase;
 use Appwilio\RussianPostSDK\Dispatching\DispatchingClient;
 use Appwilio\RussianPostSDK\Dispatching\Exceptions\UnknownEndpoint;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Orders;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Batches\Batches;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Settings\Settings;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Services;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Documents\Documents;
@@ -40,6 +41,7 @@ class DispatchingClientTest extends TestCase
         $client = $this->createClient();
 
         $this->assertInstanceOf(Orders::class, $client->orders);
+        $this->assertInstanceOf(Batches::class, $client->batches);
         $this->assertInstanceOf(Settings::class, $client->settings);
         $this->assertInstanceOf(Services::class, $client->services);
         $this->assertInstanceOf(Documents::class, $client->documents);

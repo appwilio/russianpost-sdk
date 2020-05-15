@@ -21,6 +21,7 @@ use Appwilio\RussianPostSDK\Dispatching\Http\ApiClient;
 use Appwilio\RussianPostSDK\Dispatching\Http\Authentication;
 use Appwilio\RussianPostSDK\Dispatching\Exceptions\UnknownEndpoint;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Orders\Orders;
+use Appwilio\RussianPostSDK\Dispatching\Endpoints\Batches\Batches;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Services;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Settings\Settings;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Documents\Documents;
@@ -30,6 +31,7 @@ use Appwilio\RussianPostSDK\Dispatching\Endpoints\PostOffices\PostOffices;
  * Class DispatchingClient.
  *
  * @property-read  Orders       $orders
+ * @property-read  Batches      $batches
  * @property-read  Documents    $documents
  * @property-read  Services     $services
  * @property-read  Settings     $settings
@@ -39,6 +41,7 @@ final class DispatchingClient implements LoggerAwareInterface
 {
     private const ENDPOINTS = [
         'orders'      => Orders::class,
+        'batches'     => Batches::class,
         'services'    => Services::class,
         'settings'    => Settings::class,
         'documents'   => Documents::class,
