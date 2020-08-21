@@ -36,7 +36,7 @@ class BalanceTest extends TestCase
     {
         /** @var Balance $balance */
         $balance = Instantiator::instantiate(Balance::class, [
-            'error-message' => $message = 'test'
+            'error-message' => $message = 'test',
         ]);
 
         $this->expectException(\Exception::class);

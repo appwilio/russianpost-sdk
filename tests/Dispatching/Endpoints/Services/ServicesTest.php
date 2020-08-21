@@ -34,7 +34,6 @@ use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\CheckRecipie
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\NormalizePhoneRequest;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Exceptions\CalculationException;
 use Appwilio\RussianPostSDK\Dispatching\Endpoints\Services\Requests\NormalizeAddressRequest;
-
 use function GuzzleHttp\json_encode as guzzle_json_encode;
 
 class ServicesTest extends TestCase
@@ -53,7 +52,7 @@ class ServicesTest extends TestCase
                 'raw-address'   => $address = 'Москва',
                 'raw-telephone' => ($phone = '8 901 234-56-78'),
                 'raw-full-name' => ($name = 'Иванов Иван Иванович'),
-            ]
+            ],
         ]));
 
         $result = $endpoint->checkRecipient(CheckRecipientRequest::one($address, $name, $phone));
@@ -95,7 +94,7 @@ class ServicesTest extends TestCase
 
         $endpoint = new Services($this->createClient(\array_merge($response, [
             'total-rate' => 0,
-            'total-vat' => 0
+            'total-vat' => 0,
         ])));
 
         $endpoint->calculate($request)->getTotalRate();
@@ -104,7 +103,7 @@ class ServicesTest extends TestCase
     public function test_can_normalize_fio(): void
     {
         $endpoint = new Services($this->createClient([
-            ['id' => '123', 'original-fio' => $fio = 'Иванов Иван Иванович']
+            ['id' => '123', 'original-fio' => $fio = 'Иванов Иван Иванович'],
         ]));
 
         $result = $endpoint->normalizeFio(NormalizeFioRequest::one($fio));
@@ -116,7 +115,7 @@ class ServicesTest extends TestCase
     public function test_can_normalize_phone(): void
     {
         $endpoint = new Services($this->createClient([
-            ['id' => '123', 'original-phone' => $phone = '8 901 234-56-78']
+            ['id' => '123', 'original-phone' => $phone = '8 901 234-56-78'],
         ]));
 
         $result = $endpoint->normalizePhone(NormalizePhoneRequest::one($phone));
@@ -130,8 +129,8 @@ class ServicesTest extends TestCase
         $endpoint = new Services($this->createClient([
             [
                 'id'               => '123',
-                'original-address' => $address = 'Москва'
-            ]
+                'original-address' => $address = 'Москва',
+            ],
         ]));
 
         $result = $endpoint->normalizeAddress(NormalizeAddressRequest::one($address));

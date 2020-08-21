@@ -1,4 +1,6 @@
-<?php /** @noinspection PhpUnusedPrivateFieldInspection */
+<?php
+
+/** @noinspection PhpUnusedPrivateFieldInspection */
 
 /**
  * This file is part of RussianPost SDK package.

@@ -19,7 +19,7 @@ final class Address extends AbstractAddress implements Arrayable
         }
 
         return Instantiator::instantiateFrom(self::class, $address, [
-            'id', 'original-address', 'quality-code', 'validation-code'
+            'id', 'original-address', 'quality-code', 'validation-code',
         ]);
     }
 

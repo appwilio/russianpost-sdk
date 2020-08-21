@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Endpoints\Settings\Responses;
 
-use JMS\Serializer\Annotation AS JMS;
+use JMS\Serializer\Annotation as JMS;
 
 final class ShippingPoint
 {
