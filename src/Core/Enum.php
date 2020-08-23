@@ -64,7 +64,7 @@ abstract class Enum implements \JsonSerializable
         return (string) $this->getValue();
     }
 
-    final public function equals(Enum $other): bool
+    final public function equals(self $other): bool
     {
         return $this === $other || (\get_class($other) === static::class && $this->value === $other->value);
     }

@@ -79,5 +79,4 @@ final class CalculationRequest implements Arrayable
 
         return $this->data;
     }
-
 }
