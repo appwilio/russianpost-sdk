@@ -17,15 +17,14 @@ use Psr\Log\LoggerAwareInterface;
 use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Contracts\Support\DeferrableProvider;
 use Appwilio\RussianPostSDK\Tracking\PacketAccessClient;
 use Appwilio\RussianPostSDK\Tracking\SingleAccessClient;
 use Appwilio\RussianPostSDK\Dispatching\DispatchingClient;
 
-class LaravelServiceProvider extends ServiceProvider
+class LaravelServiceProvider extends ServiceProvider implements DeferrableProvider
 {
-    protected $defer = true;
-
-    public function register()
+    public function register(): void
     {
         $this->app->singleton(SingleAccessClient::class, function (Container $app) {
             $config = $app['config']['services.russianpost.tracking'];

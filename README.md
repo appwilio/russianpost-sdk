@@ -82,6 +82,7 @@ composer require appwilio/russianpost-sdk
 ```
 
 При использовании фреймворка [Laravel](https://laravel.com/) SDK автоматически регистрирует доступные сервисы.
+> Минимальная версия Laravel — 5.8.
 
 ## Логирование
 
