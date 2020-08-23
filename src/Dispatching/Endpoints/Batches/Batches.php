@@ -102,11 +102,20 @@ final class Batches
     }
 
     /**
-     * @param  string  $barcode
-     * @return Order|null
+     * Поиск заказов по ШПИ или внутреннему номеру во всех партиях.
+     *
+     * @param  string  $query  ШПИ или внутренний номер заказа
+     *
+     * @see https://otpravka.pochta.ru/specification#/batches-find_orders_with_barcode
+     *
+     * @return Order[]|null
      */
-    public function findOrderByTrackingNumber(string $barcode): ?Order
+    public function findOrdersInAllBatches(string $query): ?iterable
     {
-        return $this->client->get('/1.0/shipment/search', GenericRequest::create(['query' => $barcode]), Order::class);
+        return $this->client->get(
+            '/1.0/shipment/search',
+            GenericRequest::create(['query' => $query]),
+            new ArrayOf(Order::class)
+        );
     }
 }
