@@ -74,13 +74,22 @@ final class Batches
      *
      * @see https://otpravka.pochta.ru/specification#/batches-get_info_about_orders_in_batch
      *
-     * @param  string  $name
+     * @param  string    $name
+     * @param  int|null  $page
+     * @param  int|null  $perPage
+     * @param  string    $sortBy
      *
      * @return Order[]
      */
-    public function getOrders(string $name)
+    public function getOrdersInBatch(string $name, ?int $page = null, ?int $perPage = null, string $sortBy = 'asc')
     {
-        return $this->client->get("/1.0/batch/{$name}/shipment", null, new ArrayOf(Order::class));
+        $query = GenericRequest::create([
+            'page' => $page,
+            'size' => $perPage,
+            'sort' => $sortBy,
+        ]);
+
+        return $this->client->get("/1.0/batch/{$name}/shipment", $query, new ArrayOf(Order::class));
     }
 
     public function getOrderById(string $id): Order
