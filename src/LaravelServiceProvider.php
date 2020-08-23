@@ -47,7 +47,7 @@ class LaravelServiceProvider extends ServiceProvider
             $config = $app['config']['services.russianpost.dispatching'];
 
             $client = new DispatchingClient(
-                $config['login'], $config['password'], $config['token'], new GuzzleClient()
+                $config['login'], $config['password'], $config['token'], new GuzzleClient($config['guzzle'] ?? [])
             );
 
             return $this->setLoggerToClient($client);
