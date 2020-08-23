@@ -7,7 +7,7 @@
     <a href="https://scrutinizer-ci.com/g/appwilio/russianpost-sdk/?branch=master"><img src="https://img.shields.io/scrutinizer/coverage/g/appwilio/russianpost-sdk/master.svg?style=flat" alt="Code Coverage" /></a>
     <a href="https://styleci.io/repos/101485954"><img src="https://github.styleci.io/repos/101485954/shield?style=flat" alt="StyleCI" /></a>
     <a href="https://packagist.org/packages/appwilio/russianpost-sdk"><img src="https://poser.pugx.org/appwilio/russianpost-sdk/downloads?format=flat" alt="Total Downloads"></a>
-    <a href="https://raw.githubusercontent.com/appwilio/russianpost-sdk/master/LICENSE.md"><img src="https://poser.pugx.org/appwilio/russianpost-sdk/license?format=flat" alt="License MIT"></a>
+    <a href="https://raw.githubusercontent.com/appwilio/russianpost-sdk/master/LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-428F7E" alt="License MIT"></a>
 </p>
 
 ## Содержание
@@ -122,7 +122,7 @@ $this->app->singleton('appwilio.russianpost.logger', static function () {
         'login' => \env('RUSSIAN_POST_TRACKING_LOGIN'),
         'password' => \env('RUSSIAN_POST_TRACKING_PASSWORD'),
     ],
-]
+],
 // ...
 ```
 
@@ -131,13 +131,14 @@ $this->app->singleton('appwilio.russianpost.logger', static function () {
 
 ### Единичный доступ
 
+Конструктор класса `SingleAccessClient` принимает два параметра — логин и пароль от личного кабинета на сайте Почты России.
 ```php
 use Appwilio\RussianPostSDK\Tracking\SingleAccessClient;
 
 $tracker = new SingleAccessClient($login = 'login', $password = 'secret');
 ```
 
-> Если инфрмации по ШПИ (трек-комеру) не найдено, то выбрасывается исключение
+> Если информации по ШПИ (трек-комеру) не найдено, то выбрасывается исключение
 >`Appwilio\RussianPostSDK\Tracking\Exceptions\SingleAccessException` с соответствующим сообщением.
 
 #### Получение данных по ШПИ (трек-комеру)
@@ -211,6 +212,11 @@ foreach ($response as $item) {
 [Документация](https://otpravka.pochta.ru/specification)
 
 ### Конфигурация
+
+Конструктор класса `DispatchingClient` принимает три обязательных параметра: логин и пароль от личного кабинета на сайте Почты России,
+а так же [токен доступа](https://otpravka.pochta.ru/specification#/authorization-token), который высылается на почту
+при подключении сервиса «Отправка» и может быть изменён в личном кабинете.
+
 ```php
 use GuzzleHttp\Client as GuzzleClient;
 use Appwilio\RussianPostSDK\Dispatching\DispatchingClient;
@@ -230,8 +236,11 @@ $dispatching = new DispatchingClient(
         'token' => \env('RUSSIAN_POST_DISPATCHING_TOKEN'),
         'login' => \env('RUSSIAN_POST_TDISPATCHING_LOGIN'),
         'password' => \env('RUSSIAN_POST_DISPATCHING_PASSWORD'),
+        'guzzle' => [
+            'timeout' => 5,
+        ],
     ],
-]
+],
 // ...
 ```
 
