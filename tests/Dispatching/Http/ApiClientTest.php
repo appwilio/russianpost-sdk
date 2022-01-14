@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Appwilio\RussianPostSDK\Tests\Dispatching\Http;
 
 use Psr\Log\NullLogger;
+use GuzzleHttp\Psr7\Utils;
 use GuzzleHttp\Psr7\Stream;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\UploadedFile;
@@ -29,7 +30,6 @@ use Appwilio\RussianPostSDK\Dispatching\Http\Authentication;
 use Appwilio\RussianPostSDK\Dispatching\Exceptions\BadRequest;
 use Appwilio\RussianPostSDK\Dispatching\Exceptions\ServerFault;
 use function GuzzleHttp\json_encode as guzzle_json_encode;
-use function GuzzleHttp\Psr7\stream_for as guzzle_stream_for;
 
 class ApiClientTest extends TestCase
 {
@@ -75,7 +75,7 @@ class ApiClientTest extends TestCase
         /** @var UploadedFile $response */
         $response = $this->createClient(
             $contentType = 'application/pdf',
-            guzzle_stream_for($tmp),
+            Utils::streamFor($tmp),
             ['Content-Disposition' => 'attachment; filename=foo']
         )->get('foo');
 

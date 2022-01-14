@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Http;
 
+use GuzzleHttp\Psr7\Utils;
+use GuzzleHttp\Psr7\Query;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
@@ -30,9 +32,6 @@ use Appwilio\RussianPostSDK\Dispatching\Exceptions\ServerFault;
 use Appwilio\RussianPostSDK\Dispatching\Contracts\DispatchingException;
 use function GuzzleHttp\json_encode as guzzle_json_encode;
 use function GuzzleHttp\json_decode as guzzle_json_decode;
-use function GuzzleHttp\Psr7\stream_for as guzzle_stream_for;
-use function GuzzleHttp\Psr7\build_query as guzzle_build_query;
-use function GuzzleHttp\Psr7\modify_request as guzzle_modify_request;
 
 final class ApiClient implements LoggerAwareInterface
 {
@@ -137,12 +136,12 @@ final class ApiClient implements LoggerAwareInterface
         $this->logger->info("Dispatching request: {$path}", $data);
 
         if ($method === 'GET') {
-            return guzzle_modify_request($request, ['query' => guzzle_build_query($data)]);
+            return Utils::modifyRequest($request, ['query' => Query::build($data)]);
         }
 
         return $request
             ->withHeader('Content-Type', 'application/json;charset=UTF-8')
-            ->withBody(guzzle_stream_for(guzzle_json_encode($data)));
+            ->withBody(Utils::streamFor((guzzle_json_encode($data))));
     }
 
     private function serializeRequestData(array $data): array
