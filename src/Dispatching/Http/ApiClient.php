@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Appwilio\RussianPostSDK\Dispatching\Http;
 
-use GuzzleHttp\Psr7\Utils;
-use GuzzleHttp\Psr7\Query;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
+use GuzzleHttp\Psr7\Utils;
+use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7\UploadedFile;
