@@ -22,11 +22,11 @@
         "issues": "https://github.com/appwilio/russianpost-sdk/issues"
     },
     "require": {
-        "php": ">=7.1",
+        "php": ">=7.2",
         "ext-intl": "*",
         "ext-json": "*",
         "ext-soap": "*",
-        "guzzlehttp/guzzle": "^6.3",
+        "guzzlehttp/guzzle": "^7.2",
         "psr/log": "^1.1"
     },
     "require-dev": {
